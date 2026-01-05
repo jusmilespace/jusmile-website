@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ju Smile App - 手掌估算法的智慧營養工具</title>
+    <meta name="description" content="Ju Smile App 採用獨特的手掌估算法，結合 AI 食物辨識與條碼掃描，讓健康管理變得簡單又有趣。">
+    <meta name="keywords" content="營養追蹤,卡路里計算,手掌估算,健康管理,減重,AI辨識">
+    
+    <!-- Open Graph (社群分享預覽) -->
+    <meta property="og:title" content="Ju Smile App - 手掌估算法的智慧營養工具">
+    <meta property="og:description" content="讓健康管理變得簡單又有趣">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jusmilespace.com">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #97d0ba 0%, #5c9c84 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.1)"/></svg>') no-repeat;
+            background-size: cover;
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo {
+            font-size: 64px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .tagline {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 300;
+            font-style: italic;
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 20px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #5c9c84;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #5c9c84;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+        
+        .scroll-indicator svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+            opacity: 0.7;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 20px;
+            background: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 42px;
+            color: #5c9c84;
+            margin-bottom: 20px;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 60px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(92, 156, 132, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 24px;
+            color: #5c9c84;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .feature-description {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* About Section */
+        .about {
+            padding: 80px 20px;
+            background: white;
+        }
+        
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .about-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .highlight {
+            color: #5c9c84;
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2c2c2c;
+            color: white;
+            padding: 60px 20px 30px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            color: #97d0ba;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: #97d0ba;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #888;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 48px;
+            }
+            
+            .tagline {
+                font-size: 24px;
+            }
+            
+            .subtitle {
+                font-size: 18px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo">Ju Smile App</div>
+            <div class="tagline">Ju Smile, make you smile ✨</div>
+            <div class="subtitle">手掌估算法的智慧營養工具</div>
+            
+            <div class="status-badge">
+                🚀 即將上架 App Store
+            </div>
+            
+            <p style="font-size: 18px; margin-bottom: 30px; opacity: 0.95;">
+                不用磅秤，用你的手掌就能精準追蹤營養<br>
+                結合 AI 辨識、條碼掃描，讓健康管理變得簡單又有趣
+            </p>
+            
+            <div class="cta-buttons">
+                <!-- 上架後取消註解，加入真實的 App Store 連結 -->
+                <!-- <a href="你的AppStore連結" class="btn btn-primary">立即下載</a> -->
+                <a href="#features" class="btn btn-primary">了解更多</a>
+                <a href="/privacy-policy.html" class="btn btn-secondary">隱私權政策</a>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">核心功能</h2>
+            <p class="section-subtitle">四大智慧功能，讓營養追蹤變得輕鬆自在</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🖐️</div>
+                    <h3 class="feature-title">手掌估算法</h3>
+                    <p class="feature-description">
+                        獨創的手掌比例估算系統，不用磅秤也能準確記錄食物份量。基於營養學標準，簡單又科學。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI 智慧辨識</h3>
+                    <p class="feature-description">
+                        拍照即可辨識食物種類，自動帶入營養資訊。支援中文食物名稱，辨識準確率高。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">視覺化統計</h3>
+                    <p class="feature-description">
+                        每日、每週、每月熱量趨勢一目了然。體重變化曲線圖，追蹤進度更直觀。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">條碼掃描</h3>
+                    <p class="feature-description">
+                        掃描包裝食品條碼，自動查詢營養資訊。超商食品快速記錄，省時又方便。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <h2 class="section-title">為什麼選擇 Ju Smile App？</h2>
+            <div class="about-content">
+                <p>
+                    我們相信，<span class="highlight">健康管理不應該是負擔</span>。
+                </p>
+                <p>
+                    傳統的營養追蹤工具往往需要精密的測量工具、複雜的操作流程，讓人望而卻步。
+                    Ju Smile App 採用<span class="highlight">獨特的手掌估算法</span>，
+                    讓你隨時隨地都能輕鬆記錄，無需攜帶磅秤。
+                </p>
+                <p>
+                    結合 <span class="highlight">AI 智慧辨識</span>和<span class="highlight">條碼掃描</span>技術，
+                    讓記錄過程變得快速又準確。視覺化的統計圖表，
+                    幫助你清楚看見自己的進步。
+                </p>
+                <p style="font-size: 24px; color: #5c9c84; margin-top: 40px;">
+                    <strong>Ju Smile，讓健康管理變得簡單又有趣！</strong>
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ju Smile App</h3>
+                    <p style="color: #ccc; line-height: 1.8;">
+                        手掌估算法的智慧營養工具<br>
+                        讓健康管理變得簡單又有趣
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>快速連結</h3>
+                    <ul>
+                        <li><a href="#features">功能介紹</a></li>
+                        <li><a href="/privacy-policy.html">隱私權政策</a></li>
+                        <!-- 上架後加入 -->
+                        <!-- <li><a href="你的AppStore連結">App Store</a></li> -->
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>聯絡我們</h3>
+                    <ul>
+                        <li><a href="mailto:ju.smilespace@gmail.com">ju.smilespace@gmail.com</a></li>
+                        <!-- 如果有社群媒體，可以加入 -->
+                        <!-- <li><a href="#">Instagram</a></li> -->
+                        <!-- <li><a href="#">YouTube</a></li> -->
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2025 Ju Smile App. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 平滑滾動
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
