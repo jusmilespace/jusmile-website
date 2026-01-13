@@ -67,7 +67,7 @@
 
         /* 主要區塊 (Hero Section) */
         .hero {
-            flex: 1; /* 讓這塊撐開高度，footer 會被推到底部 */
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -77,13 +77,24 @@
             background: radial-gradient(circle at center, var(--bg-light) 0%, #fff 70%);
         }
 
+        /* 🆕 新增 Logo 圖片樣式 */
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 28px; /* App Icon 風格圓角 */
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(151, 208, 186, 0.4); /* 薄荷色柔和陰影 */
+            object-fit: cover;
+            animation: fadeInDown 1s ease-out;
+        }
+
         h1 {
             font-size: 3.5rem;
             font-weight: 800;
             margin-bottom: 24px;
             color: var(--charcoal);
             letter-spacing: -1px;
-            animation: fadeInDown 1s ease-out;
+            animation: fadeInDown 1s ease-out 0.2s backwards;
         }
 
         .subtitle {
@@ -91,10 +102,10 @@
             color: var(--text-gray);
             max-width: 600px;
             margin-bottom: 40px;
-            animation: fadeInUp 1s ease-out 0.2s backwards;
+            animation: fadeInUp 1s ease-out 0.4s backwards;
         }
 
-        /* 核心按鈕：前往 App Hub */
+        /* 核心按鈕 */
         .btn-primary {
             display: inline-block;
             background-color: var(--charcoal);
@@ -106,7 +117,7 @@
             font-weight: bold;
             transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            animation: fadeInUp 1s ease-out 0.4s backwards;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
         }
 
         .btn-primary:hover {
@@ -189,6 +200,13 @@
     </nav>
 
     <div class="hero">
+        <img 
+            src="https://app.jusmilespace.com/ju-smile-app/icons/icon-512.png" 
+            alt="Ju Smile Space Logo" 
+            class="hero-logo"
+            onerror="this.style.display='none'"
+        >
+
         <h1>讓生活更簡單<br>每天都好記</h1>
         <p class="subtitle">
             我們致力於打造行動優先的智慧工具，<br>
