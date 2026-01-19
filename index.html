@@ -514,108 +514,266 @@
             </div>
         </div>
 
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <div class="tier-badge">🔥</div>
-                <div class="tier-name">超級早鳥</div>
-                <div class="tier-limit">限量 100 位</div>
-                <div class="price-container">
-                    <div class="original-price">原價 NT$ 1,980</div>
-                    <div class="current-price">NT$ 1,280</div>
-                    <div class="discount-badge">省 NT$ 700</div>
+        <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="pricing-container">
+            <h2 class="section-title">選擇你的創始會員方案</h2>
+            
+            <div class="pricing-grid">
+                <!-- Tier 1: Super Early Bird -->
+                <div class="pricing-card">
+                    <div class="tier-badge">🔥</div>
+                    <div class="tier-name">超級早鳥</div>
+                    <div class="tier-limit">限量 100 位</div>
+                    <div class="tier-status status-available">名額充足</div>
+                    
+                    <div class="price-container">
+                        <div class="current-price">
+                            <small>NT$</small> 1,280
+                        </div>
+                        <div class="price-label">一次付清，終身有效</div>
+                    </div>
+                    
+                    <button class="purchase-button" onclick="handlePurchase('super-early')">
+                        立即加入
+                    </button>
+                    
+                    <div class="tier-number">專屬編號 FOUNDER001-100</div>
                 </div>
-                <button class="purchase-button" onclick="handlePurchase('super-early')">立即加入</button>
-                <div class="tier-number">專屬編號 FOUNDER001-100</div>
+
+                <!-- Tier 2: Early Bird (Featured) -->
+                <div class="pricing-card featured">
+                    <div class="tier-badge">⭐</div>
+                    <div class="tier-name">早鳥優惠</div>
+                    <div class="tier-limit">限量 200 位</div>
+                    <div class="tier-status status-available">名額充足</div>
+                    
+                    <div class="price-container">
+                        <div class="current-price">
+                            <small>NT$</small> 1,480
+                        </div>
+                        <div class="price-label">一次付清，終身有效</div>
+                    </div>
+                    
+                    <button class="purchase-button" onclick="handlePurchase('early')">
+                        立即加入
+                    </button>
+                    
+                    <div class="tier-number">專屬編號 FOUNDER101-300</div>
+                </div>
+
+                <!-- Tier 3: Founder -->
+                <div class="pricing-card">
+                    <div class="tier-badge">💎</div>
+                    <div class="tier-name">創始會員</div>
+                    <div class="tier-limit">限量 200 位</div>
+                    <div class="tier-status status-available">名額充足</div>
+                    
+                    <div class="price-container">
+                        <div class="current-price">
+                            <small>NT$</small> 1,680
+                        </div>
+                        <div class="price-label">一次付清，終身有效</div>
+                    </div>
+                    
+                    <button class="purchase-button" onclick="handlePurchase('founder')">
+                        立即加入
+                    </button>
+                    
+                    <div class="tier-number">專屬編號 FOUNDER301-500</div>
+                </div>
             </div>
 
-            <div class="pricing-card featured">
-                <div class="tier-badge">⭐</div>
-                <div class="tier-name">早鳥優惠</div>
-                <div class="tier-limit">限量 200 位</div>
-                <div class="price-container">
-                    <div class="original-price">原價 NT$ 1,980</div>
-                    <div class="current-price">NT$ 1,480</div>
-                    <div class="discount-badge">省 NT$ 500</div>
-                </div>
-                <button class="purchase-button" onclick="handlePurchase('early')">立即加入</button>
-                <div class="tier-number">專屬編號 FOUNDER101-300</div>
+            <p style="text-align: center; margin-top: 40px; color: var(--text-gray);">
+                ＊創始會員售完後將推出月訂閱制（NT$ 79/月），不再提供終身方案<br>
+                ＊實體禮物僅限台灣本島地址，海外會員仍享有所有數位權益
+            </p>
+        </div>
+    </section>
+
+        <!-- Benefits Section -->
+    <section class="benefits">
+        <h2 class="section-title">💎 創始會員專屬權益</h2>
+        
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <span class="benefit-icon">🤖</span>
+                <h3 class="benefit-title">1,500 次 AI 智能辨識</h3>
+                <p class="benefit-desc">
+                    終身有效額度，<span class="benefit-highlight">每天使用可支援 17 個月以上</span>。
+                    輕度使用更可達數年，再也不用擔心額度不夠。
+                </p>
             </div>
 
-            <div class="pricing-card">
-                <div class="tier-badge">💎</div>
-                <div class="tier-name">創始會員</div>
-                <div class="tier-limit">限量 200 位</div>
-                <div class="price-container">
-                    <div class="original-price">原價 NT$ 1,980</div>
-                    <div class="current-price">NT$ 1,680</div>
-                    <div class="discount-badge">省 NT$ 300</div>
-                </div>
-                <button class="purchase-button" onclick="handlePurchase('founder')">立即加入</button>
-                <div class="tier-number">專屬編號 FOUNDER301-500</div>
+            <div class="benefit-card">
+                <span class="benefit-icon">🏆</span>
+                <h3 class="benefit-title">專屬創始編號</h3>
+                <p class="benefit-desc">
+                    <span class="benefit-highlight">FOUNDER001-500 永久身份認證</span>，
+                    象徵你是 Ju Smile 最早的支持者，這份榮譽無可取代。
+                </p>
+            </div>
+
+            <div class="benefit-card">
+                <span class="benefit-icon">✨</span>
+                <h3 class="benefit-title">優先體驗新功能</h3>
+                <p class="benefit-desc">
+                    <span class="benefit-highlight">搶先使用最新功能更新與測試版本</span>，
+                    參與產品發展，你的意見將直接影響產品方向。
+                </p>
+            </div>
+
+            <div class="benefit-card">
+                <span class="benefit-icon">💰</span>
+                <h3 class="benefit-title">未來功能專屬折扣</h3>
+                <p class="benefit-desc">
+                    所有付費功能享有<span class="benefit-highlight">創始會員優惠價</span>，
+                    長期使用越省越多，這是終身的 VIP 待遇。
+                </p>
+            </div>
+
+            <div class="benefit-card">
+                <span class="benefit-icon">🎁</span>
+                <h3 class="benefit-title">創始會員專屬禮物</h3>
+                <p class="benefit-desc">
+                    <span class="benefit-highlight">限量 500 份精選手作禮物</span>
+                    （限台灣地區配送），感謝你的支持與信任。
+                </p>
             </div>
         </div>
-
-        <div class="benefits-section">
-            <h3 class="benefits-title">💎 創始會員專屬權益</h3>
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">🤖</div>
-                    <div class="benefit-content">
-                        <div class="benefit-title">1,500 次 AI 智能辨識</div>
-                        <div class="benefit-desc">終身有效額度，每天使用可支援 17 個月以上。輕度使用更可達數年。</div>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">🏆</div>
-                    <div class="benefit-content">
-                        <div class="benefit-title">專屬創始編號</div>
-                        <div class="benefit-desc">FOUNDER001-500 永久身份認證，無可取代的榮譽。</div>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">🎁</div>
-                    <div class="benefit-content">
-                        <div class="benefit-title">創始會員專屬禮物</div>
-                        <div class="benefit-desc">限量 500 份獨立開發者親手準備的神秘禮物（限台灣地區）。</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </section>
     </div>
 
-    <div class="value-prop">
-        <h2 class="section-title">為什麼選擇創始會員？</h2>
+    <!-- Value Proposition -->
+    <section class="value-prop">
+        <div class="section-title">為什麼選擇創始會員？</div>
+        
         <div class="comparison-table">
             <table>
                 <thead>
-                    <tr><th>項目</th><th>創始會員</th><th>未來訂閱制</th></tr>
+                    <tr>
+                        <th>項目</th>
+                        <th>創始會員</th>
+                        <th>未來訂閱制</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    <tr><td>價格</td><td class="highlight">NT$ 1,280 起 (一次付清)</td><td>NT$ 79/月 (需持續付費)</td></tr>
-                    <tr><td>AI 額度</td><td class="highlight">1,500 次終身</td><td>60 次/月</td></tr>
-                    <tr><td>專屬編號</td><td class="highlight">✅ 有</td><td>❌ 無</td></tr>
-                    <tr><td>專屬禮物</td><td class="highlight">✅ 手作禮物</td><td>❌ 無</td></tr>
-                    <tr><td>長期價值</td><td class="highlight">17 個月以上無需續費</td><td>需持續訂閱</td></tr>
+                    <tr>
+                        <td>價格</td>
+                        <td class="highlight">NT$ 1,280-1,680<br><small>一次付清</small></td>
+                        <td>NT$ 79/月<br><small>需持續付費</small></td>
+                    </tr>
+                    <tr>
+                        <td>AI 額度</td>
+                        <td class="highlight">1,500 次終身</td>
+                        <td>60 次/月</td>
+                    </tr>
+                    <tr>
+                        <td>專屬編號</td>
+                        <td class="highlight">✅ FOUNDER001-500</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>專屬禮物</td>
+                        <td class="highlight">✅ 手作禮物</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>VIP 折扣</td>
+                        <td class="highlight">✅ 終身享有</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>優先新功能</td>
+                        <td class="highlight">✅ 永久優先</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td>長期價值</td>
+                        <td class="highlight">17 個月以上<br>無需續費</td>
+                        <td>需持續訂閱</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
-    </div>
+    </section>
 
-    <div class="faq">
+
+    <!-- FAQ -->
+    <section class="faq">
         <h2 class="section-title">常見問題</h2>
+        
         <details class="faq-item">
             <summary>創始會員和訂閱制有什麼差別？</summary>
-            <div class="faq-content">創始會員是一次性付費，享有終身 AI 額度與實體禮物；訂閱制則是月費模式，無專屬權益。</div>
+            <div class="faq-content">
+                <p>創始會員是一次性付費，享有 1,500 次終身 AI 額度，加上專屬編號、禮物和 VIP 折扣等獨家權益。訂閱制則是每月付費，僅提供基本 AI 額度，沒有任何專屬權益。</p>
+                <p><strong>創始會員限量 500 位，售完後將不再推出。</strong></p>
+            </div>
         </details>
+
         <details class="faq-item">
             <summary>1,500 次 AI 額度可以用多久？</summary>
-            <div class="faq-content">每天 3 次約可用 17 個月；每天 2 次約 25 個月。額度終身有效，不會過期。</div>
+            <div class="faq-content">
+                <p>根據使用頻率不同：</p>
+                <ul style="margin-left: 20px;">
+                    <li>每天 3 次：約 17 個月</li>
+                    <li>每天 2 次：約 25 個月</li>
+                    <li>每週 10 次：約 3 年</li>
+                </ul>
+                <p>而且額度<strong>終身有效，不會過期</strong>，你可以按自己的節奏使用。</p>
+            </div>
         </details>
+
+        <details class="faq-item">
+            <summary>用完 1,500 次之後呢？</summary>
+            <div class="faq-content">
+                <p>用完後你仍然可以繼續使用 Ju Smile：</p>
+                <ul style="margin-left: 20px;">
+                    <li>回到免費版（每天 1 次 AI）</li>
+                    <li>加購額度包（創始會員享最低價）</li>
+                    <li>訂閱月費方案</li>
+                </ul>
+                <p>你的創始會員身份和所有專屬權益（編號、VIP 折扣等）永久保留。</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>什麼時候會收到專屬禮物？</summary>
+            <div class="faq-content">
+                <p>購買完成後，我們會 Email 通知你填寫收件地址。禮物將在 2-4 週內新鮮製作並寄出，你會收到配送通知。</p>
+                <p><strong>目前實體禮物僅限台灣本島地址。</strong>海外會員仍享有所有數位權益（AI 額度、專屬編號、VIP 折扣等）。</p>
+            </div>
+        </details>
+
         <details class="faq-item">
             <summary>可以退款嗎？</summary>
-            <div class="faq-content">購買後 7 天內，若未使用任何 AI 額度，可申請全額退款。</div>
+            <div class="faq-content">
+                <p>購買後 7 天內，如果你還沒有使用任何 AI 額度，可以申請全額退款。</p>
+                <p>請 Email 至 ju.smilespace@gmail.com，我們會在 3 個工作天內處理。</p>
+            </div>
         </details>
-    </div>
+
+        <details class="faq-item">
+            <summary>創始會員有名額限制嗎？</summary>
+            <div class="faq-content">
+                <p>是的，創始會員<strong>限量 500 位</strong>，分三階段開放：</p>
+                <ul style="margin-left: 20px;">
+                    <li>超級早鳥：100 位（FOUNDER001-100）</li>
+                    <li>早鳥優惠：200 位（FOUNDER101-300）</li>
+                    <li>創始會員：200 位（FOUNDER301-500）</li>
+                </ul>
+                <p>售完後將推出月訂閱制，<strong>不再提供終身方案和專屬權益。</strong></p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>VIP 折扣是多少？</summary>
+            <div class="faq-content">
+                <p>創始會員在購買額度包和未來付費功能時，將享有專屬優惠價（建議 7-8.5 折）。</p>
+                <p>具體折扣會依功能調整，但創始會員永遠享有最優惠價格，這是終身的 VIP 待遇。</p>
+            </div>
+        </details>
+    </section>
 </section>
 
     <div class="features">
