@@ -20,8 +20,81 @@
             --bg-light: #f7faf9;
             --text-gray: #6b7785;
             --purple-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gold-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
         }
+/* 倒數計時器樣式 */
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+}
+.countdown-item {
+    background: white;
+    border-radius: 12px;
+    padding: 16px 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    min-width: 100px;
+    text-align: center;
+}
+.countdown-number {
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--purple-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: block;
+}
+.countdown-label { font-size: 0.85rem; color: var(--text-gray); margin-top: 4px; }
 
+/* 按鈕樣式 (取代原本僅供展示的區塊) */
+.purchase-button {
+    width: 100%;
+    background: linear-gradient(135deg, var(--mint) 0%, var(--mint-dark) 100%);
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(92, 156, 132, 0.3);
+    margin-top: 20px;
+}
+.purchase-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(92, 156, 132, 0.4); }
+
+/* 價值比較表 */
+.value-prop { padding: 60px 20px; background: white; }
+.comparison-table {
+    max-width: 900px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+.comparison-table table { width: 100%; border-collapse: collapse; }
+.comparison-table th, .comparison-table td { padding: 20px; text-align: center; border-bottom: 1px solid #e5e7eb; }
+.comparison-table th { background: var(--bg-light); font-weight: 700; color: var(--charcoal); }
+.comparison-table .highlight { background: #f0f9ff; font-weight: 600; color: var(--mint-dark); }
+
+/* FAQ 樣式 */
+.faq { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
+.section-title { text-align: center; font-size: 2rem; font-weight: 800; margin-bottom: 40px; color: var(--charcoal); }
+.faq-item { background: white; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; }
+.faq-item summary { padding: 20px 24px; cursor: pointer; font-weight: 600; list-style: none; position: relative; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::before { content: '▶'; margin-right: 12px; font-size: 0.8rem; color: var(--mint-dark); transition: transform 0.2s; display: inline-block;}
+.faq-item[open] summary::before { transform: rotate(90deg); }
+.faq-content { padding: 0 24px 24px 40px; color: var(--text-gray); line-height: 1.6; }
+
+/* RWD 微調 */
+@media (max-width: 768px) {
+    .comparison-table { display: block; overflow-x: auto; }
+    .comparison-table table { min-width: 600px; }
+}
         * {
             margin: 0;
             padding: 0;
@@ -38,7 +111,6 @@
             min-height: 100vh;
         }
 
-        /* 導航列 */
         nav {
             padding: 20px 40px;
             display: flex;
@@ -66,7 +138,6 @@
         }
         .nav-links a:hover { color: var(--mint-dark); }
 
-        /* 主要區塊 (Hero Section) */
         .hero {
             display: flex;
             flex-direction: column;
@@ -124,7 +195,6 @@
             background-color: #000;
         }
 
-        /* 創始會員定價區塊 */
         .pricing-section {
             padding: 80px 20px;
             background: linear-gradient(180deg, #fff 0%, var(--bg-light) 100%);
@@ -166,7 +236,6 @@
             margin: 0 auto;
         }
 
-        /* 定價卡片網格 */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -250,10 +319,6 @@
             margin-bottom: 8px;
         }
 
-        .current-price small {
-            font-size: 1.5rem;
-        }
-
         .discount-badge {
             display: inline-block;
             background: #fee2e2;
@@ -270,7 +335,6 @@
             margin-top: 12px;
         }
 
-        /* 權益列表 */
         .benefits-section {
             background: white;
             border-radius: 20px;
@@ -323,7 +387,6 @@
             line-height: 1.5;
         }
 
-        /* 特色簡介區塊 */
         .features {
             display: flex;
             justify-content: center;
@@ -341,7 +404,6 @@
         .feature-title { font-weight: bold; margin-bottom: 8px; }
         .feature-desc { font-size: 0.9rem; color: var(--text-gray); }
 
-        /* 頁尾 */
         footer {
             background-color: var(--bg-light);
             border-top: 1px solid #eee;
@@ -422,126 +484,139 @@
         </a>
     </div>
 
-    <!-- 創始會員定價區塊 -->
     <section id="pricing" class="pricing-section">
-        <div class="pricing-container">
-            <div class="pricing-header">
-                <div class="pricing-badge">🌟 限量 500 位</div>
-                <h2 class="pricing-title">加入 Ju Smile 創始會員</h2>
-                <p class="pricing-subtitle">
-                    成為前 500 位支持者，享有終身 AI 智能健康管理服務<br>
-                    一次投資，永久受益
-                </p>
-            </div>
-
-            <div class="pricing-grid">
-                <!-- 階段 1: 超級早鳥 -->
-                <div class="pricing-card">
-                    <div class="tier-badge">🔥</div>
-                    <div class="tier-name">超級早鳥</div>
-                    <div class="tier-limit">限量 100 位</div>
-                    
-                    <div class="price-container">
-                        <div class="original-price">原價 NT$ 1,980</div>
-                        <div class="current-price">
-                            NT$ <span style="font-size: 3rem;">1,280</span>
-                        </div>
-                        <div class="discount-badge">省 NT$ 700 (35% OFF)</div>
-                    </div>
-                    
-                    <div class="tier-number">專屬編號 FOUNDER001-100</div>
+    <div class="pricing-container">
+        <div class="pricing-header">
+            <div class="pricing-badge">🌟 限量 500 位</div>
+            <h2 class="pricing-title">加入 Ju Smile 創始會員</h2>
+            <p class="pricing-subtitle">
+                成為前 500 位支持者，享有終身 AI 智能健康管理服務<br>
+                一次投資，永久受益
+            </p>
+            
+            <div class="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">00</span>
+                    <div class="countdown-label">天</div>
                 </div>
-
-                <!-- 階段 2: 早鳥優惠 (Featured) -->
-                <div class="pricing-card featured">
-                    <div class="tier-badge">⭐</div>
-                    <div class="tier-name">早鳥優惠</div>
-                    <div class="tier-limit">限量 200 位</div>
-                    
-                    <div class="price-container">
-                        <div class="original-price">原價 NT$ 1,980</div>
-                        <div class="current-price">
-                            NT$ <span style="font-size: 3rem;">1,480</span>
-                        </div>
-                        <div class="discount-badge">省 NT$ 500 (25% OFF)</div>
-                    </div>
-                    
-                    <div class="tier-number">專屬編號 FOUNDER101-300</div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">00</span>
+                    <div class="countdown-label">時</div>
                 </div>
-
-                <!-- 階段 3: 創始會員 -->
-                <div class="pricing-card">
-                    <div class="tier-badge">💎</div>
-                    <div class="tier-name">創始會員</div>
-                    <div class="tier-limit">限量 200 位</div>
-                    
-                    <div class="price-container">
-                        <div class="original-price">原價 NT$ 1,980</div>
-                        <div class="current-price">
-                            NT$ <span style="font-size: 3rem;">1,680</span>
-                        </div>
-                        <div class="discount-badge">省 NT$ 300 (15% OFF)</div>
-                    </div>
-                    
-                    <div class="tier-number">專屬編號 FOUNDER301-500</div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <div class="countdown-label">分</div>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <div class="countdown-label">秒</div>
                 </div>
             </div>
+        </div>
 
-            <!-- 權益說明 -->
-            <div class="benefits-section">
-                <h3 class="benefits-title">💎 創始會員專屬權益</h3>
-                <div class="benefits-grid">
-                    <div class="benefit-item">
-                        <div class="benefit-icon">🤖</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">1,500 次 AI 智能辨識</div>
-                            <div class="benefit-desc">終身有效額度，每天使用可支援 17 個月以上</div>
-                        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="tier-badge">🔥</div>
+                <div class="tier-name">超級早鳥</div>
+                <div class="tier-limit">限量 100 位</div>
+                <div class="price-container">
+                    <div class="original-price">原價 NT$ 1,980</div>
+                    <div class="current-price">NT$ 1,280</div>
+                    <div class="discount-badge">省 NT$ 700</div>
+                </div>
+                <button class="purchase-button" onclick="handlePurchase('super-early')">立即加入</button>
+                <div class="tier-number">專屬編號 FOUNDER001-100</div>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="tier-badge">⭐</div>
+                <div class="tier-name">早鳥優惠</div>
+                <div class="tier-limit">限量 200 位</div>
+                <div class="price-container">
+                    <div class="original-price">原價 NT$ 1,980</div>
+                    <div class="current-price">NT$ 1,480</div>
+                    <div class="discount-badge">省 NT$ 500</div>
+                </div>
+                <button class="purchase-button" onclick="handlePurchase('early')">立即加入</button>
+                <div class="tier-number">專屬編號 FOUNDER101-300</div>
+            </div>
+
+            <div class="pricing-card">
+                <div class="tier-badge">💎</div>
+                <div class="tier-name">創始會員</div>
+                <div class="tier-limit">限量 200 位</div>
+                <div class="price-container">
+                    <div class="original-price">原價 NT$ 1,980</div>
+                    <div class="current-price">NT$ 1,680</div>
+                    <div class="discount-badge">省 NT$ 300</div>
+                </div>
+                <button class="purchase-button" onclick="handlePurchase('founder')">立即加入</button>
+                <div class="tier-number">專屬編號 FOUNDER301-500</div>
+            </div>
+        </div>
+
+        <div class="benefits-section">
+            <h3 class="benefits-title">💎 創始會員專屬權益</h3>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🤖</div>
+                    <div class="benefit-content">
+                        <div class="benefit-title">1,500 次 AI 智能辨識</div>
+                        <div class="benefit-desc">終身有效額度，每天使用可支援 17 個月以上。輕度使用更可達數年。</div>
                     </div>
-
-                    <div class="benefit-item">
-                        <div class="benefit-icon">📊</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">個人化營養分析</div>
-                            <div class="benefit-desc">AI 深度分析您的飲食習慣與健康趨勢</div>
-                        </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🏆</div>
+                    <div class="benefit-content">
+                        <div class="benefit-title">專屬創始編號</div>
+                        <div class="benefit-desc">FOUNDER001-500 永久身份認證，無可取代的榮譽。</div>
                     </div>
-
-                    <div class="benefit-item">
-                        <div class="benefit-icon">🏆</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">專屬創始編號</div>
-                            <div class="benefit-desc">FOUNDER001-500 永久身份認證</div>
-                        </div>
-                    </div>
-
-                    <div class="benefit-item">
-                        <div class="benefit-icon">✨</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">優先體驗新功能</div>
-                            <div class="benefit-desc">搶先使用最新功能更新與測試版本</div>
-                        </div>
-                    </div>
-
-                    <div class="benefit-item">
-                        <div class="benefit-icon">💰</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">未來功能專屬折扣</div>
-                            <div class="benefit-desc">所有付費功能享有創始會員優惠價</div>
-                        </div>
-                    </div>
-
-                    <div class="benefit-item">
-                        <div class="benefit-icon">📧</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">開發者直接支援</div>
-                            <div class="benefit-desc">Email 優先回覆，直接與開發團隊溝通</div>
-                        </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎁</div>
+                    <div class="benefit-content">
+                        <div class="benefit-title">創始會員專屬禮物</div>
+                        <div class="benefit-desc">限量 500 份獨立開發者親手準備的神秘禮物（限台灣地區）。</div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <div class="value-prop">
+        <h2 class="section-title">為什麼選擇創始會員？</h2>
+        <div class="comparison-table">
+            <table>
+                <thead>
+                    <tr><th>項目</th><th>創始會員</th><th>未來訂閱制</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>價格</td><td class="highlight">NT$ 1,280 起 (一次付清)</td><td>NT$ 79/月 (需持續付費)</td></tr>
+                    <tr><td>AI 額度</td><td class="highlight">1,500 次終身</td><td>60 次/月</td></tr>
+                    <tr><td>專屬編號</td><td class="highlight">✅ 有</td><td>❌ 無</td></tr>
+                    <tr><td>專屬禮物</td><td class="highlight">✅ 手作禮物</td><td>❌ 無</td></tr>
+                    <tr><td>長期價值</td><td class="highlight">17 個月以上無需續費</td><td>需持續訂閱</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="faq">
+        <h2 class="section-title">常見問題</h2>
+        <details class="faq-item">
+            <summary>創始會員和訂閱制有什麼差別？</summary>
+            <div class="faq-content">創始會員是一次性付費，享有終身 AI 額度與實體禮物；訂閱制則是月費模式，無專屬權益。</div>
+        </details>
+        <details class="faq-item">
+            <summary>1,500 次 AI 額度可以用多久？</summary>
+            <div class="faq-content">每天 3 次約可用 17 個月；每天 2 次約 25 個月。額度終身有效，不會過期。</div>
+        </details>
+        <details class="faq-item">
+            <summary>可以退款嗎？</summary>
+            <div class="faq-content">購買後 7 天內，若未使用任何 AI 額度，可申請全額退款。</div>
+        </details>
+    </div>
+</section>
 
     <div class="features">
         <div class="feature-item">
@@ -574,6 +649,43 @@
             </div>
         </div>
     </footer>
+<script>
+    // 倒數計時邏輯 (設定為 7 天後)
+    const countdownDate = new Date();
+    countdownDate.setDate(countdownDate.getDate() + 7);
 
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = countdownDate - now;
+
+        if (distance < 0) return;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // 確保元素存在才更新 (避免報錯)
+        if(document.getElementById('days')) {
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // 購買按鈕處理
+    function handlePurchase(tier) {
+        const tierNames = {
+            'super-early': '超級早鳥（NT$ 1,280）',
+            'early': '早鳥優惠（NT$ 1,480）',
+            'founder': '創始會員（NT$ 1,680）'
+        };
+        alert(`感謝支持！\n您選擇了：${tierNames[tier]}\n\n(此為測試階段，暫未串接金流)`);
+    }
+</script>
 </body>
 </html>
