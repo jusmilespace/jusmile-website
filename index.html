@@ -454,10 +454,10 @@
         }
     </style>
 </head>
-<body>
+<body id="top">
 
     <nav>
-        <a href="#" class="logo">Ju Smile Space</a>
+        <a href="#top" class="logo">Ju Smile Space</a>
         <div class="nav-links">
             <a href="https://app.jusmilespace.com">產品介紹</a>
             <a href="#pricing">創始會員</a>
@@ -584,7 +584,7 @@
                 </div>
             </div>
 
-            <p style="text-align: center; margin-top: 40px; color: var(--text-gray);">
+            <p style="text-align: center; margin-top: 40px; margin-bottom: 60px; color: var(--text-gray);">
                 ＊創始會員售完後將推出月訂閱制（NT$ 129/月），不再提供終身方案<br>
                 ＊實體禮物僅限台灣本島地址，海外會員仍享有所有數位權益
             </p>
@@ -632,7 +632,7 @@
                 </p>
             </div>
 
-            <div class="benefit-card">
+            <div class="benefit-card" style="text-align: center;">
                 <span class="benefit-icon">🎁</span>
                 <h3 class="benefit-title">創始會員專屬禮物</h3>
                 <p class="benefit-desc">
@@ -654,7 +654,7 @@
                     <tr>
                         <th>項目</th>
                         <th>創始會員</th>
-                        <th>未來訂閱制</th>
+                        <th>訂閱制</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -729,7 +729,7 @@
             <li>如果您是重度使用者（每天 3 餐都記）：可使用約 <strong>3.3 年</strong>。</li>
             <li>如果您是輕度使用者（每天 1 次）：可使用約 <strong>10 年</strong>。</li>
         </ul>
-        <p>重點是<strong>額度終身有效，不會過期</strong>。相比訂閱制每月沒用完會歸零，創始會員的每一次都實實在在保留在您的帳戶裡。</p>
+        <p>重點是<strong>額度終身有效，不會過期</strong>。相比訂閱制額度可累積 3 個月、超過就歸零，創始會員的每一次都永久保留在您的帳戶裡。</p>
     </div>
 </details>
 
@@ -818,9 +818,8 @@
         </div>
     </footer>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    // 倒數計時邏輯 (設定為 7 天後)
-    const countdownDate = new Date();
-    countdownDate.setDate(countdownDate.getDate() + 7);
+    // 倒數計時邏輯 - 創始會員優惠到 2026/02/28
+    const countdownDate = new Date('2026-02-28T23:59:59');
 
     function updateCountdown() {
         const now = new Date().getTime();
