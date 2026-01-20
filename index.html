@@ -12,7 +12,7 @@
     <meta property="og:url" content="https://jusmilespace.com">
     
     <!-- Favicon -->
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="./favicon.ico" />
 
     <style>
         :root {
@@ -338,56 +338,80 @@
             margin-top: 12px;
         }
 
+        /* --- 這一區塊是外框設定 (保留) --- */
         .benefits-section {
             background: white;
             border-radius: 20px;
-            padding: 40px;
-            max-width: 900px;
+            padding: 60px 40px; /*稍微增加上下留白，更大器*/
+            max-width: 1000px; /* 稍微放寬寬度 */
             margin: 0 auto;
             box-shadow: 0 4px 20px rgba(0,0,0,0.06);
         }
 
         .benefits-title {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: 800;
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             color: var(--charcoal);
         }
 
         .benefits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 讓卡片寬一點 */
+            gap: 30px;
         }
 
-        .benefit-item {
+        /* --- 下面這裡就是修改的重點 (從 Item 改成 Card) --- */
+        
+        /* 原本是 .benefit-item，現在改成 .benefit-card 對應 HTML */
+        .benefit-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center; /* 讓內容置中，變成卡片樣式 */
+            border: 1px solid #eee;
+            transition: transform 0.2s, box-shadow 0.2s;
             display: flex;
-            gap: 16px;
-            padding: 20px;
-            background: var(--bg-light);
-            border-radius: 16px;
+            flex-direction: column;
+            align-items: center;
+            height: 100%; /* 讓同一列卡片等高 */
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-color: var(--mint);
         }
 
         .benefit-icon {
-            font-size: 28px;
-            flex-shrink: 0;
+            font-size: 48px; /* 圖示放大 */
+            margin-bottom: 20px;
+            display: inline-block;
         }
 
-        .benefit-content {
-            flex: 1;
-        }
+        /* 移除 .benefit-content，因為卡片式排版不需要這個包裹層 */
 
         .benefit-title {
-            font-weight: 700;
-            margin-bottom: 6px;
+            font-size: 1.3rem; /* 標題放大 */
+            font-weight: 800;
+            margin-bottom: 15px;
             color: var(--charcoal);
         }
 
         .benefit-desc {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text-gray);
-            line-height: 1.5;
+            line-height: 1.7;
+        }
+
+        /* 新增：高亮文字樣式 */
+        .benefit-highlight {
+            color: var(--mint-dark);
+            font-weight: 700;
+            background: #f0f9f6;
+            padding: 0 6px;
+            border-radius: 4px;
         }
 
         .features {
@@ -488,7 +512,7 @@
         <div class="nav-links">
             <a href="https://app.jusmilespace.com">產品介紹</a>
             <a href="#pricing">創始會員</a>
-            <a href="/cdn-cgi/l/email-protection#18726d366b7571747d6b68797b7d587f75797174367b7775">聯絡我們</a>
+            <a href="mailto:ju.smilespace@gmail.com">聯絡我們</a>
         </div>
     </nav>
 
@@ -844,33 +868,18 @@
             </div>
         </div>
     </footer>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    // 倒數計時邏輯 - 創始會員優惠到 2026/02/28
-    // 使用 let 以便在備用方案中重新賦值
-    let countdownDate = new Date('2026-02-28T23:59:59+08:00');
-    
-    // 備用方案：如果上面的格式不支援，使用數字格式
-    if (isNaN(countdownDate.getTime())) {
-        countdownDate = new Date(2026, 1, 28, 23, 59, 59); // 月份是0-based，所以2月是1
-    }
+<script>
+    // 設定倒數日期：這裡設定為 2026 年 2 月 28 日
+    // 如果想要測試效果，可以把日期改成未來的幾天後
+    const countDownDate = new Date("Feb 28, 2026 23:59:59").getTime();
 
     function updateCountdown() {
         const now = new Date().getTime();
-        const distance = countdownDate.getTime() - now;
+        const distance = countDownDate - now;
 
         if (distance < 0) {
-            // 倒數結束，顯示00:00:00:00
-            const daysEl = document.getElementById('days');
-            const hoursEl = document.getElementById('hours');
-            const minutesEl = document.getElementById('minutes');
-            const secondsEl = document.getElementById('seconds');
-            
-            if(daysEl) {
-                daysEl.textContent = '00';
-                hoursEl.textContent = '00';
-                minutesEl.textContent = '00';
-                secondsEl.textContent = '00';
-            }
+            // 時間到的處理
+            document.querySelectorAll('.countdown-number').forEach(el => el.textContent = '00');
             return;
         }
 
@@ -879,34 +888,25 @@
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // 確保元素存在才更新 (避免報錯)
+        // 更新畫面
         const daysEl = document.getElementById('days');
         const hoursEl = document.getElementById('hours');
         const minutesEl = document.getElementById('minutes');
         const secondsEl = document.getElementById('seconds');
         
-        if(daysEl) {
-            daysEl.textContent = String(days).padStart(2, '0');
-            hoursEl.textContent = String(hours).padStart(2, '0');
-            minutesEl.textContent = String(minutes).padStart(2, '0');
-            secondsEl.textContent = String(seconds).padStart(2, '0');
-        }
+        if(daysEl) daysEl.textContent = String(days).padStart(2, '0');
+        if(hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+        if(minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+        if(secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
     }
 
-    // 頁面載入完成後開始倒數
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-        });
-    } else {
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    }
+    // 立即執行一次，並設定每秒更新
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
-    // 購買按鈕處理
+    // 處理購買按鈕點擊
     function handlePurchase(tier) {
-        const tierNames = {
-            'super-early': '超級早鳥（NT$ 1,280）',
-            'early': '早鳥優惠（NT$ 1,480）',
-          
+        alert('感謝您的興趣！金流串接中，請稍候再試。');
+        console.log('Selected tier:', tier);
+    }
+</script>
