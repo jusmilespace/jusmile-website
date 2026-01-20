@@ -10,6 +10,9 @@
     <meta property="og:description" content="讓生活更簡單，每天都好記。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://jusmilespace.com">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" />
 
     <style>
         :root {
@@ -445,7 +448,31 @@
 
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
-            nav { padding: 20px; }
+            nav { 
+                padding: 16px 20px; 
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+            .logo {
+                font-size: 20px;
+            }
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                width: 100%;
+            }
+            .nav-links a {
+                margin-left: 0;
+                font-size: 14px;
+                padding: 8px 16px;
+                background: var(--bg-light);
+                border-radius: 8px;
+                flex: 1;
+                text-align: center;
+                min-width: fit-content;
+            }
             .footer-links { flex-direction: column; gap: 16px; }
             .pricing-title { font-size: 2rem; }
             .pricing-grid { grid-template-columns: 1fr; }
@@ -632,7 +659,7 @@
                 </p>
             </div>
 
-            <div class="benefit-card" style="grid-column: 1 / -1; max-width: 500px; margin: 0 auto; text-align: center;">
+            <div class="benefit-card" style="grid-column: 1 / -1; max-width: 500px; margin: 0 auto;">
                 <span class="benefit-icon">🎁</span>
                 <h3 class="benefit-title">創始會員專屬禮物</h3>
                 <p class="benefit-desc">
@@ -819,10 +846,10 @@
     </footer>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // 倒數計時邏輯 - 創始會員優惠到 2026/02/28
-    // 使用更兼容的日期格式
-    const countdownDate = new Date('2026-02-28T23:59:59+08:00');
+    // 使用 let 以便在備用方案中重新賦值
+    let countdownDate = new Date('2026-02-28T23:59:59+08:00');
     
-    // 備用方案：如果上面的格式不支援
+    // 備用方案：如果上面的格式不支援，使用數字格式
     if (isNaN(countdownDate.getTime())) {
         countdownDate = new Date(2026, 1, 28, 23, 59, 59); // 月份是0-based，所以2月是1
     }
@@ -833,11 +860,16 @@
 
         if (distance < 0) {
             // 倒數結束，顯示00:00:00:00
-            if(document.getElementById('days')) {
-                document.getElementById('days').textContent = '00';
-                document.getElementById('hours').textContent = '00';
-                document.getElementById('minutes').textContent = '00';
-                document.getElementById('seconds').textContent = '00';
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            
+            if(daysEl) {
+                daysEl.textContent = '00';
+                hoursEl.textContent = '00';
+                minutesEl.textContent = '00';
+                secondsEl.textContent = '00';
             }
             return;
         }
@@ -848,11 +880,16 @@
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         // 確保元素存在才更新 (避免報錯)
-        if(document.getElementById('days')) {
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        
+        if(daysEl) {
+            daysEl.textContent = String(days).padStart(2, '0');
+            hoursEl.textContent = String(hours).padStart(2, '0');
+            minutesEl.textContent = String(minutes).padStart(2, '0');
+            secondsEl.textContent = String(seconds).padStart(2, '0');
         }
     }
 
