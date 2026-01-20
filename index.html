@@ -632,7 +632,7 @@
                 </p>
             </div>
 
-            <div class="benefit-card" style="text-align: center;">
+            <div class="benefit-card" style="grid-column: 1 / -1; max-width: 500px; margin: 0 auto; text-align: center;">
                 <span class="benefit-icon">🎁</span>
                 <h3 class="benefit-title">創始會員專屬禮物</h3>
                 <p class="benefit-desc">
@@ -700,7 +700,7 @@
                     </tr>
                     <tr>
                         <td>5 年總支出</td>
-                        <td class="highlight">NT$ 1,280<br><small>之後完全免費</small></td>
+                        <td class="highlight">NT$ 1,280-1,680<br><small>一次性費用</small></td>
                         <td>NT$ 7,740<br><small>需持續付費</small></td>
                     </tr>
                 </tbody>
@@ -819,13 +819,28 @@
     </footer>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // 倒數計時邏輯 - 創始會員優惠到 2026/02/28
-    const countdownDate = new Date('2026-02-28T23:59:59');
+    // 使用更兼容的日期格式
+    const countdownDate = new Date('2026-02-28T23:59:59+08:00');
+    
+    // 備用方案：如果上面的格式不支援
+    if (isNaN(countdownDate.getTime())) {
+        countdownDate = new Date(2026, 1, 28, 23, 59, 59); // 月份是0-based，所以2月是1
+    }
 
     function updateCountdown() {
         const now = new Date().getTime();
-        const distance = countdownDate - now;
+        const distance = countdownDate.getTime() - now;
 
-        if (distance < 0) return;
+        if (distance < 0) {
+            // 倒數結束，顯示00:00:00:00
+            if(document.getElementById('days')) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+            }
+            return;
+        }
 
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -841,8 +856,16 @@
         }
     }
 
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    // 頁面載入完成後開始倒數
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
+    } else {
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    }
 
     // 購買按鈕處理
     function handlePurchase(tier) {
