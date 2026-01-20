@@ -12,7 +12,7 @@
     <meta property="og:url" content="https://jusmilespace.com">
     
     <!-- Favicon -->
-    <link rel="icon" href="./favicon.ico?v=2" />
+    <link rel="icon" href="favicon.ico" />
 
     <style>
         :root {
@@ -448,9 +448,11 @@
         }
 
         .footer-links {
-            display: flex;
-            gap: 30px;
-        }
+    display: flex;
+    gap: 20px 30px; /* 上下間距20px，左右30px */
+    flex-wrap: wrap; /* 讓手機版自動換行 */
+    justify-content: center; /* 內容置中 */
+}
 
         .footer-links a {
             color: var(--text-gray);
@@ -512,7 +514,7 @@
         <div class="nav-links">
             <a href="https://app.jusmilespace.com">產品介紹</a>
             <a href="#pricing">創始會員</a>
-            <a href="mailto:ju.smilespace@gmail.com">聯絡我們</a>
+            <a href="#contact">聯絡我們</a>
         </div>
     </nav>
 
@@ -855,19 +857,30 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="https://app.jusmilespace.com/support.html">☕️ 支持我們</a>
-                <a href="/privacy-policy.html">隱私權政策</a>
-                <a href="/cdn-cgi/l/email-protection#a7cdd289d4cacecbc2d4d7c6c4c2e7c0cac6cecb89c4c8ca">聯絡我們</a>
-                <a href="https://app.jusmilespace.com">產品列表</a>
-            </div>
-            <div class="copyright">
-                &copy; 2026 Ju Smile Space. All rights reserved.
-            </div>
+    <footer id="contact">
+    <div class="footer-content">
+        <h3 style="margin-bottom: 20px; font-size: 1.5rem; color: var(--charcoal);">聯絡我們</h3>
+        
+        <div class="footer-links">
+            <a href="mailto:ju.smilespace@gmail.com" title="Email">
+                <span style="font-size: 1.2rem; margin-right: 8px;">📧</span> Email 信箱
+            </a>
+            <a href="https://www.instagram.com/jusmilespace/" target="_blank" title="Instagram">
+                <span style="font-size: 1.2rem; margin-right: 8px;">📸</span> Instagram
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61586288185586" target="_blank" title="Facebook">
+                <span style="font-size: 1.2rem; margin-right: 8px;">📘</span> Facebook
+            </a>
+            <a href="https://www.youtube.com/@JuSmileSpace" target="_blank" title="YouTube">
+                <span style="font-size: 1.2rem; margin-right: 8px;">📺</span> YouTube
+            </a>
         </div>
-    </footer>
+
+        <div class="copyright">
+            © 2026 Ju Smile Space. All rights reserved.
+        </div>
+    </div>
+</footer>
 <script>
     // 設定倒數日期：這裡設定為 2026 年 2 月 28 日
     // 如果想要測試效果，可以把日期改成未來的幾天後
