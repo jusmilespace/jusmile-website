@@ -505,7 +505,26 @@
             .benefits-grid { grid-template-columns: 1fr; }
             .current-price { font-size: 2.5rem; }
         }
-    </style>
+
+        /* --- 新增樣式：折扣碼與法律視窗 --- */
+.discount-section { text-align: center; margin-bottom: 40px; }
+.discount-box { display: inline-flex; gap: 10px; align-items: center; background: #f3f4f6; padding: 8px; border-radius: 50px; border: 1px solid #e5e7eb; }
+.legal-links { margin-top: 20px; font-size: 0.85rem; }
+.legal-links a { color: var(--text-gray); text-decoration: none; transition: color 0.2s; cursor: pointer; }
+.legal-links a:hover { color: var(--mint-dark); text-decoration: underline; }
+.legal-separator { margin: 0 10px; color: #ddd; }
+
+/* Modal 彈出視窗 */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+.modal-content { background: white; width: 100%; max-width: 600px; max-height: 80vh; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; animation: fadeInUp 0.3s ease-out; }
+.modal-header { padding: 20px 24px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+.modal-title { font-size: 1.2rem; font-weight: 800; color: var(--charcoal); }
+.modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; padding: 0 8px; }
+.modal-body { padding: 24px; overflow-y: auto; line-height: 1.7; color: var(--charcoal); font-size: 0.95rem; white-space: pre-line; text-align: left; }
+.modal-footer { padding: 16px 24px; border-top: 1px solid #eee; text-align: right; }
+.modal-btn { background: var(--charcoal); color: white; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    
+</style>
 </head>
 <body id="top">
 
@@ -571,6 +590,18 @@
     <section class="pricing">
         <div class="pricing-container">
             <h2 class="section-title">選擇你的創始會員方案</h2>
+            <div class="discount-section">
+    <div class="discount-box">
+        <span style="padding-left: 12px; font-size: 1.2rem;">🎟️</span>
+        <input type="text" id="discount-input" placeholder="輸入好友優惠碼" 
+               style="border: none; background: transparent; padding: 8px; font-size: 1rem; outline: none; width: 140px; color: var(--charcoal);">
+        <button onclick="applyDiscount()" 
+                style="background: var(--charcoal); color: white; border: none; padding: 8px 20px; border-radius: 40px; cursor: pointer; font-weight: bold;">
+            使用
+        </button>
+    </div>
+    <p id="discount-message" style="margin-top: 8px; font-size: 0.9rem; height: 20px;"></p>
+</div>
             
             <div class="pricing-grid">
                 <!-- Tier 1: Super Early Bird -->
@@ -591,7 +622,7 @@
                         立即加入
                     </button>
                     
-                    <div class="tier-number">專屬編號 FOUNDER001-100</div>
+                    
                 </div>
 
                 <!-- Tier 2: Early Bird (Featured) -->
@@ -612,7 +643,7 @@
                         立即加入
                     </button>
                     
-                    <div class="tier-number">專屬編號 FOUNDER101-300</div>
+                    
                 </div>
 
                 <!-- Tier 3: Founder -->
@@ -633,7 +664,7 @@
                         立即加入
                     </button>
                     
-                    <div class="tier-number">專屬編號 FOUNDER301-500</div>
+                    
                 </div>
             </div>
 
@@ -754,7 +785,7 @@
                     <tr>
                         <td>5 年總支出</td>
                         <td class="highlight">NT$ 1,280-1,680<br><small>一次性費用</small></td>
-                        <td>NT$ 7,740<br><small>需持續付費</small></td>
+                        <td>NT$ 6,450<br><small>需持續付費</small></td>
                     </tr>
                 </tbody>
             </table>
@@ -863,8 +894,8 @@
         
         <div class="footer-links">
             <div class="footer-link-item" style="display: inline-flex; align-items: center; color: var(--text-gray);">
-    <span style="font-size: 1.2rem; margin-right: 8px;">📧</span> ju.smilespace@gmail.com
-</div>
+                <span style="font-size: 1.2rem; margin-right: 8px;">📧</span> ju.smilespace@gmail.com
+            </div>
             <a href="https://www.instagram.com/jusmilespace/" target="_blank" title="Instagram">
                 <span style="font-size: 1.2rem; margin-right: 8px;">📸</span> Instagram
             </a>
@@ -876,11 +907,32 @@
             </a>
         </div>
 
+        <div class="legal-links">
+            <a onclick="showModal('terms')">服務條款</a>
+            <span class="legal-separator">|</span>
+            <a onclick="showModal('privacy')">隱私權政策</a>
+            <span class="legal-separator">|</span>
+            <a onclick="showModal('refund')">退款與訂閱政策</a>
+        </div>
+
         <div class="copyright">
             © 2026 Ju Smile Space. All rights reserved.
         </div>
     </div>
 </footer>
+
+<div id="legalModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <div class="modal-title" id="modalTitle">標題</div>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="modalBody">內容...</div>
+        <div class="modal-footer">
+            <button class="modal-btn" onclick="closeModal()">我了解了</button>
+        </div>
+    </div>
+</div>
 <script>
     // 設定倒數日期：這裡設定為 2026 年 2 月 28 日
     // 如果想要測試效果，可以把日期改成未來的幾天後
@@ -921,5 +973,89 @@
     function handlePurchase(tier) {
         alert('感謝您的興趣！金流串接中，請稍候再試。');
         console.log('Selected tier:', tier);
+    }
+
+    // --- 新增：折扣碼與價格邏輯 ---
+    const DISCOUNT_CODES = {
+        'FRIEND150': { amount: 150, name: '好友推薦優惠' },
+        'JUSMILE2026': { amount: 200, name: '早鳥粉絲優惠' },
+        'TESTUSER': { amount: 100, name: '測試優惠' }
+    };
+
+    const ORIGINAL_PRICES = { 'super-early': 1280, 'early': 1480, 'founder': 1680 };
+    let currentDiscount = 0;
+
+    function applyDiscount() {
+        const input = document.getElementById('discount-input');
+        const messageEl = document.getElementById('discount-message');
+        const code = input.value.trim().toUpperCase();
+
+        if (!code) {
+            messageEl.textContent = '請輸入優惠碼';
+            messageEl.style.color = 'var(--text-gray)';
+            return;
+        }
+
+        if (DISCOUNT_CODES.hasOwnProperty(code)) {
+            const discount = DISCOUNT_CODES[code];
+            currentDiscount = discount.amount;
+            messageEl.style.color = 'var(--mint-dark)';
+            messageEl.textContent = `✅ ${discount.name}：已折抵 NT$ ${discount.amount}`;
+            updatePrices();
+        } else {
+            currentDiscount = 0;
+            messageEl.style.color = '#dc2626';
+            messageEl.textContent = '❌ 無效的優惠碼';
+            updatePrices();
+        }
+    }
+
+    function updatePrices() {
+        const cards = document.querySelectorAll('.pricing-card');
+        const types = ['super-early', 'early', 'founder'];
+        
+        cards.forEach((card, index) => {
+            if (index < 3) {
+                const type = types[index];
+                const original = ORIGINAL_PRICES[type];
+                const final = original - currentDiscount;
+                const priceEl = card.querySelector('.current-price');
+                
+                if (currentDiscount > 0) {
+                    priceEl.innerHTML = `<div style="font-size: 1rem; text-decoration: line-through; color: #9ca3af; line-height: 1;">NT$ ${original}</div><div style="color: #dc2626;">NT$ ${final}</div>`;
+                } else {
+                    priceEl.innerHTML = `<small>NT$</small> ${original}`;
+                }
+            }
+        });
+    }
+
+    function handlePurchase(tier) {
+        const finalPrice = ORIGINAL_PRICES[tier] - currentDiscount;
+        alert(`方案：${tier}\n金額：NT$ ${finalPrice}\n(此處將串接金流)`);
+    }
+
+    // --- 新增：法律視窗內容與邏輯 ---
+    const LEGAL_CONTENT = {
+        'terms': { title: '服務條款與免責聲明', body: `<strong>1. 服務性質</strong>\n本服務提供 AI 輔助之飲食與健康記錄功能。非醫療器材。\n\n<strong>2. AI 免責</strong>\nAI 產生之數據僅供參考，可能存在誤差。請勿完全依賴。\n\n<strong>3. 公平使用</strong>\n禁止惡意爬蟲或濫用 API，違者將停權。` },
+        'privacy': { title: '隱私權政策', body: `<strong>1. 資料收集</strong>\n飲食記錄儲存於雲端資料庫。\n\n<strong>2. AI 處理</strong>\n照片用於分析，不會公開訓練或外流。\n\n<strong>3. 安全</strong>\n請妥善保管帳號。` },
+        'refund': { title: '退款與訂閱政策', body: `<strong>1. 創始會員</strong>\n序號啟用後無法退款。未啟用可於 7 日內退款。\n\n<strong>2. 訂閱制</strong>\n自動續約，可隨時取消下一期。\n\n<strong>3. 價格</strong>\n未來價格調整不影響已付費創始會員。` }
+    };
+
+    function showModal(type) {
+        const c = LEGAL_CONTENT[type];
+        if(c) {
+            document.getElementById('modalTitle').textContent = c.title;
+            document.getElementById('modalBody').innerHTML = c.body.replace(/\n/g, '<br>');
+            document.getElementById('legalModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeModal(e) {
+        if (!e || e.target === document.getElementById('legalModal') || e.target.classList.contains('modal-close') || e.target.classList.contains('modal-btn')) {
+            document.getElementById('legalModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
     }
 </script>
