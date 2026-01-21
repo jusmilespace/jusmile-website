@@ -432,42 +432,83 @@
         .feature-desc { font-size: 0.9rem; color: var(--text-gray); }
 
         footer {
-            background-color: var(--bg-light);
-            border-top: 1px solid #eee;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .footer-links {
-    display: flex;
-    gap: 20px 30px; /* 上下間距20px，左右30px */
-    flex-wrap: wrap; /* 讓手機版自動換行 */
-    justify-content: center; /* 內容置中 */
+    background-color: var(--bg-light);
+    border-top: 1px solid #e5e7eb;
+    padding: 60px 20px 40px;
+    text-align: center;
 }
 
-        .footer-links a {
-            color: var(--text-gray);
-            text-decoration: none;
-            font-size: 0.95rem;
-            display: inline-flex;
-            align-items: center;
-        }
-        .footer-links a:hover { color: var(--mint-dark); text-decoration: underline; }
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
 
-        .copyright {
-            color: #aaa;
-            font-size: 0.85rem;
-            margin-top: 20px;
-        }
+/* 社交媒體圖示容器 */
+.social-links {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 10px;
+}
+
+/* SVG 圖示設定 */
+.social-icon {
+    width: 28px;
+    height: 28px;
+    fill: var(--text-gray);
+    transition: all 0.3s ease;
+}
+
+.social-link:hover .social-icon {
+    fill: var(--mint-dark);
+    transform: translateY(-3px);
+}
+
+.contact-email {
+    color: var(--text-gray);
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 法律連結優化 */
+.legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    margin-top: 10px;
+}
+
+.legal-links a {
+    color: var(--text-gray);
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+}
+
+.legal-links a:hover {
+    color: var(--mint-dark);
+    border-bottom-color: var(--mint-dark);
+}
+
+.legal-separator {
+    color: #e5e7eb;
+}
+
+.copyright {
+    color: #aaa;
+    font-size: 0.8rem;
+    margin-top: 30px;
+}
 
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -890,27 +931,35 @@
 
     <footer id="contact">
     <div class="footer-content">
-        <h3 style="margin-bottom: 20px; font-size: 1.5rem; color: var(--charcoal);">聯絡我們</h3>
         
-        <div class="footer-links">
-            <div class="footer-link-item" style="display: inline-flex; align-items: center; color: var(--text-gray);">
-                <span style="font-size: 1.2rem; margin-right: 8px;">📧</span> ju.smilespace@gmail.com
-            </div>
-            <a href="https://www.instagram.com/jusmilespace/" target="_blank" title="Instagram">
-                <span style="font-size: 1.2rem; margin-right: 8px;">📸</span> Instagram
+        <div class="social-links">
+            <a href="https://www.instagram.com/jusmilespace/" target="_blank" class="social-link" title="Instagram">
+                <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
             </a>
-            <a href="https://www.facebook.com/profile.php?id=61586288185586" target="_blank" title="Facebook">
-                <span style="font-size: 1.2rem; margin-right: 8px;">📘</span> Facebook
+
+            <a href="https://www.facebook.com/profile.php?id=61586288185586" target="_blank" class="social-link" title="Facebook">
+                <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036c-2.148 0-2.797 1.603-2.797 2.87v1.101h4.188l-1.369 3.667h-2.819v7.98c5.014-1.592 8.586-6.312 8.586-11.824C22.705 5.625 17.618.539 11.342.539 5.066.539-.02 5.625-.02 11.895c0 5.512 3.571 10.232 8.585 11.824l.536-.028z"/>
+                </svg>
             </a>
-            <a href="https://www.youtube.com/@JuSmileSpace" target="_blank" title="YouTube">
-                <span style="font-size: 1.2rem; margin-right: 8px;">📺</span> YouTube
+
+            <a href="https://www.youtube.com/@JuSmileSpace" target="_blank" class="social-link" title="YouTube">
+                <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
             </a>
+        </div>
+
+        <div class="contact-email">
+            <span>📧</span> ju.smilespace@gmail.com
         </div>
 
         <div class="legal-links">
             <a onclick="showModal('terms')">服務條款</a>
             <span class="legal-separator">|</span>
-            <a onclick="showModal('privacy')">隱私權政策</a>
+            <a href="privacy-policy.html" target="_blank">隱私權政策</a>
             <span class="legal-separator">|</span>
             <a onclick="showModal('refund')">退款與訂閱政策</a>
         </div>
