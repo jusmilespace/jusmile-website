@@ -979,8 +979,9 @@
     </div>
 </div>
 <script>
-    // 設定倒數日期：這裡設定為 2026 年 2 月 28 日
-    // 如果想要測試效果，可以把日期改成未來的幾天後
+    // ==========================================
+    // 1. 倒數計時器邏輯 (Countdown)
+    // ==========================================
     const countDownDate = new Date("Feb 28, 2026 23:59:59").getTime();
 
     function updateCountdown() {
@@ -988,7 +989,6 @@
         const distance = countDownDate - now;
 
         if (distance < 0) {
-            // 時間到的處理
             document.querySelectorAll('.countdown-number').forEach(el => el.textContent = '00');
             return;
         }
@@ -998,7 +998,6 @@
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // 更新畫面
         const daysEl = document.getElementById('days');
         const hoursEl = document.getElementById('hours');
         const minutesEl = document.getElementById('minutes');
@@ -1010,15 +1009,16 @@
         if(secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
     }
 
-    // 立即執行一次，並設定每秒更新
+    // 啟動倒數
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-   // ==========================================
-    // 1. 設定與資料 (Configuration & Data)
+
+    // ==========================================
+    // 2. 金流與折扣設定 (Configuration)
     // ==========================================
     
-    // 綠界金流連結 (已更新為真實代碼)
+    // 綠界金流連結 (真實代碼)
     const ECPAY_LINKS = {
         'super-early': {
             original: 'https://p.ecpay.com.tw/49D7E91', // 原價 $1280
@@ -1043,115 +1043,15 @@
     // 原價設定
     const ORIGINAL_PRICES = { 'super-early': 1280, 'early': 1480, 'founder': 1680 };
     
-    // 目前累積的折扣金額 (全域變數)
+    // 目前累積的折扣金額
     let currentDiscount = 0;
 
 
     // ==========================================
-    // 2. 功能邏輯 (Functions)
+    // 3. 核心功能邏輯 (Core Functions)
     // ==========================================
 
-    // 套用折扣碼邏輯
-    function applyDiscount() {
-        const input = document.getElementById('discount-input');
-        const messageEl = document.getElementById('discount-message');
-        const code = input.value.trim().toUpperCase();
-
-        if (!code) {
-            messageEl.textContent = '請輸入優惠碼';
-            messageEl.style.color = 'var(--text-gray)';
-            return;
-        }
-
-        if (DISCOUNT_CODES.hasOwnProperty(code)) {
-            const discount = DISCOUNT_CODES[code];
-            currentDiscount = discount.amount; // 設定折扣金額
-            messageEl.style.color = 'var(--mint-dark)';
-            messageEl.textContent = `✅ ${discount.name}：已折抵 NT$ ${discount.amount}`;
-            updatePrices(); // 更新畫面價格
-        } else {
-            currentDiscount = 0;
-            messageEl.style.color = '#dc2626';
-            messageEl.textContent = '❌ 無效的優惠碼';
-            updatePrices(); // 還原畫面價格
-        }
-    }
-
-    // 更新介面上的價格顯示
-    function updatePrices() {
-        const cards = document.querySelectorAll('.pricing-card');
-        const types = ['super-early', 'early', 'founder'];
-        
-        cards.forEach((card, index) => {
-            if (index < 3) {
-                const type = types[index];
-                const original = ORIGINAL_PRICES[type];
-                const final = original - currentDiscount;
-                const priceEl = card.querySelector('.current-price');
-                
-                if (currentDiscount > 0) {
-                    // 有折扣時：顯示原價刪除線 + 紅色折扣價
-                    priceEl.innerHTML = `<div style="font-size: 1rem; text-decoration: line-through; color: #9ca3af; line-height: 1;">NT$ ${original}</div><div style="color: #dc2626;">NT$ ${final}</div>`;
-                } else {
-                    // 無折扣時：顯示原價
-                    priceEl.innerHTML = `<small>NT$</small> ${original}`;
-                }
-            }
-        });
-    }
-
-    // 處理購買點擊 (正確版：會跳轉至綠界)
-    function handlePurchase(tier) {
-        // 1. 計算目前應該付多少錢
-        const originalPrice = ORIGINAL_PRICES[tier];
-        const finalPrice = originalPrice - currentDiscount;
-        
-        // 2. 決定要用哪一個連結
-        const links = ECPAY_LINKS[tier];
-        let targetUrl = '';
-
-        if (currentDiscount > 0) {
-            // 如果有折扣，就用 discount 連結
-            // (防呆：如果沒設定 discount 連結，就回退用原價連結)
-            targetUrl = links.discount || links.original;
-        } else {
-            // 沒折扣，用原價連結
-            targetUrl = links.original;
-        }
-
-        // 3. (開發階段防呆檢查，確認連結是否有效)
-        // 由於您已經填入真實 ID，這段通常不會觸發，但保留作為安全檢查
-        if (!targetUrl || targetUrl.includes('EFXXX')) { 
-            alert('系統設定中，請稍後再試。');
-            return;
-        }
-
-        // 4. 定義方案名稱 (用於確認視窗)
-        const tierNames = {
-            'super-early': '超級早鳥方案',
-            'early': '早鳥優惠方案',
-            'founder': '創始會員方案'
-        };
-        
-        // 5. 最終確認視窗
-        const message = `您選擇了：【${tierNames[tier]}】\n` +
-                        `應付金額：NT$ ${finalPrice}\n\n` +
-                        `點擊「確定」將前往綠界加密頁面進行付款。`;
-
-        if (confirm(message)) {
-            window.open(targetUrl, '_blank');
-        }
-    }
-
-    // --- 新增：折扣碼與價格邏輯 ---
-    const DISCOUNT_CODES = {
-        'FRIEND100': { amount: 100, name: '好友專屬折扣' },
-        'VIP2026':   { amount: 100, name: 'VIP 邀請優惠' },
-    };
-
-    const ORIGINAL_PRICES = { 'super-early': 1280, 'early': 1480, 'founder': 1680 };
-    let currentDiscount = 0;
-
+    // 套用折扣碼
     function applyDiscount() {
         const input = document.getElementById('discount-input');
         const messageEl = document.getElementById('discount-message');
@@ -1177,6 +1077,7 @@
         }
     }
 
+    // 更新介面價格
     function updatePrices() {
         const cards = document.querySelectorAll('.pricing-card');
         const types = ['super-early', 'early', 'founder'];
@@ -1197,12 +1098,48 @@
         });
     }
 
+    // 處理購買點擊 (串接綠界)
     function handlePurchase(tier) {
-        const finalPrice = ORIGINAL_PRICES[tier] - currentDiscount;
-        alert(`方案：${tier}\n金額：NT$ ${finalPrice}\n(此處將串接金流)`);
+        // 計算金額
+        const originalPrice = ORIGINAL_PRICES[tier];
+        const finalPrice = originalPrice - currentDiscount;
+        
+        // 取得連結
+        const links = ECPAY_LINKS[tier];
+        let targetUrl = '';
+
+        if (currentDiscount > 0) {
+            targetUrl = links.discount || links.original;
+        } else {
+            targetUrl = links.original;
+        }
+
+        // 檢查連結
+        if (!targetUrl) { 
+            alert('系統忙碌中，請稍後再試。');
+            return;
+        }
+
+        // 顯示確認視窗
+        const tierNames = {
+            'super-early': '超級早鳥方案',
+            'early': '早鳥優惠方案',
+            'founder': '創始會員方案'
+        };
+        
+        const message = `您選擇了：【${tierNames[tier]}】\n` +
+                        `應付金額：NT$ ${finalPrice}\n\n` +
+                        `點擊「確定」將前往綠界加密頁面進行付款。`;
+
+        if (confirm(message)) {
+            window.open(targetUrl, '_blank');
+        }
     }
 
-    // --- 新增：法律視窗內容與邏輯 ---
+
+    // ==========================================
+    // 4. 法律條款彈窗 (Legal Modal)
+    // ==========================================
     const LEGAL_CONTENT = {
         'terms': { title: '服務條款與免責聲明', body: `<strong>1. 服務性質</strong>\n本服務提供 AI 輔助之飲食與健康記錄功能。非醫療器材。\n\n<strong>2. AI 免責</strong>\nAI 產生之數據僅供參考，可能存在誤差。請勿完全依賴。\n\n<strong>3. 公平使用</strong>\n禁止惡意爬蟲或濫用 API，違者將停權。` },
         'privacy': { title: '隱私權政策', body: `<strong>1. 資料收集</strong>\n飲食記錄儲存於雲端資料庫。\n\n<strong>2. AI 處理</strong>\n照片用於分析，不會公開訓練或外流。\n\n<strong>3. 安全</strong>\n請妥善保管帳號。` },
