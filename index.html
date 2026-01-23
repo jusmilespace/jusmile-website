@@ -1014,24 +1014,93 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    // --- 綠界金流串接設定 (配合 $100 折扣) ---
+   // ==========================================
+    // 1. 設定與資料 (Configuration & Data)
+    // ==========================================
     
-    // 請將這裡的網址換成您綠界後台產生的真實網址
+    // 綠界金流連結 (已更新為真實代碼)
     const ECPAY_LINKS = {
         'super-early': {
-            original: 'https://p.ecpay.com.tw/EFXXX', // 原價 $1280
-            discount: 'https://p.ecpay.com.tw/ABXXX'  // ★折後 $1180 (1280-100)
+            original: 'https://p.ecpay.com.tw/49D7E91', // 原價 $1280
+            discount: 'https://p.ecpay.com.tw/76E92DB'  // 折後 $1180
         },
         'early': {
-            original: 'https://p.ecpay.com.tw/CDXXX', // 原價 $1480
-            discount: 'https://p.ecpay.com.tw/GHXXX'  // ★折後 $1380 (1480-100)
+            original: 'https://p.ecpay.com.tw/3959051', // 原價 $1480
+            discount: 'https://p.ecpay.com.tw/D1415F7'  // 折後 $1380
         },
         'founder': {
-            original: 'https://p.ecpay.com.tw/IJXXX', // 原價 $1680
-            discount: 'https://p.ecpay.com.tw/KLXXX'  // ★折後 $1580 (1680-100)
+            original: 'https://p.ecpay.com.tw/458346A', // 原價 $1680
+            discount: 'https://p.ecpay.com.tw/1123623'  // 折後 $1580
         }
     };
 
+    // 折扣碼設定
+    const DISCOUNT_CODES = {
+        'FRIEND100': { amount: 100, name: '好友專屬折扣' },
+        'VIP2026':   { amount: 100, name: 'VIP 邀請優惠' },
+    };
+
+    // 原價設定
+    const ORIGINAL_PRICES = { 'super-early': 1280, 'early': 1480, 'founder': 1680 };
+    
+    // 目前累積的折扣金額 (全域變數)
+    let currentDiscount = 0;
+
+
+    // ==========================================
+    // 2. 功能邏輯 (Functions)
+    // ==========================================
+
+    // 套用折扣碼邏輯
+    function applyDiscount() {
+        const input = document.getElementById('discount-input');
+        const messageEl = document.getElementById('discount-message');
+        const code = input.value.trim().toUpperCase();
+
+        if (!code) {
+            messageEl.textContent = '請輸入優惠碼';
+            messageEl.style.color = 'var(--text-gray)';
+            return;
+        }
+
+        if (DISCOUNT_CODES.hasOwnProperty(code)) {
+            const discount = DISCOUNT_CODES[code];
+            currentDiscount = discount.amount; // 設定折扣金額
+            messageEl.style.color = 'var(--mint-dark)';
+            messageEl.textContent = `✅ ${discount.name}：已折抵 NT$ ${discount.amount}`;
+            updatePrices(); // 更新畫面價格
+        } else {
+            currentDiscount = 0;
+            messageEl.style.color = '#dc2626';
+            messageEl.textContent = '❌ 無效的優惠碼';
+            updatePrices(); // 還原畫面價格
+        }
+    }
+
+    // 更新介面上的價格顯示
+    function updatePrices() {
+        const cards = document.querySelectorAll('.pricing-card');
+        const types = ['super-early', 'early', 'founder'];
+        
+        cards.forEach((card, index) => {
+            if (index < 3) {
+                const type = types[index];
+                const original = ORIGINAL_PRICES[type];
+                const final = original - currentDiscount;
+                const priceEl = card.querySelector('.current-price');
+                
+                if (currentDiscount > 0) {
+                    // 有折扣時：顯示原價刪除線 + 紅色折扣價
+                    priceEl.innerHTML = `<div style="font-size: 1rem; text-decoration: line-through; color: #9ca3af; line-height: 1;">NT$ ${original}</div><div style="color: #dc2626;">NT$ ${final}</div>`;
+                } else {
+                    // 無折扣時：顯示原價
+                    priceEl.innerHTML = `<small>NT$</small> ${original}`;
+                }
+            }
+        });
+    }
+
+    // 處理購買點擊 (正確版：會跳轉至綠界)
     function handlePurchase(tier) {
         // 1. 計算目前應該付多少錢
         const originalPrice = ORIGINAL_PRICES[tier];
@@ -1043,26 +1112,28 @@
 
         if (currentDiscount > 0) {
             // 如果有折扣，就用 discount 連結
+            // (防呆：如果沒設定 discount 連結，就回退用原價連結)
             targetUrl = links.discount || links.original;
         } else {
             // 沒折扣，用原價連結
             targetUrl = links.original;
         }
 
-        // 3. (開發階段防呆)
-        if (targetUrl.includes('EFXXX')) { // 簡單檢查是否還在用範例網址
-            alert('金流連結尚未設定！請等待綠界審核通過。');
+        // 3. (開發階段防呆檢查，確認連結是否有效)
+        // 由於您已經填入真實 ID，這段通常不會觸發，但保留作為安全檢查
+        if (!targetUrl || targetUrl.includes('EFXXX')) { 
+            alert('系統設定中，請稍後再試。');
             return;
         }
 
-        // 4. 定義方案名稱
+        // 4. 定義方案名稱 (用於確認視窗)
         const tierNames = {
             'super-early': '超級早鳥方案',
             'early': '早鳥優惠方案',
             'founder': '創始會員方案'
         };
         
-        // 5. 最終確認
+        // 5. 最終確認視窗
         const message = `您選擇了：【${tierNames[tier]}】\n` +
                         `應付金額：NT$ ${finalPrice}\n\n` +
                         `點擊「確定」將前往綠界加密頁面進行付款。`;
