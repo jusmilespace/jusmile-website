@@ -1098,43 +1098,109 @@
         });
     }
 
-    // 處理購買點擊 (串接綠界)
-    function handlePurchase(tier) {
-        // 計算金額
-        const originalPrice = ORIGINAL_PRICES[tier];
-        const finalPrice = originalPrice - currentDiscount;
-        
-        // 取得連結
-        const links = ECPAY_LINKS[tier];
-        let targetUrl = '';
+    // 處理購買點擊 (串接 Worker API)
+async function handlePurchase(tier) {
+    // 1. 取得或生成 userId
+    let userId = localStorage.getItem('JU_USER_ID');
+    if (!userId) {
+        userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        localStorage.setItem('JU_USER_ID', userId);
+    }
 
-        if (currentDiscount > 0) {
-            targetUrl = links.discount || links.original;
-        } else {
-            targetUrl = links.original;
-        }
+    // 2. 詢問用戶 Email
+    const email = prompt('請輸入您的 Email 地址\n（用於接收兌換碼）：');
+    
+    if (!email) {
+        alert('需要提供 Email 才能完成購買');
+        return;
+    }
 
-        // 檢查連結
-        if (!targetUrl) { 
-            alert('系統忙碌中，請稍後再試。');
+    // 簡單的 Email 格式驗證
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('Email 格式錯誤，請重新輸入');
+        return;
+    }
+
+    // 3. 計算金額（含折扣）
+    const originalPrice = ORIGINAL_PRICES[tier];
+    const finalPrice = originalPrice - currentDiscount;
+
+    // 4. 顯示確認視窗
+    const tierNames = {
+        'super-early': '超級早鳥方案',
+        'early': '早鳥優惠方案',
+        'founder': '創始會員方案'
+    };
+    
+    const message = `您選擇了：【${tierNames[tier]}】\n` +
+                    `應付金額：NT$ ${finalPrice}\n` +
+                    `Email：${email}\n\n` +
+                    `點擊「確定」將前往付款頁面`;
+
+    if (!confirm(message)) {
+        return;
+    }
+
+    // 5. 顯示載入中
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'payment-loading';
+    loadingDiv.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+            <div style="background: white; padding: 30px; border-radius: 12px; text-align: center;">
+                <div style="font-size: 18px; margin-bottom: 10px;">⏳ 正在建立訂單...</div>
+                <div style="color: #666;">請稍候，不要關閉視窗</div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(loadingDiv);
+
+    try {
+        // 6. 呼叫 Worker API 建立訂單
+        const response = await fetch('https://api.jusmilespace.com/create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: userId,
+                tier: tier,
+                email: email,
+                discountCode: currentDiscount > 0 ? document.getElementById('discount-input').value : null
+            })
+        });
+
+        // 移除載入中畫面
+        document.body.removeChild(loadingDiv);
+
+        if (!response.ok) {
+            const error = await response.json();
+            alert('建立訂單失敗：' + (error.error || '請稍後再試'));
             return;
         }
 
-        // 顯示確認視窗
-        const tierNames = {
-            'super-early': '超級早鳥方案',
-            'early': '早鳥優惠方案',
-            'founder': '創始會員方案'
-        };
+        // 7. 取得付款頁面 HTML 並顯示
+        const html = await response.text();
         
-        const message = `您選擇了：【${tierNames[tier]}】\n` +
-                        `應付金額：NT$ ${finalPrice}\n\n` +
-                        `點擊「確定」將前往綠界加密頁面進行付款。`;
-
-        if (confirm(message)) {
-            window.open(targetUrl, '_blank');
+        // 在新視窗中開啟付款頁面
+        const paymentWindow = window.open('', '_blank');
+        if (paymentWindow) {
+            paymentWindow.document.write(html);
+            paymentWindow.document.close();
+        } else {
+            alert('請允許彈出視窗以完成付款');
         }
+
+    } catch (error) {
+        // 移除載入中畫面
+        if (document.getElementById('payment-loading')) {
+            document.body.removeChild(loadingDiv);
+        }
+        
+        console.error('購買錯誤:', error);
+        alert('發生錯誤，請稍後再試');
     }
+}
 
 
     // ==========================================
