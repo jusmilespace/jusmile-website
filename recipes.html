@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>微笑廚房 - Ju Smile Space</title>
+<style>
+  :root {
+    --mint: #97d0ba;
+    --mint-dark: #5c9c84;
+    --mint-light: #e8f5f0;
+    --mint-pale: #f4faf7;
+    --charcoal: #1f2937;
+    --warm-gray: #6b7785;
+    --cream: #fdfcf9;
+    --border: #e8f0ec;
+
+    /* 系列色碼 */
+    --s-smile-bg:   #FFE500; --s-smile-text:   #7a6c00;
+    --s-lab-bg:     #97D0BA; --s-lab-text:     #2d6e58;
+    --s-grandma-bg: #D4A373; --s-grandma-text: #7a4e1e;
+    --s-julia-bg:   #C28E8E; --s-julia-text:   #6b3535;
+    --s-bar-bg:     #7B9BAE; --s-bar-text:     #1e4a5e;
+
+    /* 官網字型 */
+    --font: "PingFang TC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--cream);
+    color: var(--charcoal);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,252,249,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  /* 圓形佔位 logo — 之後換成真實圖檔 */
+  .nav-logo-circle {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--charcoal);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; position: relative; overflow: hidden;
+  }
+  /* 微笑弧線 */
+  .nav-logo-circle::after {
+    content: '';
+    position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+    width: 18px; height: 8px;
+    border-bottom: 2px solid var(--mint);
+    border-radius: 0 0 10px 10px;
+  }
+  /* J 字 */
+  .nav-logo-circle span {
+    font-size: 15px; font-weight: 800; color: white;
+    letter-spacing: -0.5px; margin-bottom: 4px;
+    font-style: italic;
+  }
+  .nav-logo-text {
+    font-size: 1rem; font-weight: 700;
+    color: var(--charcoal); letter-spacing: -0.2px;
+    line-height: 1.2;
+  }
+  .nav-logo-text small {
+    display: block; font-size: 0.62rem; font-weight: 500;
+    color: var(--warm-gray); letter-spacing: 1px;
+    text-transform: uppercase; margin-top: 1px;
+  }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    font-size: 0.88rem; font-weight: 500; color: var(--warm-gray);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--mint-dark); }
+  .nav-links a.active { font-weight: 600; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 72px 40px 48px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(151,208,186,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--mint-light); color: var(--mint-dark);
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 800; line-height: 1.2;
+    margin-bottom: 14px; letter-spacing: -0.5px;
+  }
+  .hero h1 em { font-style: normal; color: var(--mint-dark); }
+  .hero p {
+    font-size: 0.98rem; color: var(--warm-gray);
+    max-width: 420px; margin: 0 auto;
+    line-height: 1.8; font-weight: 400;
+  }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    max-width: 560px; margin: 32px auto 0;
+    padding: 0 40px;
+  }
+  .search-box {
+    display: flex; align-items: center; gap: 12px;
+    background: white; border: 1.5px solid var(--border);
+    border-radius: 50px; padding: 10px 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-box:focus-within {
+    border-color: var(--mint);
+    box-shadow: 0 0 0 3px rgba(151,208,186,0.15);
+  }
+  .search-icon { font-size: 16px; opacity: 0.45; flex-shrink: 0; }
+  .search-box input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font-size: 0.92rem; font-family: var(--font);
+    color: var(--charcoal);
+  }
+  .search-box input::placeholder { color: #bbc5bf; }
+  .search-clear {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #e5e9e7; border: none; cursor: pointer;
+    display: none; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--warm-gray);
+    flex-shrink: 0;
+  }
+  .search-clear.visible { display: flex; }
+
+  .search-hint {
+    text-align: center; margin-top: 10px;
+    font-size: 0.75rem; color: #bbc5bf;
+  }
+
+  /* ── SERIES BAR ── */
+  .series-bar {
+    padding: 28px 40px 0;
+    display: flex; gap: 8px; overflow-x: auto;
+    scrollbar-width: none; -ms-overflow-style: none;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .series-bar::-webkit-scrollbar { display: none; }
+  .series-pill {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 16px; border-radius: 40px;
+    border: 1.5px solid var(--border);
+    font-size: 0.84rem; font-weight: 600;
+    white-space: nowrap; cursor: pointer;
+    transition: all 0.2s; flex-shrink: 0;
+    background: white; color: var(--warm-gray);
+    font-family: var(--font);
+  }
+  .series-pill .dot {
+    width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+  }
+  .series-pill:hover { border-color: var(--mint); color: var(--mint-dark); }
+  .series-pill[data-series="all"].active       { background: var(--charcoal); color: white; border-color: var(--charcoal); }
+  .series-pill[data-series="微笑料理"].active   { background: var(--s-smile-bg);   color: var(--s-smile-text);   border-color: var(--s-smile-bg); }
+  .series-pill[data-series="料理實驗室"].active  { background: var(--s-lab-bg);     color: var(--s-lab-text);     border-color: var(--s-lab-bg); }
+  .series-pill[data-series="阿嬤的私房菜"].active{ background: var(--s-grandma-bg); color: var(--s-grandma-text); border-color: var(--s-grandma-bg); }
+  .series-pill[data-series="Julia Child"].active { background: var(--s-julia-bg);   color: var(--s-julia-text);   border-color: var(--s-julia-bg); }
+  .series-pill[data-series="微笑吧台"].active    { background: var(--s-bar-bg);     color: white;                 border-color: var(--s-bar-bg); }
+
+  /* ── FILTER TAGS ── */
+  .filter-bar {
+    display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+    padding: 16px 40px 36px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .filter-label {
+    font-size: 0.74rem; font-weight: 600; color: var(--warm-gray);
+    letter-spacing: 0.5px; margin-right: 2px;
+  }
+  .filter-btn {
+    padding: 5px 14px; border-radius: 40px;
+    border: 1.5px solid var(--border);
+    background: white; color: var(--warm-gray);
+    font-size: 0.8rem; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    font-family: var(--font);
+  }
+  .filter-btn:hover { border-color: var(--mint); color: var(--mint-dark); }
+  .filter-btn.active { background: var(--mint-dark); border-color: var(--mint-dark); color: white; }
+
+  /* ── GRID ── */
+  .recipes-section {
+    max-width: 1200px; margin: 0 auto; padding: 0 40px 100px;
+  }
+  .section-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 22px;
+  }
+  .section-label {
+    font-size: 0.74rem; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+  .search-result-tag {
+    display: none; align-items: center; gap: 6px;
+    background: var(--mint-light); color: var(--mint-dark);
+    font-size: 0.78rem; font-weight: 600;
+    padding: 4px 12px; border-radius: 20px;
+  }
+  .search-result-tag.visible { display: flex; }
+  .recipes-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  }
+  .empty-state {
+    grid-column: 1/-1; text-align: center; padding: 80px 0;
+    color: var(--warm-gray); font-size: 0.95rem; line-height: 2;
+  }
+  .empty-state .emoji { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+
+  /* ── CARD ── */
+  .recipe-card {
+    background: white; border-radius: 18px;
+    overflow: hidden; border: 1px solid var(--border);
+    transition: transform 0.28s, box-shadow 0.28s;
+    cursor: pointer;
+  }
+  .recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(92,156,132,0.14);
+  }
+  .card-thumb {
+    position: relative; width: 100%; padding-top: 58%; overflow: hidden;
+  }
+  .card-thumb img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; transition: transform 0.4s ease;
+  }
+  .recipe-card:hover .card-thumb img { transform: scale(1.04); }
+  .card-thumb-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; font-weight: 700;
+    color: rgba(255,255,255,0.85); padding: 16px; text-align: center;
+  }
+  .card-play {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0); transition: background 0.25s;
+  }
+  .recipe-card:hover .card-play { background: rgba(0,0,0,0.08); }
+  .play-circle {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.93);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.25s;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+  }
+  .recipe-card:hover .play-circle { opacity: 1; }
+  .play-circle svg { width: 14px; height: 14px; fill: var(--mint-dark); margin-left: 2px; }
+  .card-series-badge {
+    position: absolute; top: 11px; left: 11px;
+    font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.2px;
+  }
+  /* highlight matching text */
+  mark {
+    background: rgba(255,229,0,0.45); color: inherit;
+    border-radius: 2px; padding: 0 1px;
+  }
+  .card-body { padding: 16px 18px 18px; }
+  .card-hook {
+    font-size: 0.72rem; color: var(--mint-dark);
+    font-weight: 500; margin-bottom: 4px; font-style: italic;
+  }
+  .card-title-zh {
+    font-size: 1.05rem; font-weight: 700;
+    color: var(--charcoal); line-height: 1.3; margin-bottom: 2px;
+  }
+  .card-title-en {
+    font-size: 0.73rem; color: #bbc5bf;
+    font-weight: 400; margin-bottom: 11px; font-style: italic;
+  }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    font-size: 0.68rem; font-weight: 600;
+    padding: 3px 8px; border-radius: 20px;
+    background: var(--mint-pale); color: var(--mint-dark);
+    border: 1px solid rgba(151,208,186,0.3);
+  }
+
+  /* ── DETAIL OVERLAY ── */
+  .detail-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(31,41,55,0.6); backdrop-filter: blur(8px);
+    padding: 20px; overflow-y: auto;
+  }
+  .detail-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .detail-modal {
+    background: var(--cream); border-radius: 24px;
+    width: 100%; max-width: 780px; margin: 20px auto;
+    overflow: hidden; animation: slideUp 0.3s ease;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.25); position: relative;
+  }
+  .detail-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); border: none;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: var(--charcoal);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12); z-index: 10;
+    transition: all 0.2s; font-family: var(--font);
+  }
+  .detail-close:hover { background: white; transform: scale(1.06); }
+  .detail-video {
+    position: relative; width: 100%; padding-top: 56.25%; background: #111;
+  }
+  .detail-video iframe {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+  }
+  .detail-series-bar { height: 4px; width: 100%; }
+  .detail-content { padding: 28px 36px 44px; }
+  .detail-series-label {
+    display: inline-block; font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px; margin-bottom: 8px;
+  }
+  .detail-hook {
+    font-size: 0.9rem; color: var(--warm-gray);
+    font-style: italic; margin-bottom: 7px;
+  }
+  .detail-title-zh {
+    font-size: 1.85rem; font-weight: 800;
+    color: var(--charcoal); line-height: 1.2; margin-bottom: 4px;
+    letter-spacing: -0.5px;
+  }
+  .detail-title-en {
+    font-size: 0.9rem; color: #bbc5bf;
+    font-style: italic; margin-bottom: 18px;
+  }
+  .detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 26px; }
+  .detail-tags .tag { font-size: 0.78rem; padding: 4px 12px; }
+
+  /* Nutrition */
+  .nutrition-card {
+    background: var(--mint-pale); border: 1px solid rgba(151,208,186,0.35);
+    border-radius: 14px; padding: 20px 24px; margin-bottom: 28px;
+  }
+  .nutrition-card h3 {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--mint-dark); margin-bottom: 14px;
+  }
+  .nutrition-summary {
+    display: flex; background: white; border-radius: 10px;
+    overflow: hidden; border: 1px solid var(--border); margin-bottom: 12px;
+  }
+  .nutrition-item {
+    flex: 1; padding: 13px 8px; text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .nutrition-item:last-child { border-right: none; }
+  .nutrition-item .num {
+    font-size: 1.45rem; font-weight: 800; color: var(--charcoal);
+    line-height: 1; display: block; margin-bottom: 3px;
+  }
+  .nutrition-item .num.hl { color: var(--mint-dark); }
+  .nutrition-item .lbl { font-size: 0.65rem; font-weight: 600; color: var(--warm-gray); letter-spacing: 0.5px; }
+  .macros-row { display: flex; gap: 8px; }
+  .macro-pill {
+    flex: 1; background: white; border-radius: 9px;
+    padding: 9px 8px; text-align: center; border: 1px solid var(--border);
+  }
+  .macro-pill .m-label { font-size: 0.65rem; color: var(--warm-gray); font-weight: 600; display: block; margin-bottom: 2px; }
+  .macro-pill .m-val { font-size: 0.98rem; font-weight: 700; color: var(--charcoal); }
+  .macro-pill .m-unit { font-size: 0.65rem; color: #bbc5bf; }
+
+  /* Detail Sections */
+  .detail-section { margin-bottom: 28px; }
+  .detail-section h3 {
+    font-size: 0.95rem; font-weight: 700;
+    color: var(--charcoal); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .detail-section h3 .icon {
+    width: 24px; height: 24px; border-radius: 6px;
+    background: var(--mint-light);
+    display: flex; align-items: center; justify-content: center; font-size: 12px;
+  }
+  .servings-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--mint-light); color: var(--mint-dark);
+    font-size: 0.78rem; font-weight: 600;
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 12px;
+  }
+  .ingredients-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .ingredient-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px; background: white;
+    border-radius: 9px; border: 1px solid var(--border); font-size: 0.86rem;
+  }
+  .ingredient-row .i-name { font-weight: 500; color: var(--charcoal); }
+  .ingredient-row .i-amount { color: var(--warm-gray); font-size: 0.8rem; }
+  .steps-list { display: flex; flex-direction: column; gap: 8px; }
+  .step-item {
+    display: flex; gap: 13px; align-items: flex-start;
+    padding: 13px 15px; background: white;
+    border-radius: 11px; border: 1px solid var(--border);
+  }
+  .step-num {
+    min-width: 26px; height: 26px; border-radius: 50%;
+    background: var(--mint-dark); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.76rem; font-weight: 700; flex-shrink: 0;
+  }
+  .step-text { font-size: 0.88rem; color: var(--charcoal); line-height: 1.65; padding-top: 2px; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 52px 20px 32px; }
+    .search-wrap { padding: 0 20px; }
+    .series-bar, .filter-bar, .recipes-section { padding-left: 20px; padding-right: 20px; }
+    .recipes-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+    .detail-content { padding: 22px 20px 36px; }
+    .ingredients-grid { grid-template-columns: 1fr; }
+    .detail-title-zh { font-size: 1.5rem; }
+  }
+  @media (max-width: 480px) {
+    .recipes-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <!-- 換成真實 logo 時：把 .nav-logo-circle 整個 div 移除，換成 <img src="logo.png" height="36" alt="微笑料理"> -->
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-circle"><span>J</span></div>
+    <div class="nav-logo-text">
+      微笑料理
+      <small>Smile Cuisine</small>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#">首頁</a>
+    <a href="#" class="active">微笑料理</a>
+    <a href="#">創始會員</a>
+    <a href="#">聯絡我們</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">微笑料理 · Smile Cuisine</div>
+  <h1>讓<em>微笑</em>・成為生活裡最好的<em>調味料</em></h1>
+</section>
+
+<!-- 搜尋 -->
+<div class="search-wrap">
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="搜尋食譜名稱、食材、標籤…" oninput="handleSearch(this.value)">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+  </div>
+  <div class="search-hint">可搜尋：番茄、雞胸、低卡、快速…</div>
+</div>
+
+<!-- 系列篩選 -->
+<div class="series-bar">
+  <button class="series-pill active" data-series="all" onclick="filterBySeries('all',this)">
+    <span class="dot" style="background:var(--charcoal)"></span>全部
+  </button>
+  <button class="series-pill" data-series="微笑料理" onclick="filterBySeries('微笑料理',this)">
+    <span class="dot" style="background:var(--s-smile-bg)"></span>微笑料理
+  </button>
+  <button class="series-pill" data-series="料理實驗室" onclick="filterBySeries('料理實驗室',this)">
+    <span class="dot" style="background:var(--s-lab-bg)"></span>料理實驗室
+  </button>
+  <button class="series-pill" data-series="阿嬤的私房菜" onclick="filterBySeries('阿嬤的私房菜',this)">
+    <span class="dot" style="background:var(--s-grandma-bg)"></span>阿嬤的私房菜
+  </button>
+  <button class="series-pill" data-series="Julia Child" onclick="filterBySeries('Julia Child',this)">
+    <span class="dot" style="background:var(--s-julia-bg)"></span>Julia Child
+  </button>
+  <button class="series-pill" data-series="微笑吧台" onclick="filterBySeries('微笑吧台',this)">
+    <span class="dot" style="background:var(--s-bar-bg)"></span>微笑吧台
+  </button>
+</div>
+
+<!-- 標籤篩選 -->
+<div class="filter-bar">
+  <span class="filter-label">標籤：</span>
+  <button class="filter-btn active" onclick="filterByTag('all',this)">全部</button>
+  <button class="filter-btn" onclick="filterByTag('快速',this)">快速料理</button>
+  <button class="filter-btn" onclick="filterByTag('低卡',this)">低卡</button>
+  <button class="filter-btn" onclick="filterByTag('健身',this)">健身餐</button>
+  <button class="filter-btn" onclick="filterByTag('週末',this)">週末慢煮</button>
+  <button class="filter-btn" onclick="filterByTag('咖啡',this)">咖啡・茶・酒</button>
+</div>
+
+<!-- 食譜列表 -->
+<section class="recipes-section">
+  <div class="section-meta">
+    <div class="section-label" id="sectionLabel">所有食譜</div>
+    <div class="search-result-tag" id="searchResultTag">
+      <span>🔍</span><span id="searchResultText"></span>
+    </div>
+  </div>
+  <div class="recipes-grid" id="recipesGrid"></div>
+</section>
+
+<!-- 詳細頁 -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
+  <div class="detail-modal">
+    <button class="detail-close" onclick="closeDetailBtn()">✕</button>
+    <div class="detail-video" id="detailVideo"></div>
+    <div class="detail-series-bar" id="detailSeriesBar"></div>
+    <div class="detail-content" id="detailContent"></div>
+  </div>
+</div>
+
+<script>
+const SERIES = {
+  '微笑料理':    { bg:'#FFE500', text:'#7a6c00', grad:'linear-gradient(135deg,#FFE500,#ffd000)' },
+  '料理實驗室':  { bg:'#97D0BA', text:'#2d6e58', grad:'linear-gradient(135deg,#97D0BA,#6bb89e)' },
+  '阿嬤的私房菜':{ bg:'#D4A373', text:'#7a4e1e', grad:'linear-gradient(135deg,#D4A373,#c08850)' },
+  'Julia Child': { bg:'#C28E8E', text:'#6b3535', grad:'linear-gradient(135deg,#C28E8E,#a86868)' },
+  '微笑吧台':    { bg:'#7B9BAE', text:'#ffffff', grad:'linear-gradient(135deg,#7B9BAE,#5a7d92)' },
+};
+function getSeries(s){ return SERIES[s]||{bg:'#97d0ba',text:'#2d6e58',grad:'linear-gradient(135deg,#97d0ba,#5c9c84)'}; }
+
+let recipes = [];
+let currentSeries = 'all';
+let currentTag = 'all';
+let currentSearch = '';
+
+function escapeRegex(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+
+function highlight(text, query){
+  if(!query) return text;
+  const re = new RegExp(`(${escapeRegex(query)})`,'gi');
+  return text.replace(re,'<mark>$1</mark>');
+}
+
+function recipeMatchesSearch(r, q){
+  if(!q) return true;
+  const lower = q.toLowerCase();
+  if(r.titleZh.toLowerCase().includes(lower)) return true;
+  if(r.titleEn.toLowerCase().includes(lower)) return true;
+  if(r.hook.toLowerCase().includes(lower)) return true;
+  if(r.tags.some(t => t.toLowerCase().includes(lower))) return true;
+  if(r.ingredients.some(i => i.name.toLowerCase().includes(lower))) return true;
+  return false;
+}
+
+function getFiltered(){
+  return recipes.filter(r=>{
+    const matchSeries = currentSeries==='all' || r.series===currentSeries;
+    const matchTag    = currentTag==='all'    || r.tags.includes(currentTag);
+    const matchSearch = recipeMatchesSearch(r, currentSearch);
+    return matchSeries && matchTag && matchSearch;
+  });
+}
+
+function renderCard(r){
+  const s = getSeries(r.series);
+  const q = currentSearch;
+  return `
+    <div class="recipe-card" onclick="openDetail('${r.id}')">
+      <div class="card-thumb" style="background:${s.grad}">
+        <img src="https://img.youtube.com/vi/${r.youtubeId}/maxresdefault.jpg"
+             alt="${r.titleZh}" onerror="this.style.display='none'">
+        <div class="card-thumb-bg">${r.titleZh}</div>
+        <div class="card-play"><div class="play-circle">
+          <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+        </div></div>
+        <div class="card-series-badge" style="background:${s.bg};color:${s.text}">${r.series}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hook">${highlight(r.hook,q)}</div>
+        <div class="card-title-zh">${highlight(r.titleZh,q)}</div>
+        <div class="card-title-en">${r.titleEn}</div>
+        <div class="card-tags">${r.tags.map(t=>`<span class="tag">${highlight(t,q)}</span>`).join('')}</div>
+      </div>
+    </div>`;
+}
+
+function renderGrid(){
+  const list = getFiltered();
+  const grid = document.getElementById('recipesGrid');
+  const label = document.getElementById('sectionLabel');
+  const resultTag = document.getElementById('searchResultTag');
+  const resultText = document.getElementById('searchResultText');
+
+  if(list.length){
+    grid.innerHTML = list.map(renderCard).join('');
+  } else {
+    grid.innerHTML = `<div class="empty-state"><span class="emoji">🔍</span>找不到符合「${currentSearch||currentSeries}」的食譜<br><span style="font-size:0.85rem">試試其他關鍵字，或清除篩選條件</span></div>`;
+  }
+
+  label.textContent = currentSeries==='all' ? `所有食譜（${list.length} 道）` : `${currentSeries}（${list.length} 道）`;
+
+  if(currentSearch){
+    resultTag.classList.add('visible');
+    resultText.textContent = `「${currentSearch}」找到 ${list.length} 道`;
+  } else {
+    resultTag.classList.remove('visible');
+  }
+}
+
+function filterBySeries(series, btn){
+  currentSeries = series;
+  document.querySelectorAll('.series-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+function filterByTag(tag, btn){
+  currentTag = tag;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+function handleSearch(val){
+  currentSearch = val.trim();
+  document.getElementById('searchClear').classList.toggle('visible', currentSearch.length>0);
+  renderGrid();
+}
+
+function clearSearch(){
+  currentSearch='';
+  document.getElementById('searchInput').value='';
+  document.getElementById('searchClear').classList.remove('visible');
+  renderGrid();
+}
+
+function openDetail(id){
+  const r = recipes.find(r=>r.id===id);
+  if(!r) return;
+  const s = getSeries(r.series);
+  const p = r.nutrition.perServing;
+  const t = r.nutrition.total;
+
+  document.getElementById('detailVideo').innerHTML =
+    `<iframe src="https://www.youtube.com/embed/${r.youtubeId}" allowfullscreen allow="accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture"></iframe>`;
+  document.getElementById('detailSeriesBar').style.background = s.grad;
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-series-label" style="background:${s.bg};color:${s.text}">${r.series}</div>
+    <div class="detail-hook">${r.hook}</div>
+    <div class="detail-title-zh">${r.titleZh}</div>
+    <div class="detail-title-en">${r.titleEn}</div>
+    <div class="detail-tags">${r.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <div class="nutrition-card">
+      <h3>📊 營養資訊</h3>
+      <div class="nutrition-summary">
+        <div class="nutrition-item"><span class="num hl">${t.kcal}</span><span class="lbl">整份 kcal</span></div>
+        <div class="nutrition-item"><span class="num">${r.servings}</span><span class="lbl">人份</span></div>
+        <div class="nutrition-item"><span class="num hl">${p.kcal}</span><span class="lbl">每份 kcal</span></div>
+      </div>
+      <div class="macros-row">
+        <div class="macro-pill"><span class="m-label">蛋白質／份</span><span class="m-val">${p.protein}<span class="m-unit"> g</span></span></div>
+        <div class="macro-pill"><span class="m-label">碳水／份</span><span class="m-val">${p.carbs}<span class="m-unit"> g</span></span></div>
+        <div class="macro-pill"><span class="m-label">脂肪／份</span><span class="m-val">${p.fat}<span class="m-unit"> g</span></span></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h3><span class="icon">🥬</span> 食材清單</h3>
+      <div class="servings-badge">👤 ${r.servings} 人份</div>
+      <div class="ingredients-grid">${r.ingredients.map(i=>`
+        <div class="ingredient-row">
+          <span class="i-name">${i.name}</span>
+          <span class="i-amount">${i.amount}</span>
+        </div>`).join('')}</div>
+    </div>
+    <div class="detail-section">
+      <h3><span class="icon">👩‍🍳</span> 料理步驟</h3>
+      <div class="steps-list">${r.steps.map((step,i)=>`
+        <div class="step-item">
+          <div class="step-num">${i+1}</div>
+          <div class="step-text">${step}</div>
+        </div>`).join('')}</div>
+    </div>`;
+
+  document.getElementById('detailOverlay').classList.add('active');
+  document.body.style.overflow='hidden';
+}
+
+function closeDetailBtn(){
+  document.getElementById('detailOverlay').classList.remove('active');
+  document.getElementById('detailVideo').innerHTML='';
+  document.body.style.overflow='';
+}
+function closeDetail(e){
+  if(e.target===document.getElementById('detailOverlay')) closeDetailBtn();
+}
+
+// 從外部 JSON 載入食譜資料
+fetch('data/recipes.json')
+  .then(r => r.json())
+  .then(data => {
+    recipes = data;
+    renderGrid();
+  })
+  .catch(() => {
+    // 本地直接開檔案時 fetch 會失敗，顯示提示
+    document.getElementById('recipesGrid').innerHTML =
+      '<div class="empty-state"><span class="emoji">⚠️</span>請透過伺服器開啟此頁面<br><span style="font-size:0.85rem">本地直接開啟 HTML 無法讀取 JSON，請用 VS Code Live Server 或上傳到 GitHub</span></div>';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+[
+  {
+    "id": "tornado-egg",
+    "series": "微笑料理",
+    "hook": "2顆蛋・2匙油・2支筷",
+    "titleZh": "漩渦蛋／裙擺蛋",
+    "titleEn": "Tornado Omelette / The Elegant Egg Skirt",
+    "tags": [
+      "快速",
+      "低卡"
+    ],
+    "youtubeId": "dQw4w9WgXcQ",
+    "servings": 1,
+    "nutrition": {
+      "total": {
+        "kcal": 280,
+        "protein": 14,
+        "carbs": 2,
+        "fat": 24
+      },
+      "perServing": {
+        "kcal": 280,
+        "protein": 14,
+        "carbs": 2,
+        "fat": 24
+      }
+    },
+    "ingredients": [
+      {
+        "name": "雞蛋",
+        "amount": "2 顆"
+      },
+      {
+        "name": "食用油",
+        "amount": "2 匙"
+      },
+      {
+        "name": "鹽",
+        "amount": "少許"
+      },
+      {
+        "name": "黑胡椒",
+        "amount": "少許"
+      }
+    ],
+    "steps": [
+      "雞蛋打入碗中，加鹽輕輕攪拌（不要打發）。",
+      "熱鍋加油，中大火待油微微冒煙。",
+      "倒入蛋液，立即用兩支筷子快速畫圓攪拌。",
+      "蛋液半熟時停止攪拌，讓邊緣自然捲起成裙擺狀。",
+      "撒上黑胡椒即完成。"
+    ]
+  },
+  {
+    "id": "tomato-egg",
+    "series": "微笑料理",
+    "hook": "5分鐘上桌的國民料理",
+    "titleZh": "番茄炒蛋",
+    "titleEn": "Tomato & Egg Stir Fry",
+    "tags": [
+      "台式",
+      "快速",
+      "低卡"
+    ],
+    "youtubeId": "dQw4w9WgXcQ",
+    "servings": 2,
+    "nutrition": {
+      "total": {
+        "kcal": 420,
+        "protein": 24,
+        "carbs": 18,
+        "fat": 28
+      },
+      "perServing": {
+        "kcal": 210,
+        "protein": 12,
+        "carbs": 9,
+        "fat": 14
+      }
+    },
+    "ingredients": [
+      {
+        "name": "雞蛋",
+        "amount": "3 顆"
+      },
+      {
+        "name": "番茄",
+        "amount": "2 顆（約 300g）"
+      },
+      {
+        "name": "橄欖油",
+        "amount": "1 大匙"
+      },
+      {
+        "name": "鹽",
+        "amount": "少許"
+      },
+      {
+        "name": "糖",
+        "amount": "1/2 茶匙"
+      },
+      {
+        "name": "蔥花",
+        "amount": "適量"
+      }
+    ],
+    "steps": [
+      "雞蛋打散，加少許鹽攪拌均勻。",
+      "番茄洗淨切塊。",
+      "熱鍋加油，倒入蛋液炒至半熟後盛起。",
+      "同鍋炒番茄至出汁，加入雞蛋拌炒。",
+      "加鹽、糖調味，撒蔥花即完成。"
+    ]
+  },
+  {
+    "id": "poached-egg",
+    "series": "料理實驗室",
+    "hook": "掌握這個技巧，所有蛋料理都好吃",
+    "titleZh": "完美水波蛋技法",
+    "titleEn": "The Perfect Poached Egg",
+    "tags": [
+      "技巧",
+      "低卡"
+    ],
+    "youtubeId": "dQw4w9WgXcQ",
+    "servings": 1,
+    "nutrition": {
+      "total": {
+        "kcal": 78,
+        "protein": 6,
+        "carbs": 0.5,
+        "fat": 5
+      },
+      "perServing": {
+        "kcal": 78,
+        "protein": 6,
+        "carbs": 0.5,
+        "fat": 5
+      }
+    },
+    "ingredients": [
+      {
+        "name": "新鮮雞蛋",
+        "amount": "1 顆"
+      },
+      {
+        "name": "水",
+        "amount": "500ml"
+      },
+      {
+        "name": "白醋",
+        "amount": "1 大匙"
+      },
+      {
+        "name": "鹽",
+        "amount": "少許"
+      }
+    ],
+    "steps": [
+      "水加熱至約 90°C（微滾，不要沸騰）。",
+      "加入白醋攪拌，製造漩渦。",
+      "蛋打入小碗，輕輕滑入漩渦中心。",
+      "靜置 3 分鐘，撈起即完成。"
+    ]
+  },
+  {
+    "id": "braised-pork",
+    "series": "阿嬤的私房菜",
+    "hook": "記憶中最安心的味道",
+    "titleZh": "阿嬤的滷肉飯",
+    "titleEn": "Grandma's Braised Pork Rice",
+    "tags": [
+      "台式",
+      "週末"
+    ],
+    "youtubeId": "dQw4w9WgXcQ",
+    "servings": 4,
+    "nutrition": {
+      "total": {
+        "kcal": 2200,
+        "protein": 88,
+        "carbs": 320,
+        "fat": 64
+      },
+      "perServing": {
+        "kcal": 550,
+        "protein": 22,
+        "carbs": 80,
+        "fat": 16
+      }
+    },
+    "ingredients": [
+      {
+        "name": "五花肉",
+        "amount": "600g"
+      },
+      {
+        "name": "白飯",
+        "amount": "4 碗"
+      },
+      {
+        "name": "醬油",
+        "amount": "4 大匙"
+      },
+      {
+        "name": "米酒",
+        "amount": "2 大匙"
+      },
+      {
+        "name": "冰糖",
+        "amount": "1 大匙"
+      },
+      {
+        "name": "紅蔥頭",
+        "amount": "6 顆"
+      }
+    ],
+    "steps": [
+      "五花肉切小丁，紅蔥頭切薄片。",
+      "熱鍋爆香紅蔥頭至金黃，取出備用。",
+      "同鍋炒肉丁至出油變色。",
+      "加入醬油、米酒、冰糖、紅蔥頭，加水蓋過食材。",
+      "小火燉煮 1 小時，淋在白飯上享用。"
+    ]
+  },
+  {
+    "id": "beurre-blanc",
+    "series": "Julia Child",
+    "hook": "法式料理的靈魂醬汁",
+    "titleZh": "白奶油醬",
+    "titleEn": "Beurre Blanc",
+    "tags": [
+      "西式",
+      "週末"
+    ],
+    "youtubeId": "dQw4w9WgXcQ",
+    "servings": 4,
+    "nutrition": {
+      "total": {
+        "kcal": 1200,
+        "protein": 4,
+        "carbs": 8,
+        "fat": 128
+      },
+      "perServing": {
+        "kcal": 300,
+        "protein": 1,
+        "carbs": 2,
+        "fat": 32
+      }
+    },
+    "ingredients": [
+      {
+        "name": "無鹽奶油",
+        "amount": "200g（冷藏切丁）"
+      },
+      {
+        "name": "白葡萄酒",
+        "amount": "100ml"
+      },
+      {
+        "name": "白葡萄酒醋",
+        "amount": "50ml"
+      },
+      {
+        "name": "紅蔥頭",
+        "amount": "2 顆（切碎）"
+      },
+      {
+        "name": "鮮奶油",
+        "amount": "2 大匙"
+      }
+    ],
+    "steps": [
+      "紅蔥頭、白酒、白酒醋小火收汁至剩 2 大匙。",
+      "加入鮮奶油，轉最小火。",
+      "分次加入冷奶油丁，每次攪拌至融化再加。",
+      "過篩，加鹽白胡椒調味即完成。"
+    ]
+  },
+  {
+    "id": "pour-over",
+    "series": "微笑吧台",
+    "hook": "一壺、一杯、一個早晨",
+    "titleZh": "手沖咖啡入門",
+    "titleEn": "Pour Over Coffee Basics",
+    "tags": [
+      "咖啡",
+      "快速"
+    ],
+    "youtubeId": "dQw4w9WgXcQ",
+    "servings": 1,
+    "nutrition": {
+      "total": {
+        "kcal": 5,
+        "protein": 0.3,
+        "carbs": 0,
+        "fat": 0
+      },
+      "perServing": {
+        "kcal": 5,
+        "protein": 0.3,
+        "carbs": 0,
+        "fat": 0
+      }
+    },
+    "ingredients": [
+      {
+        "name": "咖啡豆（中淺焙）",
+        "amount": "15g"
+      },
+      {
+        "name": "熱水（92°C）",
+        "amount": "225ml"
+      },
+      {
+        "name": "濾紙",
+        "amount": "1 張"
+      }
+    ],
+    "steps": [
+      "研磨咖啡豆至中細研磨度（類似粗砂糖）。",
+      "濾紙用熱水潤濕，倒掉預熱水。",
+      "放入咖啡粉，中心注入 30ml 熱水悶蒸 30 秒。",
+      "以螺旋方式緩慢注入剩餘熱水，約 2.5 分鐘完成萃取。"
+    ]
+  },
+  {
+    "id": "whisky-sour",
+    "series": "微笑吧台",
+    "hook": "在家就能做出的經典調酒",
+    "titleZh": "威士忌酸酒",
+    "titleEn": "Whisky Sour",
+    "tags": [
+      "酒",
+      "週末"
+    ],
+    "youtubeId": "dQw4w9WgXcQ",
+    "servings": 1,
+    "nutrition": {
+      "total": {
+        "kcal": 180,
+        "protein": 2,
+        "carbs": 12,
+        "fat": 0
+      },
+      "perServing": {
+        "kcal": 180,
+        "protein": 2,
+        "carbs": 12,
+        "fat": 0
+      }
+    },
+    "ingredients": [
+      {
+        "name": "威士忌",
+        "amount": "60ml"
+      },
+      {
+        "name": "新鮮檸檬汁",
+        "amount": "30ml"
+      },
+      {
+        "name": "糖漿",
+        "amount": "20ml"
+      },
+      {
+        "name": "蛋白",
+        "amount": "1 顆份"
+      },
+      {
+        "name": "冰塊",
+        "amount": "適量"
+      }
+    ],
+    "steps": [
+      "所有材料加入雪克杯，不加冰塊先 Dry Shake 約 15 秒（讓蛋白起泡）。",
+      "加入冰塊再 Shake 約 10 秒。",
+      "濾冰倒入玻璃杯，可用檸檬片裝飾。"
+    ]
+  }
+]
