@@ -328,8 +328,6 @@
     ]
   },
   {
-=======
->>>>>>> 0516501d8a85ad52cac603a2f8d5516b2ea01044
     "id": "紅酒燉牛肉",
     "series": "Julia Child 經典重現",
     "hook": "🍲 重現傳奇主廚 Julia Child 的經典紅酒燉牛肉，讓濃郁的酒香與入口即化的牛肉為你帶來法式浪漫饗宴！",
@@ -340,11 +338,7 @@
       "高蛋白"
     ],
     "youtubeId": "7iKmOiZKkXM",
-<<<<<<< HEAD
-    "servings": 3,
-=======
     "servings": 6,
->>>>>>> 0516501d8a85ad52cac603a2f8d5516b2ea01044
     "nutrition": {
       "total": {
         "kcal": 3816,
