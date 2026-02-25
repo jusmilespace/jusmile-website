@@ -1,58 +1,5 @@
 [
   {
-<<<<<<< HEAD
-    "id": "tornado-egg",
-    "series": "微笑料理",
-    "hook": "2顆蛋・2匙油・2支筷",
-    "titleZh": "漩渦蛋／裙擺蛋",
-    "titleEn": "Tornado Omelette / The Elegant Egg Skirt",
-    "tags": [
-      "快速",
-      "低卡"
-    ],
-    "youtubeId": "",
-    "servings": 1,
-    "nutrition": {
-      "total": {
-        "kcal": 280,
-        "protein": 14,
-        "carbs": 2,
-        "fat": 24
-      },
-      "perServing": {
-        "kcal": 280,
-        "protein": 14,
-        "carbs": 2,
-        "fat": 24
-      }
-    },
-    "ingredients": [
-      {
-        "name": "雞蛋",
-        "amount": "2 顆"
-      },
-      {
-        "name": "食用油",
-        "amount": "2 匙"
-      },
-      {
-        "name": "鹽",
-        "amount": "少許"
-      },
-      {
-        "name": "黑胡椒",
-        "amount": "少許"
-      }
-    ],
-    "steps": [
-      "雞蛋打入碗中，加鹽輕輕攪拌（不要打發）。",
-      "熱鍋加油，中大火待油微微冒煙。",
-      "倒入蛋液，立即用兩支筷子快速畫圓攪拌。",
-      "蛋液半熟時停止攪拌，讓邊緣自然捲起成裙擺狀。",
-      "撒上黑胡椒即完成。"
-    ]
-  },
-  {
     "id": "tomato-egg",
     "series": "微笑料理",
     "hook": "5分鐘上桌的國民料理",
