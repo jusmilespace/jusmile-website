@@ -495,19 +495,6 @@
       transform: scale(1.04);
     }
 
-    .card-thumb-bg {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.85);
-      padding: 16px;
-      text-align: center;
-    }
-
     .card-play {
       position: absolute;
       inset: 0;
@@ -1201,14 +1188,12 @@
       const s = getSeries(r.series);
       const q = currentSearch;
 
-      // 媒體優先權邏輯：YouTube > customCover > 品牌動畫
       let mediaContent = '';
       if (r.youtubeId && r.youtubeId.trim().length > 5) {
         mediaContent = `<img src="https://img.youtube.com/vi/${r.youtubeId}/maxresdefault.jpg" onerror="this.style.display='none'">`;
       } else if (r.customCover) {
         mediaContent = `<img src="${r.customCover}" onerror="this.style.display='none'">`;
       } else {
-        // 若無 ID 或圖片，直接顯示品牌影片，確保填滿黑色背景
         mediaContent = `<video src="${BRAND_VIDEO}" autoplay muted loop playsinline></video>`;
       }
 
@@ -1216,7 +1201,7 @@
     <div class="recipe-card" onclick="openDetail('${r.id}')">
       <div class="card-thumb">
         ${mediaContent}
-        <div class="card-thumb-bg">${highlight(r.titleZh, q)}</div>
+        
         <div class="card-play">
           <div class="play-circle">
             <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
