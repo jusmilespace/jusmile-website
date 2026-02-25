@@ -1340,7 +1340,7 @@
 
     function init() {
       // 修正後的 Fetch 路徑，適應 Live Server
-      fetch('data/recipes.json')
+      fetch('./data/recipes.json')
         .then(res => res.json())
         .then(data => { recipes = data; renderGrid(); })
         .catch(err => {
