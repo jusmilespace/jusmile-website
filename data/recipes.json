@@ -2,7 +2,7 @@
   {
     "id": "紅酒燉牛肉",
     "series": "Julia Child 經典重現",
-    "hook": "🍲 重現傳奇主廚 Julia Child 的經典紅酒燉牛肉，讓濃郁的酒香與入口即化的牛肉為你帶來法式浪漫饗宴！",
+    "hook": "重現傳奇主廚 Julia Child 的經典紅酒燉牛肉，讓濃郁的酒香與入口即化的牛肉為你帶來法式浪漫饗宴！",
     "proTips": [
       "牛肉要擦乾才易煎出金黃色焦香",
       "紅酒建議使用Beaujolais (薄酒萊)、Cȏtes du Rhȏne (隆河谷地)、Bordeaux-St. Έmilion (波爾多聖愛美濃)、Burgundy (法國勃根地)等產區",
@@ -19,7 +19,7 @@
       "蘑菇切成1/4塊"
     ],
     "titleZh": "紅酒燉牛肉",
-    "titleEn": "Boeuf Bourguignon",
+    "titleEn": "Beef Bourguignon",
     "tags": [
       "高蛋白"
     ],
@@ -27,18 +27,18 @@
     "servings": 6,
     "nutrition": {
       "total": {
-        "kcal": 3623,
-        "protein": 153.5,
-        "carbs": 91.1,
-        "fat": 266.8,
-        "weight": 3024
+        "kcal": 3492,
+        "protein": 168,
+        "carbs": 91,
+        "fat": 236.7,
+        "weight": 3021
       },
       "perServing": {
-        "kcal": 604,
-        "protein": 25.6,
+        "kcal": 582,
+        "protein": 28,
         "carbs": 15.2,
-        "fat": 44.5,
-        "weight": 504
+        "fat": 39.4,
+        "weight": 503
       }
     },
     "ingredients": [
@@ -48,7 +48,7 @@
       },
       {
         "name": "豬五花",
-        "amount": "80g"
+        "amount": "80 g"
       },
       {
         "name": "紅蘿蔔",
@@ -64,7 +64,7 @@
       },
       {
         "name": "番茄",
-        "amount": "1 顆"
+        "amount": "1顆"
       },
       {
         "name": "番茄泥",
