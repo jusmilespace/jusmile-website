@@ -866,37 +866,56 @@
         }
 
         /* --- 手機版修正 (與微笑料理一致) --- */
+        /* --- 手機版修正 (完全同步微笑料理版面) --- */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: flex;
+                /* 顯示漢堡 */
                 z-index: 1001;
             }
 
             .nav-links {
                 position: fixed;
                 right: -100%;
+                /* 初始隱藏 */
                 top: 0;
                 width: 260px;
+                /* 寬度固定，解決空白感太大的關鍵 */
                 height: 100vh;
                 background: rgba(255, 255, 255, 0.98);
+                /* 純白半透明背景 */
                 backdrop-filter: blur(10px);
+                /* 2026 質感的毛玻璃效果 */
+                -webkit-backdrop-filter: blur(10px);
                 flex-direction: column;
+                justify-content: flex-start;
+                /* 靠上排列 */
                 padding-top: 80px;
+                /* 留出上方空間，避開 Logo */
+                gap: 0;
+                /* 移除 gap 改用 padding 增加點擊範圍 */
                 transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
                 box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
             }
 
             .nav-links.active {
                 right: 0;
+                /* 滑入畫面 */
             }
 
             .nav-links a {
                 width: 100%;
                 padding: 20px 30px;
+                /* 舒適的內距 */
                 border-bottom: 1px solid #f9f9f9;
+                /* 微細的分隔線 */
+                font-size: 1.05rem;
                 text-align: left;
+                /* 向左對齊，比置中更具設計感 */
+                color: var(--charcoal);
             }
 
+            /* 漢堡變成 X 的動畫效果 */
             .menu-toggle.active .bar:nth-child(1) {
                 transform: translateY(8px) rotate(45deg);
             }
