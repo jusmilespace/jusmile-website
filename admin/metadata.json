@@ -1,0 +1,5 @@
+{
+  "name": "Ju Smile 食譜營養計算工具",
+  "description": "為 Ju Smile 品牌開發的簡約現代食譜營養計算 App，支援 AI 食材辨識、過敏原提醒與健康標籤。",
+  "requestFramePermissions": []
+}

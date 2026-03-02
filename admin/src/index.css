@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
+  --color-mint: #97d0ba;
+  --color-mint-dark: #5c9c84;
+  --color-mint-light: #e8f5f0;
+}
+
+body {
+  background-color: #fdfcf9;
+  color: #1f2937;
+}
+
