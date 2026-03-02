@@ -1,9 +1,8 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-// 新的寫法 (在您自己的 Vite 環境中使用)
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "" });
-
-export async function parseRecipe(text: string) {
+export async function parseRecipe(text: string, apiKey: string) {
+  if (!apiKey) throw new Error("請先在設定中填寫 Gemini API Key");
+  const ai = new GoogleGenAI({ apiKey });
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: `解析以下食譜文字，提取資訊。
@@ -59,17 +58,12 @@ export async function parseRecipe(text: string) {
     }
   });
 
-  const result = JSON.parse(response.text || "{}");
-
-  // Fix series name if needed
-  if (result.series && result.series.includes("Julia Child")) {
-    result.series = "Julia Child 經典重現";
-  }
-
-  return result;
+  return JSON.parse(response.text || "{}");
 }
 
-export async function estimateNutrition(ingredients: { name: string; amount: string }[]) {
+export async function estimateNutrition(ingredients: any[], apiKey: string) {
+  if (!apiKey) throw new Error("請先在設定中填寫 Gemini API Key");
+  const ai = new GoogleGenAI({ apiKey });
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: `估計以下食材的營養成分（每份）。請返回 JSON 格式。

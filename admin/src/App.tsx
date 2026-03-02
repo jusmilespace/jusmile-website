@@ -1,13 +1,13 @@
 import { useState, useRef, ChangeEvent, KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Upload, 
-  FileText, 
-  Calculator, 
-  AlertTriangle, 
-  Tag, 
-  Download, 
-  Plus, 
+import {
+  Upload,
+  FileText,
+  Calculator,
+  AlertTriangle,
+  Tag,
+  Download,
+  Plus,
   Trash2,
   CheckCircle2,
   Loader2,
@@ -43,7 +43,7 @@ interface RecipeData {
 export default function App() {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Form State
   const [formData, setFormData] = useState<RecipeData>({
     titleZh: '',
@@ -68,6 +68,7 @@ export default function App() {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [githubSettings, setGithubSettings] = useState({
     token: localStorage.getItem('gh_token') || '',
+    geminiKey: localStorage.getItem('gemini_api_key') || '',
     owner: localStorage.getItem('gh_owner') || '',
     repo: localStorage.getItem('gh_repo') || '',
     path: localStorage.getItem('gh_path') || 'data/recipes.json',
@@ -78,6 +79,7 @@ export default function App() {
 
   const saveGithubSettings = (settings: typeof githubSettings) => {
     localStorage.setItem('gh_token', settings.token);
+    localStorage.setItem('gemini_api_key', settings.geminiKey);
     localStorage.setItem('gh_owner', settings.owner);
     localStorage.setItem('gh_repo', settings.repo);
     localStorage.setItem('gh_path', settings.path);
@@ -92,8 +94,8 @@ export default function App() {
     if (!text.trim()) return;
     setIsLoading(true);
     try {
-      const parsed = await parseRecipe(text);
-      
+      const parsed = await parseRecipe(text, githubSettings.geminiKey);
+
       const newFormData = {
         ...formData,
         titleZh: parsed.titleZh || '',
@@ -106,7 +108,7 @@ export default function App() {
         ingredients: parsed.ingredients || [],
         steps: parsed.steps?.length ? parsed.steps : [''],
       };
-      
+
       setFormData(newFormData);
       await updateNutrition(newFormData.ingredients, newFormData.servings);
     } catch (error) {
@@ -121,10 +123,10 @@ export default function App() {
     if (!ingredients.length) return;
     const nutResults = await calculateNutrition(ingredients, currentServings);
     setNutrition(nutResults);
-    
+
     const detectedAllergens = detectAllergens(ingredients.map(i => i.name));
     setAllergens(detectedAllergens);
-    
+
     const hTags = getHealthTags(nutResults.perServing);
     setFormData(prev => ({
       ...prev,
@@ -147,7 +149,7 @@ export default function App() {
   const handleInputChange = (field: keyof RecipeData, value: any) => {
     const newFormData = { ...formData, [field]: value };
     setFormData(newFormData);
-    
+
     // If servings or ingredients change, recalculate nutrition
     if (field === 'servings' || field === 'ingredients') {
       updateNutrition(newFormData.ingredients, newFormData.servings);
@@ -269,21 +271,21 @@ export default function App() {
     }
 
     setIsSaving(true);
-    
+
     // If GitHub settings are configured, try direct publishing
     if (githubSettings.token && githubSettings.owner && githubSettings.repo) {
       try {
         const { token, owner, repo, path } = githubSettings;
         const authHeader = { Authorization: `token ${token}` };
-        
+
         // 1. Get current file content and SHA (Add timestamp to avoid cache)
         const getFileRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?t=${Date.now()}`, {
           headers: authHeader
         });
-        
+
         let currentContent: any[] = [];
         let sha = '';
-        
+
         if (getFileRes.ok) {
           const fileData = await getFileRes.json();
           sha = fileData.sha;
@@ -305,7 +307,7 @@ export default function App() {
           // Append new
           updatedContent = [...currentContent, finalData];
         }
-        
+
         const encodedContent = btoa(unescape(encodeURIComponent(JSON.stringify(updatedContent, null, 2))));
 
         // 3. Update file
@@ -331,15 +333,15 @@ export default function App() {
         if (githubSettings.csvOwner && githubSettings.csvRepo) {
           try {
             const { csvOwner, csvRepo, csvPath } = githubSettings;
-            
+
             // Get current CSV (Add timestamp to avoid cache)
             const getCsvRes = await fetch(`https://api.github.com/repos/${csvOwner}/${csvRepo}/contents/${csvPath}?t=${Date.now()}`, {
               headers: authHeader
             });
-            
+
             let csvContent = "";
             let csvSha = "";
-            
+
             if (getCsvRes.ok) {
               const csvData = await getCsvRes.json();
               csvSha = csvData.sha;
@@ -350,7 +352,7 @@ export default function App() {
 
             const csvLines = csvContent.split(/\r?\n/).filter(l => l.trim() !== '');
             if (csvLines.length === 0) throw new Error("CSV 檔案格式錯誤或為空");
-            
+
             const header = csvLines[0];
             const dataLines = csvLines.slice(1);
             const existingNames = dataLines.map(l => l.split(',')[0]);
@@ -359,7 +361,7 @@ export default function App() {
             // Remove spaces in Notes for better compatibility: 1份=450g
             const dishRow = `${formData.titleZh},份,1,混合料理,1份=${nutrition.perServing.weight}g,${nutrition.perServing.weight},${nutrition.perServing.kcal},${nutrition.perServing.protein},${nutrition.perServing.carbs},${nutrition.perServing.fat},Ju Smile`;
             const dishIndex = existingNames.indexOf(formData.titleZh);
-            
+
             if (dishIndex !== -1) {
               dataLines[dishIndex] = dishRow;
             } else {
@@ -428,7 +430,7 @@ export default function App() {
             <h1 className="text-lg font-bold tracking-tight">Ju Smile Admin</h1>
           </div>
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => setShowGithubSettings(true)}
               className="text-xs font-bold text-gray-400 hover:text-mint transition-colors flex items-center gap-1"
             >
@@ -443,10 +445,10 @@ export default function App() {
       </header>
 
       <main className="max-w-3xl mx-auto px-6 pt-12">
-        
+
         {/* Step 1: Upload/Paste */}
         {!nutrition && !isLoading && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-8"
@@ -463,9 +465,9 @@ export default function App() {
                 placeholder="在此貼上食譜文字..."
                 className="w-full h-64 p-6 bg-[#f4faf7] border-none rounded-2xl focus:ring-2 focus:ring-mint/20 outline-none transition-all resize-none text-sm leading-relaxed"
               />
-              
+
               <div className="flex gap-4">
-                <button 
+                <button
                   onClick={() => handleProcess(inputText)}
                   disabled={!inputText.trim()}
                   className="flex-1 py-4 bg-mint text-white rounded-2xl font-bold shadow-lg shadow-mint/20 hover:bg-mint-dark transition-all flex items-center justify-center gap-2 disabled:opacity-50"
@@ -473,7 +475,7 @@ export default function App() {
                   <Calculator className="w-5 h-5" />
                   自動辨識並計算
                 </button>
-                <button 
+                <button
                   onClick={() => fileInputRef.current?.click()}
                   className="px-6 py-4 bg-white border border-black/5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-gray-50 transition-all"
                 >
@@ -494,7 +496,7 @@ export default function App() {
 
         {/* Step 2: The Form (Matching Screenshot) */}
         {nutrition && !isLoading && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-10"
@@ -506,7 +508,7 @@ export default function App() {
                 </h2>
                 <p className="text-xs text-gray-400 mt-1">填寫完成後儲存至 GitHub</p>
               </div>
-              <button 
+              <button
                 onClick={() => { setNutrition(null); setInputText(''); }}
                 className="text-xs font-bold text-gray-400 hover:text-red-500 transition-colors"
               >
@@ -516,7 +518,7 @@ export default function App() {
 
             {/* Form Sections */}
             <div className="space-y-12">
-              
+
               {/* 基本資料 */}
               <section className="space-y-6">
                 <div className="flex items-center gap-3">
@@ -527,7 +529,7 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 ml-1">系列</label>
-                    <select 
+                    <select
                       value={formData.series}
                       onChange={(e) => handleInputChange('series', e.target.value)}
                       className="w-full p-4 bg-white border border-black/5 rounded-2xl focus:ring-2 focus:ring-mint/20 outline-none appearance-none"
@@ -543,8 +545,8 @@ export default function App() {
                     <label className="text-xs font-bold text-gray-500 ml-1 flex justify-between">
                       人份數 <span className="text-[10px] font-normal opacity-60">(與計算器同步)</span>
                     </label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       value={formData.servings}
                       onChange={(e) => handleInputChange('servings', parseInt(e.target.value))}
                       className="w-full p-4 bg-white border border-black/5 rounded-2xl focus:ring-2 focus:ring-mint/20 outline-none"
@@ -554,8 +556,8 @@ export default function App() {
 
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-gray-500 ml-1">Hook <span className="text-[10px] font-normal opacity-60">(一句吸引人的話)</span></label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={formData.hook}
                     onChange={(e) => handleInputChange('hook', e.target.value)}
                     placeholder="例如：2顆蛋・2匙油・2支筷"
@@ -568,14 +570,14 @@ export default function App() {
                   {formData.proTips.map((tip, idx) => (
                     <div key={idx} className="flex gap-4 group">
                       <div className="flex-1 relative">
-                        <textarea 
+                        <textarea
                           value={tip}
                           onChange={(e) => updateProTip(idx, e.target.value)}
                           placeholder={`小撇步 ${idx + 1}...`}
                           className="w-full p-4 bg-amber-50 border border-amber-100 rounded-2xl focus:ring-2 focus:ring-amber-200 outline-none resize-none text-sm leading-relaxed"
                           rows={2}
                         />
-                        <button 
+                        <button
                           onClick={() => removeProTip(idx)}
                           className="absolute -right-10 top-4 p-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
                         >
@@ -584,7 +586,7 @@ export default function App() {
                       </div>
                     </div>
                   ))}
-                  <button 
+                  <button
                     onClick={addProTip}
                     className="w-full p-4 border-2 border-dashed border-amber-200 rounded-2xl text-xs font-bold text-amber-600 hover:bg-amber-50 transition-all flex items-center justify-center gap-2"
                   >
@@ -595,8 +597,8 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 ml-1">食譜中文名稱</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={formData.titleZh}
                       onChange={(e) => handleInputChange('titleZh', e.target.value)}
                       placeholder="漩渦蛋 / 裙擺蛋"
@@ -605,8 +607,8 @@ export default function App() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 ml-1">英文名稱</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={formData.titleEn}
                       onChange={(e) => handleInputChange('titleEn', e.target.value)}
                       placeholder="Tornado Omelette"
@@ -619,8 +621,8 @@ export default function App() {
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 ml-1">YouTube 連結</label>
                     <div className="relative">
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={formData.youtubeUrl}
                         onChange={(e) => handleInputChange('youtubeUrl', e.target.value)}
                         placeholder="https://www.youtube.com/watch?v=..."
@@ -631,7 +633,7 @@ export default function App() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 ml-1">或上傳食譜照片</label>
-                    <div 
+                    <div
                       onClick={() => imageInputRef.current?.click()}
                       className="w-full p-4 bg-white border border-black/5 rounded-2xl cursor-pointer hover:bg-gray-50 transition-all flex items-center justify-between"
                     >
@@ -640,12 +642,12 @@ export default function App() {
                       </span>
                       <Upload className="w-4 h-4 text-gray-400" />
                     </div>
-                    <input 
-                      type="file" 
-                      ref={imageInputRef} 
-                      onChange={handleImageUpload} 
-                      className="hidden" 
-                      accept="image/*" 
+                    <input
+                      type="file"
+                      ref={imageInputRef}
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      accept="image/*"
                     />
                   </div>
                 </div>
@@ -659,8 +661,8 @@ export default function App() {
                         <button onClick={() => removeTag(tag)} className="hover:text-red-500">×</button>
                       </span>
                     ))}
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       onKeyDown={handleTagInput}
                       placeholder="快速、低卡、健身..."
                       className="flex-1 bg-transparent outline-none text-sm p-2 min-w-[120px]"
@@ -675,7 +677,7 @@ export default function App() {
                   <div className="w-1 h-4 bg-mint rounded-full" />
                   <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">食材清單</h3>
                 </div>
-                
+
                 <div className="bg-white rounded-[32px] border border-black/5 overflow-hidden">
                   <div className="divide-y divide-black/5">
                     {nutrition.ingredients.map((ing: any, idx: number) => (
@@ -696,7 +698,7 @@ export default function App() {
                           <div className="text-right">
                             <p className="text-xs font-bold text-mint-dark">{ing.kcal} kcal</p>
                           </div>
-                          <button 
+                          <button
                             onClick={() => {
                               const newIngs = formData.ingredients.filter((_, i) => i !== idx);
                               handleInputChange('ingredients', newIngs);
@@ -709,7 +711,7 @@ export default function App() {
                       </div>
                     ))}
                   </div>
-                  <button 
+                  <button
                     onClick={() => {
                       const name = prompt("食材名稱：");
                       const amount = prompt("份量（如：100g, 2 顆）：");
@@ -739,14 +741,14 @@ export default function App() {
                         {idx + 1}
                       </div>
                       <div className="flex-1 relative">
-                        <textarea 
+                        <textarea
                           value={step}
                           onChange={(e) => updateMiseStep(idx, e.target.value)}
                           placeholder={`備料步驟 ${idx + 1}...`}
                           className="w-full p-4 bg-white border border-black/5 rounded-2xl focus:ring-2 focus:ring-[#7B9BAE]/20 outline-none transition-all resize-none text-sm leading-relaxed"
                           rows={2}
                         />
-                        <button 
+                        <button
                           onClick={() => removeMiseStep(idx)}
                           className="absolute -right-10 top-4 p-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
                         >
@@ -755,7 +757,7 @@ export default function App() {
                       </div>
                     </div>
                   ))}
-                  <button 
+                  <button
                     onClick={addMiseStep}
                     className="w-full p-4 border-2 border-dashed border-black/5 rounded-2xl text-xs font-bold text-gray-400 hover:bg-gray-50 hover:border-[#7B9BAE]/20 transition-all flex items-center justify-center gap-2"
                   >
@@ -778,14 +780,14 @@ export default function App() {
                         {idx + 1}
                       </div>
                       <div className="flex-1 relative">
-                        <textarea 
+                        <textarea
                           value={step}
                           onChange={(e) => updateStep(idx, e.target.value)}
                           placeholder={`步驟 ${idx + 1}...`}
                           className="w-full p-4 bg-white border border-black/5 rounded-2xl focus:ring-2 focus:ring-mint/20 outline-none transition-all resize-none text-sm leading-relaxed"
                           rows={2}
                         />
-                        <button 
+                        <button
                           onClick={() => removeStep(idx)}
                           className="absolute -right-10 top-4 p-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
                         >
@@ -794,7 +796,7 @@ export default function App() {
                       </div>
                     </div>
                   ))}
-                  <button 
+                  <button
                     onClick={addStep}
                     className="w-full p-4 border-2 border-dashed border-black/5 rounded-2xl text-xs font-bold text-gray-400 hover:bg-gray-50 hover:border-mint/20 transition-all flex items-center justify-center gap-2"
                   >
@@ -853,13 +855,13 @@ export default function App() {
 
               {/* Final Actions */}
               <div className="pt-10 flex gap-4">
-                <button 
+                <button
                   onClick={() => setShowJsonPreview(!showJsonPreview)}
                   className="px-8 py-4 bg-white border border-black/5 rounded-2xl font-bold hover:bg-gray-50 transition-all shadow-sm"
                 >
                   預覽 JSON
                 </button>
-                <button 
+                <button
                   onClick={handleSave}
                   disabled={isSaving}
                   className="flex-1 py-4 bg-mint text-white rounded-2xl font-bold shadow-xl shadow-mint/20 hover:bg-mint-dark transition-all flex items-center justify-center gap-2 disabled:opacity-50"
@@ -874,7 +876,7 @@ export default function App() {
               </div>
 
               {showJsonPreview && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   className="bg-black rounded-3xl p-6 overflow-hidden"
@@ -897,13 +899,13 @@ export default function App() {
 
         <AnimatePresence>
           {showGithubSettings && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm"
             >
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 className="bg-white rounded-[40px] p-10 max-w-md w-full space-y-6 shadow-2xl overflow-y-auto max-h-[90vh]"
@@ -912,22 +914,22 @@ export default function App() {
                   <h3 className="text-2xl font-bold">GitHub 自動發佈設定</h3>
                   <p className="text-gray-500 text-xs">設定後點擊「儲存並發佈」將自動更新您的網站</p>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <div className="flex justify-between items-center ml-1">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Personal Access Token</label>
-                      <a 
-                        href="https://github.com/settings/tokens/new?notes=Ju%20Smile%20App&scopes=repo" 
-                        target="_blank" 
+                      <a
+                        href="https://github.com/settings/tokens/new?notes=Ju%20Smile%20App&scopes=repo"
+                        target="_blank"
                         rel="noreferrer"
                         className="text-[10px] text-mint hover:underline flex items-center gap-1"
                       >
                         <ExternalLink className="w-2 h-2" /> 如何取得？
                       </a>
                     </div>
-                    <input 
-                      type="password" 
+                    <input
+                      type="password"
                       value={githubSettings.token}
                       onChange={(e) => setGithubSettings(prev => ({ ...prev, token: e.target.value }))}
                       placeholder="ghp_..."
@@ -940,8 +942,8 @@ export default function App() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Owner</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={githubSettings.owner}
                           onChange={(e) => setGithubSettings(prev => ({ ...prev, owner: e.target.value }))}
                           placeholder="GitHub 帳號"
@@ -950,8 +952,8 @@ export default function App() {
                       </div>
                       <div className="space-y-1">
                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Repo Name</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={githubSettings.repo}
                           onChange={(e) => setGithubSettings(prev => ({ ...prev, repo: e.target.value }))}
                           placeholder="專案名稱"
@@ -961,8 +963,8 @@ export default function App() {
                     </div>
                     <div className="space-y-1 mt-2">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">JSON Path</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={githubSettings.path}
                         onChange={(e) => setGithubSettings(prev => ({ ...prev, path: e.target.value }))}
                         placeholder="data/recipes.json"
@@ -977,8 +979,8 @@ export default function App() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Owner</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={githubSettings.csvOwner}
                           onChange={(e) => setGithubSettings(prev => ({ ...prev, csvOwner: e.target.value }))}
                           placeholder="GitHub 帳號"
@@ -987,8 +989,8 @@ export default function App() {
                       </div>
                       <div className="space-y-1">
                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Repo Name</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={githubSettings.csvRepo}
                           onChange={(e) => setGithubSettings(prev => ({ ...prev, csvRepo: e.target.value }))}
                           placeholder="ju-smile-app"
@@ -998,8 +1000,8 @@ export default function App() {
                     </div>
                     <div className="space-y-1 mt-2">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">CSV Path</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={githubSettings.csvPath}
                         onChange={(e) => setGithubSettings(prev => ({ ...prev, csvPath: e.target.value }))}
                         placeholder="public/data/Unit_Map.csv"
@@ -1010,13 +1012,13 @@ export default function App() {
                 </div>
 
                 <div className="flex gap-3 pt-4">
-                  <button 
+                  <button
                     onClick={() => setShowGithubSettings(false)}
                     className="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-all"
                   >
                     取消
                   </button>
-                  <button 
+                  <button
                     onClick={() => saveGithubSettings(githubSettings)}
                     className="flex-1 py-3 bg-mint text-white rounded-xl font-bold hover:bg-mint-dark transition-all"
                   >
@@ -1028,13 +1030,13 @@ export default function App() {
           )}
 
           {isSaveSuccess && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm"
             >
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 className="bg-white rounded-[40px] p-10 max-w-md w-full text-center space-y-6 shadow-2xl"
@@ -1074,7 +1076,7 @@ export default function App() {
                   </div>
                 </div>
                 <div className="pt-4">
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSaveSuccess(false);
                       setNutrition(null);
@@ -1090,7 +1092,7 @@ export default function App() {
           )}
         </AnimatePresence>
       </main>
-      
+
       {/* Footer Branding */}
       <footer className="mt-20 py-12 border-t border-black/5 text-center">
         <div className="max-w-xl mx-auto px-6 mb-12 text-left bg-gray-50 p-8 rounded-[32px] border border-black/5">
