@@ -824,18 +824,104 @@
             cursor: pointer;
             font-weight: bold;
         }
+
+        /* 確保導覽容器撐開 */
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 預設隱藏手機版漢堡按鈕 */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--charcoal);
+            margin: 4px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* 手機版 (768px 以下) */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+                /* 顯示漢堡按鈕 */
+                z-index: 1001;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                /* 預設在螢幕外 */
+                width: 70%;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                /* 2026 流行毛玻璃 */
+                padding-top: 80px;
+                transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+            }
+
+            .nav-links.active {
+                right: 0;
+                /* 展開選單 */
+            }
+
+            .nav-links a {
+                padding: 15px 30px;
+                width: 100%;
+                font-size: 1.1rem;
+            }
+
+            /* 漢堡按鈕變叉叉的動畫 */
+            .menu-toggle.active .bar:nth-child(1) {
+                transform: translateY(11px) rotate(45deg);
+            }
+
+            .menu-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active .bar:nth-child(3) {
+                transform: translateY(-11px) rotate(-45deg);
+            }
+        }
     </style>
 </head>
 
 <body id="top">
 
     <nav>
-        <a href="#top" class="logo">Ju Smile Space</a>
-        <div class="nav-links">
-            <a href="https://app.jusmilespace.com">產品介紹</a>
-            <a href="/recipes.html">微笑料理</a>
-            <a href="#pricing">創始會員</a>
-            <a href="#contact">聯絡我們</a>
+        <div class="nav-container">
+            <a href="#top" class="logo">Ju Smile Space</a>
+
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+
+            <div class="nav-links" id="nav-links">
+                <a href="https://app.jusmilespace.com">產品介紹</a>
+                <a href="/recipes.html">微笑料理</a>
+                <a href="#pricing">創始會員</a>
+                <a href="#contact">聯絡我們</a>
+            </div>
         </div>
     </nav>
 
@@ -1495,11 +1581,39 @@
             }
         }
     </script>
-    <footer style="text-align: center; padding: 20px; opacity: 0.5;">
-        <p>© 2024 Ju Smile. All rights reserved.
-            <a href="/admin/" style="color: inherit; text-decoration: none; font-size: 0.8em;">[管理後台]</a>
-        </p>
+    <footer style="position: relative; text-align: center; padding: 40px 20px; opacity: 0.6; font-size: 0.9em;">
+        <p>© 2026 Ju Smile. All rights reserved.</p>
+
+        <a href="/admin/" style="
+        position: absolute; 
+        bottom: 0; 
+        right: 0; 
+        width: 50px; 
+        height: 50px; 
+        cursor: default; 
+        display: block;
+        z-index: 10;
+        border: 1px solid rgba(0,0,0,0.05);  // 開發時可以取消註解這行來確認位置 
+       " title=""> </a>
     </footer>
+    <script>
+        const menuBtn = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+
+        if (menuBtn && navLinks) { // 加上檢查機制，避免找不到元素報錯
+            menuBtn.addEventListener('click', () => {
+                menuBtn.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    menuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+        }
+    </script>
 </body>
 
 </html>

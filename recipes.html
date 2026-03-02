@@ -992,24 +992,22 @@
 <body>
 
   <nav>
-    <!-- 換成真實 logo 時：把 .nav-logo-circle 整個 div 移除，換成 <img src="logo.png" height="36" alt="微笑料理"> -->
-    <a href="#" class="nav-logo">
-      <div class="nav-logo-circle"><span>J</span></div>
-      <div class="nav-logo-text">
-        微笑料理
-        <small>Smile Cuisine</small>
+    <div class="nav-container">
+      <a href="index.html#top" class="logo">Ju Smile Space</a>
+
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
       </div>
-    </a>
-    <div class="nav-links">
-      <a href="https://jusmilespace.com/">首頁</a>
 
-      <a href="https://app.jusmilespace.com/">產品介紹</a>
-
-      <a href="#" class="active">微笑料理</a>
-
-      <a href="https://jusmilespace.com/#membership">創始會員</a>
-
-      <a href="https://jusmilespace.com/#contact">聯絡我們</a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html">首頁</a>
+        <a href="https://app.jusmilespace.com">產品介紹</a>
+        <a href="recipes.html" class="active">微笑料理</a>
+        <a href="index.html#pricing">創始會員</a>
+        <a href="index.html#contact">聯絡我們</a>
+      </div>
     </div>
   </nav>
 
@@ -1335,6 +1333,25 @@ ${r.proTips && Array.isArray(r.proTips) ? r.proTips.map(tip => `
     }
 
     init();
+  </script>
+  <script>
+    const menuBtn = document.getElementById('mobile-menu');
+    const navLinks = document.getElementById('nav-links');
+
+    if (menuBtn && navLinks) {
+      menuBtn.addEventListener('click', () => {
+        menuBtn.classList.toggle('active');
+        navLinks.classList.toggle('active');
+      });
+
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+          menuBtn.classList.remove('active');
+          navLinks.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+    }
   </script>
 </body>
 
