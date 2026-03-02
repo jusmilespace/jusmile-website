@@ -58,6 +58,14 @@
       z-index: 1000;
     }
 
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--mint-dark);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
     .nav-container {
       display: flex;
       justify-content: space-between;
@@ -1026,11 +1034,7 @@
     </div>
   </nav>
 
-  <footer style="position: relative; text-align: center; padding: 40px 20px; opacity: 0.6; font-size: 0.9em;">
-    <p>© 2026 Ju Smile. All rights reserved.</p>
-    <a href="/admin/" id="admin-trigger"
-      style="position: absolute; bottom: 0; right: 0; width: 40px; height: 40px; cursor: default;"></a>
-  </footer>
+
 
   <section class="hero">
     <div class="hero-tag">微笑料理 · Smile Cuisine</div>
@@ -1391,5 +1395,10 @@ ${r.proTips && Array.isArray(r.proTips) ? r.proTips.map(tip => `
     });
   </script>
 </body>
+<footer style="position: relative; text-align: center; padding: 40px 20px; opacity: 0.6; font-size: 0.9em;">
+  <p>© 2026 Ju Smile. All rights reserved.</p>
+  <a href="/admin/" id="admin-trigger"
+    style="position: absolute; bottom: 0; right: 0; width: 40px; height: 40px; cursor: default;"></a>
+</footer>
 
 </html>

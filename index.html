@@ -825,85 +825,79 @@
             font-weight: bold;
         }
 
-        /* 確保導覽容器撐開 */
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 10px 20px;
         }
 
-        /* 預設隱藏手機版漢堡按鈕 */
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
         .menu-toggle {
             display: none;
-            flex-direction: column;
-            cursor: pointer;
         }
 
-        .menu-toggle .bar {
-            width: 25px;
-            height: 3px;
-            background-color: var(--charcoal);
-            margin: 4px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
+        /* 電腦版隱藏漢堡 */
 
-        /* 手機版 (768px 以下) */
+        /* 手機版修正 */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: flex;
-                /* 顯示漢堡按鈕 */
+                flex-direction: column;
+                gap: 5px;
                 z-index: 1001;
             }
 
+            /* 關鍵：預設隱藏導航列 */
             .nav-links {
-                display: flex;
-                flex-direction: column;
                 position: fixed;
-                top: 0;
                 right: -100%;
-                /* 預設在螢幕外 */
-                width: 70%;
+                top: 0;
+                width: 250px;
+                /* 寬度適中，解決空白太大問題 */
                 height: 100vh;
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(10px);
-                /* 2026 流行毛玻璃 */
+                background: rgba(255, 255, 255, 0.98);
+                flex-direction: column;
                 padding-top: 80px;
-                transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+                transition: 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
             }
 
             .nav-links.active {
                 right: 0;
-                /* 展開選單 */
+                /* 點擊後滑入 */
             }
 
             .nav-links a {
-                padding: 12px 20px;
-                /* 從原本可能很寬的數值縮小 */
-                margin: 5px 0;
-                /* 讓選項之間有一點點呼吸感就好 */
-                font-size: 1.1rem;
+                padding: 15px 20px;
+                /* 緊湊的間距 */
+                font-size: 1rem;
+                border-bottom: 1px solid #eee;
                 width: 100%;
-                text-align: center;
+                text-align: left;
+                /* 向左對齊更有專業感 */
             }
+        }
 
-            /* 漢堡按鈕變叉叉的動畫 */
-            .menu-toggle.active .bar:nth-child(1) {
-                transform: translateY(11px) rotate(45deg);
-            }
+        /* 漢堡按鈕變叉叉的動畫 */
+        .menu-toggle.active .bar:nth-child(1) {
+            transform: translateY(11px) rotate(45deg);
+        }
 
-            .menu-toggle.active .bar:nth-child(2) {
-                opacity: 0;
-            }
+        .menu-toggle.active .bar:nth-child(2) {
+            opacity: 0;
+        }
 
-            .menu-toggle.active .bar:nth-child(3) {
-                transform: translateY(-11px) rotate(-45deg);
-            }
+        .menu-toggle.active .bar:nth-child(3) {
+            transform: translateY(-11px) rotate(-45deg);
+        }
         }
     </style>
 </head>
