@@ -883,9 +883,13 @@
             }
 
             .nav-links a {
-                padding: 15px 30px;
-                width: 100%;
+                padding: 12px 20px;
+                /* 從原本可能很寬的數值縮小 */
+                margin: 5px 0;
+                /* 讓選項之間有一點點呼吸感就好 */
                 font-size: 1.1rem;
+                width: 100%;
+                text-align: center;
             }
 
             /* 漢堡按鈕變叉叉的動畫 */
@@ -1581,22 +1585,9 @@
             }
         }
     </script>
-    <footer style="position: relative; text-align: center; padding: 40px 20px; opacity: 0.6; font-size: 0.9em;">
-        <p>© 2026 Ju Smile. All rights reserved.</p>
 
-        <a href="/admin/" style="
-        position: absolute; 
-        bottom: 0; 
-        right: 0; 
-        width: 50px; 
-        height: 50px; 
-        cursor: default; 
-        display: block;
-        z-index: 10;
-        border: 1px solid rgba(0,0,0,0.05);  // 開發時可以取消註解這行來確認位置 
-       " title=""> </a>
-    </footer>
     <script>
+
         const menuBtn = document.getElementById('mobile-menu');
         const navLinks = document.getElementById('nav-links');
 
@@ -1614,6 +1605,14 @@
             });
         }
     </script>
+    <script>window.addEventListener('keydown', (e) => {
+            // 按下 Cmd(或Ctrl) + Shift + A 進入後台
+            if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.code === 'KeyA') {
+                window.location.href = '/admin/';
+            }
+        });
+    </script>
+
 </body>
 
 </html>
