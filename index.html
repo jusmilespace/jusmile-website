@@ -211,14 +211,14 @@
             min-height: 100vh;
         }
 
+        /* --- 導航列基礎樣式 --- */
         nav {
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
+            background: var(--white);
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo {
@@ -831,7 +831,7 @@
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 10px 20px;
+            padding: 0 20px;
         }
 
         .nav-links {
@@ -839,65 +839,75 @@
             gap: 1.5rem;
         }
 
-        .menu-toggle {
-            display: none;
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 500;
+            font-size: 0.95rem;
         }
 
-        /* 電腦版隱藏漢堡 */
+        .nav-links a.active {
+            color: var(--mint-dark);
+        }
 
-        /* 手機版修正 */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--charcoal);
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* --- 手機版修正 (與微笑料理一致) --- */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: flex;
-                flex-direction: column;
-                gap: 5px;
                 z-index: 1001;
             }
 
-            /* 關鍵：預設隱藏導航列 */
             .nav-links {
                 position: fixed;
                 right: -100%;
                 top: 0;
-                width: 250px;
-                /* 寬度適中，解決空白太大問題 */
+                width: 260px;
                 height: 100vh;
                 background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
                 flex-direction: column;
                 padding-top: 80px;
-                transition: 0.3s ease;
-                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
+                transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
             }
 
             .nav-links.active {
                 right: 0;
-                /* 點擊後滑入 */
             }
 
             .nav-links a {
-                padding: 15px 20px;
-                /* 緊湊的間距 */
-                font-size: 1rem;
-                border-bottom: 1px solid #eee;
                 width: 100%;
+                padding: 20px 30px;
+                border-bottom: 1px solid #f9f9f9;
                 text-align: left;
-                /* 向左對齊更有專業感 */
             }
-        }
 
-        /* 漢堡按鈕變叉叉的動畫 */
-        .menu-toggle.active .bar:nth-child(1) {
-            transform: translateY(11px) rotate(45deg);
-        }
+            .menu-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
 
-        .menu-toggle.active .bar:nth-child(2) {
-            opacity: 0;
-        }
+            .menu-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
 
-        .menu-toggle.active .bar:nth-child(3) {
-            transform: translateY(-11px) rotate(-45deg);
-        }
+            .menu-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
         }
     </style>
 </head>
@@ -915,8 +925,9 @@
             </div>
 
             <div class="nav-links" id="nav-links">
+                <a href="index.html" class="active">首頁</a>
                 <a href="https://app.jusmilespace.com">產品介紹</a>
-                <a href="/recipes.html">微笑料理</a>
+                <a href="recipes.html">微笑料理</a>
                 <a href="#pricing">創始會員</a>
                 <a href="#contact">聯絡我們</a>
             </div>
@@ -1581,16 +1592,18 @@
     </script>
 
     <script>
-
         const menuBtn = document.getElementById('mobile-menu');
         const navLinks = document.getElementById('nav-links');
+        const adminTrigger = document.getElementById('admin-trigger');
 
-        if (menuBtn && navLinks) { // 加上檢查機制，避免找不到元素報錯
+        // 1. 漢堡選單切換
+        if (menuBtn && navLinks) {
             menuBtn.addEventListener('click', () => {
                 menuBtn.classList.toggle('active');
                 navLinks.classList.toggle('active');
             });
 
+            // 點擊連結後自動關閉選單
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => {
                     menuBtn.classList.remove('active');
@@ -1598,15 +1611,21 @@
                 });
             });
         }
-    </script>
-    <script>window.addEventListener('keydown', (e) => {
-            // 按下 Cmd(或Ctrl) + Shift + A 進入後台
+
+        // 2. 管理後台雙擊進入
+        if (adminTrigger) {
+            adminTrigger.addEventListener('dblclick', () => {
+                window.location.href = '/admin/';
+            });
+        }
+
+        // 3. 電腦版快捷鍵 Cmd+Shift+A
+        window.addEventListener('keydown', (e) => {
             if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.code === 'KeyA') {
                 window.location.href = '/admin/';
             }
         });
     </script>
-
 </body>
 
 </html>
