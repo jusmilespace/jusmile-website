@@ -340,7 +340,7 @@
       border-color: var(--s-grandma-bg);
     }
 
-    .series-pill[data-series="Julia Child經典重現"].active {
+    .series-pill[data-series="Julia Child 經典重現"].active {
       background: var(--s-julia-bg);
       color: var(--s-julia-text);
       border-color: var(--s-julia-bg);
@@ -469,37 +469,30 @@
       box-shadow: 0 16px 40px rgba(92, 156, 132, 0.14);
     }
 
+    /* 確保卡片縮圖容器背景為黑色，避免系列色滲出 */
     .card-thumb {
       position: relative;
       width: 100%;
       padding-top: 58%;
       overflow: hidden;
+      background: #000 !important;
+      /* 強制改為黑色，解決截圖中的黃條問題 */
     }
 
-    .card-thumb img {
+    /* 確保列表中的媒體完全填滿容器 */
+    .card-thumb img,
+    .card-thumb video {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      display: block;
+      /* 移除可能的行內間隙 */
     }
 
     .recipe-card:hover .card-thumb img {
       transform: scale(1.04);
-    }
-
-    .card-thumb-bg {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.85);
-      padding: 16px;
-      text-align: center;
     }
 
     .card-play {
@@ -675,24 +668,39 @@
       position: relative;
       width: 100%;
       padding-top: 56.25%;
-      background: #111;
+      /* 維持 16:9 比例不變 */
+      background: #000;
+      /* 改為純黑色，確保影片載入失敗或比例不符時不會露出黃底 */
+      overflow: hidden;
+      /* 防止內容溢出 */
+      display: block;
+      /* 確保區塊層級正確 */
     }
 
-    .detail-video iframe {
+    .detail-video iframe,
+    .detail-video video,
+    .detail-video img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       border: none;
+      display: block;
+      /* 移除行內元素的間隙 */
     }
 
     .detail-series-bar {
       height: 4px;
       width: 100%;
+      display: block;
+      /* 確保色條為獨立區塊，不與上方產生間隙 */
+      margin-top: 0;
+      /* 確保緊貼影片容器 */
     }
 
     .detail-content {
       padding: 28px 36px 44px;
+      /* 保留您原始的間距 */
     }
 
     .detail-series-label {
@@ -993,10 +1001,15 @@
       </div>
     </a>
     <div class="nav-links">
-      <a href="#">首頁</a>
+      <a href="https://jusmilespace.com/">首頁</a>
+
+      <a href="https://app.jusmilespace.com/">產品介紹</a>
+
       <a href="#" class="active">微笑料理</a>
-      <a href="#">創始會員</a>
-      <a href="#">聯絡我們</a>
+
+      <a href="https://jusmilespace.com/#membership">創始會員</a>
+
+      <a href="https://jusmilespace.com/#contact">聯絡我們</a>
     </div>
   </nav>
 
@@ -1029,8 +1042,8 @@
     <button class="series-pill" data-series="阿嬤的私房菜" onclick="filterBySeries('阿嬤的私房菜',this)">
       <span class="dot" style="background:var(--s-grandma-bg)"></span>阿嬤的私房菜
     </button>
-    <button class="series-pill" data-series="Julia Child經典重現" onclick="filterBySeries('Julia Child經典重現',this)">
-      <span class="dot" style="background:var(--s-julia-bg)"></span>Julia Child經典重現
+    <button class="series-pill" data-series="Julia Child 經典重現" onclick="filterBySeries('Julia Child 經典重現',this)">
+      <span class="dot" style="background:var(--s-julia-bg)"></span>Julia Child 經典重現
     </button>
     <button class="series-pill" data-series="微笑吧台" onclick="filterBySeries('微笑吧台',this)">
       <span class="dot" style="background:var(--s-bar-bg)"></span>微笑吧台
@@ -1043,7 +1056,7 @@
     <button class="filter-btn active" onclick="filterByTag('all',this)">全部</button>
     <button class="filter-btn" onclick="filterByTag('快速',this)">快速料理</button>
     <button class="filter-btn" onclick="filterByTag('低卡',this)">低卡</button>
-    <button class="filter-btn" onclick="filterByTag('健身',this)">健身餐</button>
+    <button class="filter-btn" onclick="filterByTag('高蛋白',this)">高蛋白</button>
     <button class="filter-btn" onclick="filterByTag('週末',this)">週末慢煮</button>
     <button class="filter-btn" onclick="filterByTag('咖啡',this)">咖啡・茶・酒</button>
   </div>
@@ -1070,11 +1083,20 @@
   </div>
 
   <script>
+    // 1. 設定自定義圖案與品牌影片路徑 [來自您的要求]
+    const CUSTOM_ICONS = {
+      prep: 'assets/icons/prep.png', // 備料圖案
+      step: 'assets/icons/step.png', // 步驟圖案
+      tip: 'assets/icons/tip.png',   // Pro Tip 圖案
+      ingr: 'assets/icons/ingr.png'  // 食材清單圖案
+    };
+    const BRAND_VIDEO = 'assets/brand/logo-animation-A.mp4';
+
     const SERIES = {
       '微笑料理': { bg: '#FFE500', text: '#7a6c00', grad: 'linear-gradient(135deg,#FFE500,#ffd000)' },
       '料理實驗室': { bg: '#97D0BA', text: '#2d6e58', grad: 'linear-gradient(135deg,#97D0BA,#6bb89e)' },
       '阿嬤的私房菜': { bg: '#D4A373', text: '#7a4e1e', grad: 'linear-gradient(135deg,#D4A373,#c08850)' },
-      'Julia Child經典重現': { bg: '#C28E8E', text: '#6b3535', grad: 'linear-gradient(135deg,#C28E8E,#a86868)' },
+      'Julia Child 經典重現': { bg: '#C28E8E', text: '#6b3535', grad: 'linear-gradient(135deg,#C28E8E,#a86868)' },
       '微笑吧台': { bg: '#7B9BAE', text: '#ffffff', grad: 'linear-gradient(135deg,#7B9BAE,#5a7d92)' },
     };
     function getSeries(s) { return SERIES[s] || { bg: '#97d0ba', text: '#2d6e58', grad: 'linear-gradient(135deg,#97d0ba,#5c9c84)' }; }
@@ -1084,8 +1106,17 @@
     let currentTag = 'all';
     let currentSearch = '';
 
-    function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+    // 輔助函式：處理圖案備援邏輯，若圖案失效則顯示原有 Emoji [來自您的要求]
+    function getIcon(key, emoji) {
+      return `
+        <img src="${CUSTOM_ICONS[key]}" class="custom-icon" 
+             style="width:24px; height:24px; vertical-align:middle; margin-right:4px;"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+        <span class="fallback-emoji" style="display:none">${emoji}</span>
+      `;
+    }
 
+    function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
     function highlight(text, query) {
       if (!query) return text;
       const re = new RegExp(`(${escapeRegex(query)})`, 'gi');
@@ -1112,18 +1143,70 @@
       });
     }
 
+    // 1. 補上 HTML 呼叫的啟動函式
+    function handleSearch(val) {
+      // 將搜尋框的值存入 currentSearch 變數，供 getFiltered 比對
+      currentSearch = val.trim();
+
+      // 同步切換清除按鈕的顯示狀態
+      const clearBtn = document.getElementById('searchClear');
+      if (clearBtn) {
+        clearBtn.classList.toggle('visible', currentSearch.length > 0);
+      }
+
+      // 重新過濾並重新渲染 Grid 畫面
+      renderGrid();
+    }
+
+    // 2. 補上清除搜尋的邏輯
+    function clearSearch() {
+      currentSearch = '';
+      document.getElementById('searchInput').value = '';
+      const clearBtn = document.getElementById('searchClear');
+      if (clearBtn) clearBtn.classList.remove('visible');
+
+      renderGrid();
+    }
+
+    // 3. 補上系列篩選按鈕的邏輯
+    function filterBySeries(series, btn) {
+      currentSeries = series;
+      document.querySelectorAll('.series-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGrid();
+    }
+
+    // 4. 補上標籤篩選按鈕的邏輯
+    function filterByTag(tag, btn) {
+      currentTag = tag;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGrid();
+    }
+
     function renderCard(r) {
       const s = getSeries(r.series);
       const q = currentSearch;
+
+      let mediaContent = '';
+      if (r.youtubeId && r.youtubeId.trim().length > 5) {
+        mediaContent = `<img src="https://img.youtube.com/vi/${r.youtubeId}/maxresdefault.jpg" onerror="this.style.display='none'">`;
+      } else if (r.customCover) {
+        mediaContent = `<img src="${r.customCover}" onerror="this.style.display='none'">`;
+      } else {
+        mediaContent = `<video src="${BRAND_VIDEO}" autoplay muted loop playsinline></video>`;
+      }
+
       return `
     <div class="recipe-card" onclick="openDetail('${r.id}')">
-      <div class="card-thumb" style="background:${s.grad}">
-        <img src="https://img.youtube.com/vi/${r.youtubeId}/maxresdefault.jpg"
-             alt="${r.titleZh}" onerror="this.style.display='none'">
-        <div class="card-thumb-bg">${r.titleZh}</div>
-        <div class="card-play"><div class="play-circle">
-          <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-        </div></div>
+      <div class="card-thumb">
+        ${mediaContent}
+        
+        <div class="card-play">
+          <div class="play-circle">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </div>
         <div class="card-series-badge" style="background:${s.bg};color:${s.text}">${r.series}</div>
       </div>
       <div class="card-body">
@@ -1141,59 +1224,32 @@
       const label = document.getElementById('sectionLabel');
       const resultTag = document.getElementById('searchResultTag');
       const resultText = document.getElementById('searchResultText');
-
-      if (list.length) {
-        grid.innerHTML = list.map(renderCard).join('');
-      } else {
-        grid.innerHTML = `<div class="empty-state"><span class="emoji">🔍</span>找不到符合「${currentSearch || currentSeries}」的食譜<br><span style="font-size:0.85rem">試試其他關鍵字，或清除篩選條件</span></div>`;
-      }
-
+      if (list.length) { grid.innerHTML = list.map(renderCard).join(''); }
+      else { grid.innerHTML = `<div class="empty-state">...</div>`; }
       label.textContent = currentSeries === 'all' ? `所有食譜（${list.length} 道）` : `${currentSeries}（${list.length} 道）`;
-
-      if (currentSearch) {
-        resultTag.classList.add('visible');
-        resultText.textContent = `「${currentSearch}」找到 ${list.length} 道`;
-      } else {
-        resultTag.classList.remove('visible');
-      }
-    }
-
-    function filterBySeries(series, btn) {
-      currentSeries = series;
-      document.querySelectorAll('.series-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderGrid();
-    }
-
-    function filterByTag(tag, btn) {
-      currentTag = tag;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderGrid();
-    }
-
-    function handleSearch(val) {
-      currentSearch = val.trim();
-      document.getElementById('searchClear').classList.toggle('visible', currentSearch.length > 0);
-      renderGrid();
-    }
-
-    function clearSearch() {
-      currentSearch = '';
-      document.getElementById('searchInput').value = '';
-      document.getElementById('searchClear').classList.remove('visible');
-      renderGrid();
+      if (currentSearch) { resultTag.classList.add('visible'); resultText.textContent = `「${currentSearch}」找到 ${list.length} 道`; }
+      else { resultTag.classList.remove('visible'); }
     }
 
     function openDetail(id) {
-      const r = recipes.find(r => r.id === id);
+      const r = recipes.find(r => String(r.id) === String(id));
       if (!r) return;
       const s = getSeries(r.series);
       const p = r.nutrition.perServing;
       const t = r.nutrition.total;
 
-      document.getElementById('detailVideo').innerHTML =
-        `<iframe src="https://www.youtube.com/embed/${r.youtubeId}" allowfullscreen allow="accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture"></iframe>`;
+      // 詳細頁媒體優先權邏輯 [來自您的要求]
+      let detailMedia = '';
+      if (r.youtubeId && r.youtubeId.trim() !== "") {
+        detailMedia = `<iframe src="https://www.youtube.com/embed/${r.youtubeId}?autoplay=1" 
+                     allowfullscreen style="display:block; width:100%; height:100%;"></iframe>`;
+      } else if (r.customCover) {
+        detailMedia = `<img src="${r.customCover}" style="width:100%; height:100%; object-fit:cover;">`;
+      } else {
+        detailMedia = `<video src="${BRAND_VIDEO}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;"></video>`;
+      }
+
+      document.getElementById('detailVideo').innerHTML = detailMedia;
       document.getElementById('detailSeriesBar').style.background = s.grad;
       document.getElementById('detailContent').innerHTML = `
     <div class="detail-series-label" style="background:${s.bg};color:${s.text}">${r.series}</div>
@@ -1201,6 +1257,7 @@
     <div class="detail-title-zh">${r.titleZh}</div>
     <div class="detail-title-en">${r.titleEn}</div>
     <div class="detail-tags">${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    
     <div class="nutrition-card">
       <h3>📊 營養資訊</h3>
       <div class="nutrition-summary">
@@ -1209,13 +1266,14 @@
         <div class="nutrition-item"><span class="num hl">${p.kcal}</span><span class="lbl">每份 kcal</span></div>
       </div>
       <div class="macros-row">
-        <div class="macro-pill"><span class="m-label">蛋白質／份</span><span class="m-val">${p.protein}<span class="m-unit"> g</span></span></div>
-        <div class="macro-pill"><span class="m-label">碳水／份</span><span class="m-val">${p.carbs}<span class="m-unit"> g</span></span></div>
-        <div class="macro-pill"><span class="m-label">脂肪／份</span><span class="m-val">${p.fat}<span class="m-unit"> g</span></span></div>
+        <div class="macro-pill"><span class="m-label">蛋白質／份</span><span class="m-val" style="color:#5c9c84">${p.protein}<span class="m-unit"> g</span></span></div>
+        <div class="macro-pill"><span class="m-label">碳水／份</span><span class="m-val" style="color:#ffbe76">${p.carbs}<span class="m-unit"> g</span></span></div>
+        <div class="macro-pill"><span class="m-label">脂肪／份</span><span class="m-val" style="color:#ff7979">${p.fat}<span class="m-unit"> g</span></span></div>
       </div>
     </div>
+
     <div class="detail-section">
-      <h3><span class="icon">🥬</span> 食材清單</h3>
+      <h3>${getIcon('ingr', '🥬')} 食材清單</h3>
       <div class="servings-badge">👤 ${r.servings} 人份</div>
       <div class="ingredients-grid">${r.ingredients.map(i => `
         <div class="ingredient-row">
@@ -1223,14 +1281,37 @@
           <span class="i-amount">${i.amount}</span>
         </div>`).join('')}</div>
     </div>
+
+    ${r.miseEnPlace ? `
     <div class="detail-section">
-      <h3><span class="icon">👩‍🍳</span> 料理步驟</h3>
+      <h3>${getIcon('prep', '🔪')} 備料 Mise en Place</h3>
+      <div class="steps-list">
+        ${r.miseEnPlace.map((item, i) => `
+          <div class="step-item" style="background:#f0f4f7; border:1px dashed #7B9BAE;">
+            <div class="step-num" style="background:#7B9BAE;">${i + 1}</div>
+            <div class="step-text">${item}</div>
+          </div>`).join('')}
+      </div>
+    </div>` : ''}
+
+    <div class="detail-section">
+      <h3>${getIcon('step', '👩‍🍳')} 料理步驟</h3>
       <div class="steps-list">${r.steps.map((step, i) => `
         <div class="step-item">
           <div class="step-num">${i + 1}</div>
           <div class="step-text">${step}</div>
         </div>`).join('')}</div>
-    </div>`;
+    </div>
+
+${r.proTips && Array.isArray(r.proTips) ? r.proTips.map(tip => `
+  <div class="pro-tip-card" style="background:#f4faf7; border-left:5px solid #5c9c84; border-radius:12px; padding:20px; margin-bottom:15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    <h4 style="display:flex; align-items:center; gap:8px; color:#5c9c84; font-size:0.9rem; margin-bottom:8px;">
+      ${getIcon('tip', '💡')} PRO TIP
+    </h4>
+    <p style="font-size:0.95rem; line-height:1.6; color:#1f2937;">${tip}</p>
+  </div>
+`).join('') : ''}
+    `;
 
       document.getElementById('detailOverlay').classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -1241,22 +1322,19 @@
       document.getElementById('detailVideo').innerHTML = '';
       document.body.style.overflow = '';
     }
-    function closeDetail(e) {
-      if (e.target === document.getElementById('detailOverlay')) closeDetailBtn();
+
+    function init() {
+      // 修正後的 Fetch 路徑，適應 Live Server
+      fetch('./data/recipes.json')
+        .then(res => res.json())
+        .then(data => { recipes = data; renderGrid(); })
+        .catch(err => {
+          console.error("Fetch error:", err);
+          document.getElementById('recipesGrid').innerHTML = '<div class="empty-state">⚠️ 無法載入食譜資料，請檢查 data/recipes.json 檔案路徑。</div>';
+        });
     }
 
-    // 從外部 JSON 載入食譜資料
-    fetch('data/recipes.json')
-      .then(r => r.json())
-      .then(data => {
-        recipes = data;
-        renderGrid();
-      })
-      .catch(() => {
-        // 本地直接開檔案時 fetch 會失敗，顯示提示
-        document.getElementById('recipesGrid').innerHTML =
-          '<div class="empty-state"><span class="emoji">⚠️</span>請透過伺服器開啟此頁面<br><span style="font-size:0.85rem">本地直接開啟 HTML 無法讀取 JSON，請用 VS Code Live Server 或上傳到 GitHub</span></div>';
-      });
+    init();
   </script>
 </body>
 
