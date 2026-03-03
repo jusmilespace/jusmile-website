@@ -15,7 +15,6 @@
       --warm-gray: #6b7785;
       --cream: #fdfcf9;
       --border: #e8f0ec;
-      --white: #ffffff;
 
       /* 系列色碼 */
       --s-smile-bg: #FFE500;
@@ -29,7 +28,8 @@
       --s-bar-bg: #7B9BAE;
       --s-bar-text: #1e4a5e;
 
-      --font: "PingFang TC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      /* 官網字型 */
+      --font: "PingFang TC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
     }
 
     * {
@@ -44,119 +44,107 @@
       color: var(--charcoal);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      /* 確保 Logo 纖細 */
       -moz-osx-font-smoothing: grayscale;
     }
 
     /* ── NAV ── */
     nav {
-      background: var(--white);
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      z-index: 1000;
-    }
-
-    .nav-container {
+      z-index: 100;
+      background: rgba(253, 252, 249, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 64px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
     }
 
-    .logo {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--mint-dark);
+    .nav-logo {
       text-decoration: none;
-      letter-spacing: -0.8px;
       display: flex;
       align-items: center;
-      line-height: 1;
+      gap: 10px;
+    }
+
+    /* 圓形佔位 logo — 之後換成真實圖檔 */
+    .nav-logo-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--charcoal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 微笑弧線 */
+    .nav-logo-circle::after {
+      content: '';
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 8px;
+      border-bottom: 2px solid var(--mint);
+      border-radius: 0 0 10px 10px;
+    }
+
+    /* J 字 */
+    .nav-logo-circle span {
+      font-size: 15px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+      font-style: italic;
+    }
+
+    .nav-logo-text {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      letter-spacing: -0.2px;
+      line-height: 1.2;
+    }
+
+    .nav-logo-text small {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: var(--warm-gray);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 1px;
     }
 
     .nav-links {
       display: flex;
-      gap: 1.5rem;
-      align-items: center;
+      gap: 28px;
     }
 
     .nav-links a {
-      text-decoration: none;
-      color: var(--charcoal);
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       font-weight: 500;
-      transition: color 0.3s;
+      color: var(--warm-gray);
+      text-decoration: none;
+      transition: color 0.2s;
     }
 
+    .nav-links a:hover,
     .nav-links a.active {
       color: var(--mint-dark);
     }
 
-    .menu-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 5px;
-    }
-
-    .menu-toggle .bar {
-      width: 25px;
-      height: 3px;
-      background-color: var(--charcoal);
-      transition: 0.3s;
-      border-radius: 2px;
-    }
-
-    /* --- 手機版 (768px 以下) --- */
-    @media (max-width: 768px) {
-      .menu-toggle {
-        display: flex !important;
-        z-index: 1001;
-      }
-
-      .nav-links {
-        position: fixed;
-        right: -100%;
-        top: 0;
-        width: 260px;
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        flex-direction: column;
-        justify-content: flex-start;
-        padding-top: 80px;
-        transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
-      }
-
-      .nav-links.active {
-        right: 0;
-      }
-
-      .nav-links a {
-        width: 100%;
-        padding: 20px 30px;
-        border-bottom: 1px solid #f9f9f9;
-        text-align: left;
-        display: block;
-      }
-
-      .menu-toggle.active .bar:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-      }
-
-      .menu-toggle.active .bar:nth-child(2) {
-        opacity: 0;
-      }
-
-      .menu-toggle.active .bar:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-      }
+    .nav-links a.active {
+      font-weight: 600;
     }
 
     /* ── HERO ── */
@@ -165,9 +153,6 @@
       text-align: center;
       position: relative;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
     .hero::before {
@@ -218,7 +203,7 @@
       font-weight: 400;
     }
 
-    /* ── 搜尋、標籤、列表等剩餘樣式保持原樣 ── */
+    /* ── SEARCH ── */
     .search-wrap {
       max-width: 560px;
       margin: 32px auto 0;
@@ -244,6 +229,7 @@
     .search-icon {
       font-size: 16px;
       opacity: 0.45;
+      flex-shrink: 0;
     }
 
     .search-box input {
@@ -254,6 +240,10 @@
       font-size: 0.92rem;
       font-family: var(--font);
       color: var(--charcoal);
+    }
+
+    .search-box input::placeholder {
+      color: #bbc5bf;
     }
 
     .search-clear {
@@ -267,6 +257,8 @@
       align-items: center;
       justify-content: center;
       font-size: 12px;
+      color: var(--warm-gray);
+      flex-shrink: 0;
     }
 
     .search-clear.visible {
@@ -280,12 +272,14 @@
       color: #bbc5bf;
     }
 
+    /* ── SERIES BAR ── */
     .series-bar {
       padding: 28px 40px 0;
       display: flex;
       gap: 8px;
       overflow-x: auto;
       scrollbar-width: none;
+      -ms-overflow-style: none;
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -303,18 +297,28 @@
       border: 1.5px solid var(--border);
       font-size: 0.84rem;
       font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
       background: white;
       color: var(--warm-gray);
-      cursor: pointer;
+      font-family: var(--font);
     }
 
     .series-pill .dot {
       width: 9px;
       height: 9px;
       border-radius: 50%;
+      flex-shrink: 0;
     }
 
-    .series-pill.active {
+    .series-pill:hover {
+      border-color: var(--mint);
+      color: var(--mint-dark);
+    }
+
+    .series-pill[data-series="all"].active {
       background: var(--charcoal);
       color: white;
       border-color: var(--charcoal);
@@ -350,6 +354,7 @@
       border-color: var(--s-bar-bg);
     }
 
+    /* ── FILTER TAGS ── */
     .filter-bar {
       display: flex;
       align-items: center;
@@ -360,6 +365,14 @@
       margin: 0 auto;
     }
 
+    .filter-label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--warm-gray);
+      letter-spacing: 0.5px;
+      margin-right: 2px;
+    }
+
     .filter-btn {
       padding: 5px 14px;
       border-radius: 40px;
@@ -367,19 +380,59 @@
       background: white;
       color: var(--warm-gray);
       font-size: 0.8rem;
+      font-weight: 500;
       cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--mint);
+      color: var(--mint-dark);
     }
 
     .filter-btn.active {
       background: var(--mint-dark);
-      color: white;
       border-color: var(--mint-dark);
+      color: white;
     }
 
+    /* ── GRID ── */
     .recipes-section {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 40px 100px;
+    }
+
+    .section-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .section-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+    }
+
+    .search-result-tag {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: var(--mint-light);
+      color: var(--mint-dark);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .search-result-tag.visible {
+      display: flex;
     }
 
     .recipes-grid {
@@ -388,12 +441,28 @@
       gap: 22px;
     }
 
+    .empty-state {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 0;
+      color: var(--warm-gray);
+      font-size: 0.95rem;
+      line-height: 2;
+    }
+
+    .empty-state .emoji {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    /* ── CARD ── */
     .recipe-card {
       background: white;
       border-radius: 18px;
       overflow: hidden;
       border: 1px solid var(--border);
-      transition: 0.28s;
+      transition: transform 0.28s, box-shadow 0.28s;
       cursor: pointer;
     }
 
@@ -402,14 +471,17 @@
       box-shadow: 0 16px 40px rgba(92, 156, 132, 0.14);
     }
 
+    /* 確保卡片縮圖容器背景為黑色，避免系列色滲出 */
     .card-thumb {
       position: relative;
       width: 100%;
       padding-top: 58%;
       overflow: hidden;
-      background: #000;
+      background: #000 !important;
+      /* 強制改為黑色，解決截圖中的黃條問題 */
     }
 
+    /* 確保列表中的媒體完全填滿容器 */
     .card-thumb img,
     .card-thumb video {
       position: absolute;
@@ -417,6 +489,50 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
+      /* 移除可能的行內間隙 */
+    }
+
+    .recipe-card:hover .card-thumb img {
+      transform: scale(1.04);
+    }
+
+    .card-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0);
+      transition: background 0.25s;
+    }
+
+    .recipe-card:hover .card-play {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .play-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.93);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+    }
+
+    .recipe-card:hover .play-circle {
+      opacity: 1;
+    }
+
+    .play-circle svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--mint-dark);
+      margin-left: 2px;
     }
 
     .card-series-badge {
@@ -427,16 +543,49 @@
       font-weight: 700;
       padding: 3px 9px;
       border-radius: 20px;
+      letter-spacing: 0.2px;
+    }
+
+    /* highlight matching text */
+    mark {
+      background: rgba(255, 229, 0, 0.45);
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
     }
 
     .card-body {
       padding: 16px 18px 18px;
     }
 
+    .card-hook {
+      font-size: 0.72rem;
+      color: var(--mint-dark);
+      font-weight: 500;
+      margin-bottom: 4px;
+      font-style: italic;
+    }
+
     .card-title-zh {
       font-size: 1.05rem;
       font-weight: 700;
+      color: var(--charcoal);
+      line-height: 1.3;
       margin-bottom: 2px;
+    }
+
+    .card-title-en {
+      font-size: 0.73rem;
+      color: #bbc5bf;
+      font-weight: 400;
+      margin-bottom: 11px;
+      font-style: italic;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
     }
 
     .tag {
@@ -446,9 +595,10 @@
       border-radius: 20px;
       background: var(--mint-pale);
       color: var(--mint-dark);
+      border: 1px solid rgba(151, 208, 186, 0.3);
     }
 
-    /* ── 詳細頁樣式保持原樣 ── */
+    /* ── DETAIL OVERLAY ── */
     .detail-overlay {
       display: none;
       position: fixed;
@@ -466,6 +616,18 @@
       justify-content: center;
     }
 
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .detail-modal {
       background: var(--cream);
       border-radius: 24px;
@@ -473,8 +635,9 @@
       max-width: 780px;
       margin: 20px auto;
       overflow: hidden;
-      position: relative;
+      animation: slideUp 0.3s ease;
       box-shadow: 0 32px 80px rgba(0, 0, 0, 0.25);
+      position: relative;
     }
 
     .detail-close {
@@ -484,48 +647,339 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: white;
+      background: rgba(255, 255, 255, 0.9);
       border: none;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--charcoal);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
       z-index: 10;
-      font-weight: bold;
+      transition: all 0.2s;
+      font-family: var(--font);
+    }
+
+    .detail-close:hover {
+      background: white;
+      transform: scale(1.06);
     }
 
     .detail-video {
       position: relative;
       width: 100%;
       padding-top: 56.25%;
+      /* 維持 16:9 比例不變 */
       background: #000;
+      /* 改為純黑色，確保影片載入失敗或比例不符時不會露出黃底 */
+      overflow: hidden;
+      /* 防止內容溢出 */
+      display: block;
+      /* 確保區塊層級正確 */
     }
 
     .detail-video iframe,
-    .detail-video video {
+    .detail-video video,
+    .detail-video img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
+      border: none;
+      display: block;
+      /* 移除行內元素的間隙 */
+    }
+
+    .detail-series-bar {
+      height: 4px;
+      width: 100%;
+      display: block;
+      /* 確保色條為獨立區塊，不與上方產生間隙 */
+      margin-top: 0;
+      /* 確保緊貼影片容器 */
     }
 
     .detail-content {
       padding: 28px 36px 44px;
+      /* 保留您原始的間距 */
+    }
+
+    .detail-series-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+
+    .detail-hook {
+      font-size: 0.9rem;
+      color: var(--warm-gray);
+      font-style: italic;
+      margin-bottom: 7px;
+    }
+
+    .detail-title-zh {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--charcoal);
+      line-height: 1.2;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .detail-title-en {
+      font-size: 0.9rem;
+      color: #bbc5bf;
+      font-style: italic;
+      margin-bottom: 18px;
+    }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 26px;
+    }
+
+    .detail-tags .tag {
+      font-size: 0.78rem;
+      padding: 4px 12px;
+    }
+
+    /* Nutrition */
+    .nutrition-card {
+      background: var(--mint-pale);
+      border: 1px solid rgba(151, 208, 186, 0.35);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+
+    .nutrition-card h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--mint-dark);
+      margin-bottom: 14px;
+    }
+
+    .nutrition-summary {
+      display: flex;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+
+    .nutrition-item {
+      flex: 1;
+      padding: 13px 8px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .nutrition-item:last-child {
+      border-right: none;
+    }
+
+    .nutrition-item .num {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--charcoal);
+      line-height: 1;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .nutrition-item .num.hl {
+      color: var(--mint-dark);
+    }
+
+    .nutrition-item .lbl {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--warm-gray);
+      letter-spacing: 0.5px;
+    }
+
+    .macros-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .macro-pill {
+      flex: 1;
+      background: white;
+      border-radius: 9px;
+      padding: 9px 8px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .macro-pill .m-label {
+      font-size: 0.65rem;
+      color: var(--warm-gray);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .macro-pill .m-val {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+
+    .macro-pill .m-unit {
+      font-size: 0.65rem;
+      color: #bbc5bf;
+    }
+
+    /* Detail Sections */
+    .detail-section {
+      margin-bottom: 28px;
+    }
+
+    .detail-section h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .detail-section h3 .icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--mint-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .servings-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--mint-light);
+      color: var(--mint-dark);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .ingredients-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .ingredient-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      font-size: 0.86rem;
+    }
+
+    .ingredient-row .i-name {
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+
+    .ingredient-row .i-amount {
+      color: var(--warm-gray);
+      font-size: 0.8rem;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+      padding: 13px 15px;
+      background: white;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+    }
+
+    .step-num {
+      min-width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--mint-dark);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.88rem;
+      color: var(--charcoal);
+      line-height: 1.65;
+      padding-top: 2px;
     }
 
     @media (max-width: 768px) {
-      .recipes-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+      nav {
+        padding: 0 20px;
       }
 
       .hero {
         padding: 52px 20px 32px;
       }
 
-      .search-wrap,
+      .search-wrap {
+        padding: 0 20px;
+      }
+
       .series-bar,
       .filter-bar,
       .recipes-section {
         padding-left: 20px;
         padding-right: 20px;
+      }
+
+      .recipes-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .detail-content {
+        padding: 22px 20px 36px;
+      }
+
+      .ingredients-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-title-zh {
+        font-size: 1.5rem;
       }
     }
 
@@ -563,39 +1017,61 @@
     <h1>讓<em>微笑</em>・成為生活裡最好的<em>調味料</em></h1>
   </section>
 
+  <!-- 搜尋 -->
   <div class="search-wrap">
     <div class="search-box">
       <span class="search-icon">🔍</span>
       <input type="text" id="searchInput" placeholder="搜尋食譜名稱、食材、標籤…" oninput="handleSearch(this.value)">
       <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
     </div>
+    <div class="search-hint">可搜尋：番茄、雞胸、低卡、快速…</div>
   </div>
 
+  <!-- 系列篩選 -->
   <div class="series-bar">
-    <button class="series-pill active" data-series="all" onclick="filterBySeries('all',this)">全部</button>
-    <button class="series-pill" data-series="微笑料理" onclick="filterBySeries('微笑料理',this)">微笑料理</button>
-    <button class="series-pill" data-series="料理實驗室" onclick="filterBySeries('料理實驗室',this)">料理實驗室</button>
-    <button class="series-pill" data-series="阿嬤的私房菜" onclick="filterBySeries('阿嬤的私房菜',this)">阿嬤的私房菜</button>
-    <button class="series-pill" data-series="Julia Child 經典重現" onclick="filterBySeries('Julia Child 經典重現',this)">Julia
-      Child</button>
-    <button class="series-pill" data-series="微笑吧台" onclick="filterBySeries('微笑吧台',this)">微笑吧台</button>
+    <button class="series-pill active" data-series="all" onclick="filterBySeries('all',this)">
+      <span class="dot" style="background:var(--charcoal)"></span>全部
+    </button>
+    <button class="series-pill" data-series="微笑料理" onclick="filterBySeries('微笑料理',this)">
+      <span class="dot" style="background:var(--s-smile-bg)"></span>微笑料理
+    </button>
+    <button class="series-pill" data-series="料理實驗室" onclick="filterBySeries('料理實驗室',this)">
+      <span class="dot" style="background:var(--s-lab-bg)"></span>料理實驗室
+    </button>
+    <button class="series-pill" data-series="阿嬤的私房菜" onclick="filterBySeries('阿嬤的私房菜',this)">
+      <span class="dot" style="background:var(--s-grandma-bg)"></span>阿嬤的私房菜
+    </button>
+    <button class="series-pill" data-series="Julia Child 經典重現" onclick="filterBySeries('Julia Child 經典重現',this)">
+      <span class="dot" style="background:var(--s-julia-bg)"></span>Julia Child 經典重現
+    </button>
+    <button class="series-pill" data-series="微笑吧台" onclick="filterBySeries('微笑吧台',this)">
+      <span class="dot" style="background:var(--s-bar-bg)"></span>微笑吧台
+    </button>
   </div>
 
+  <!-- 標籤篩選 -->
   <div class="filter-bar">
+    <span class="filter-label">標籤：</span>
     <button class="filter-btn active" onclick="filterByTag('all',this)">全部</button>
-    <button class="filter-btn" onclick="filterByTag('快速',this)">快速</button>
+    <button class="filter-btn" onclick="filterByTag('快速',this)">快速料理</button>
     <button class="filter-btn" onclick="filterByTag('低卡',this)">低卡</button>
     <button class="filter-btn" onclick="filterByTag('高蛋白',this)">高蛋白</button>
+    <button class="filter-btn" onclick="filterByTag('週末',this)">週末慢煮</button>
+    <button class="filter-btn" onclick="filterByTag('咖啡',this)">咖啡・茶・酒</button>
   </div>
 
+  <!-- 食譜列表 -->
   <section class="recipes-section">
     <div class="section-meta">
       <div class="section-label" id="sectionLabel">所有食譜</div>
-      <div class="search-result-tag" id="searchResultTag"><span>🔍</span><span id="searchResultText"></span></div>
+      <div class="search-result-tag" id="searchResultTag">
+        <span>🔍</span><span id="searchResultText"></span>
+      </div>
     </div>
     <div class="recipes-grid" id="recipesGrid"></div>
   </section>
 
+  <!-- 詳細頁 -->
   <div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
     <div class="detail-modal">
       <button class="detail-close" onclick="closeDetailBtn()">✕</button>
@@ -605,16 +1081,16 @@
     </div>
   </div>
 
-  <footer style="position: relative; text-align: center; padding: 60px 20px; opacity: 0.6; font-size: 0.9em;">
-    <p>© 2026 Ju Smile. All rights reserved.</p>
-    <a href="/admin/" id="admin-trigger"
-      style="position: absolute; bottom: 0; right: 0; width: 40px; height: 40px; cursor: default;"></a>
-  </footer>
-
   <script>
-    // 這裡保留您原本所有的 JavaScript 邏輯 (CUSTOM_ICONS, SERIES, renderGrid, init 等)
-    const CUSTOM_ICONS = { prep: 'assets/icons/prep.png', step: 'assets/icons/step.png', tip: 'assets/icons/tip.png', ingr: 'assets/icons/ingr.png' };
+    // 1. 設定自定義圖案與品牌影片路徑 [來自您的要求]
+    const CUSTOM_ICONS = {
+      prep: 'assets/icons/prep.png', // 備料圖案
+      step: 'assets/icons/step.png', // 步驟圖案
+      tip: 'assets/icons/tip.png',   // Pro Tip 圖案
+      ingr: 'assets/icons/ingr.png'  // 食材清單圖案
+    };
     const BRAND_VIDEO = 'assets/brand/logo-animation-A.mp4';
+
     const SERIES = {
       '微笑料理': { bg: '#FFE500', text: '#7a6c00', grad: 'linear-gradient(135deg,#FFE500,#ffd000)' },
       '料理實驗室': { bg: '#97D0BA', text: '#2d6e58', grad: 'linear-gradient(135deg,#97D0BA,#6bb89e)' },
@@ -629,29 +1105,129 @@
     let currentTag = 'all';
     let currentSearch = '';
 
-    function handleSearch(val) { currentSearch = val.trim(); renderGrid(); }
-    function clearSearch() { currentSearch = ''; document.getElementById('searchInput').value = ''; renderGrid(); }
-    function filterBySeries(series, btn) { currentSeries = series; document.querySelectorAll('.series-pill').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderGrid(); }
-    function filterByTag(tag, btn) { currentTag = tag; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderGrid(); }
+    // 輔助函式：處理圖案備援邏輯，若圖案失效則顯示原有 Emoji [來自您的要求]
+    function getIcon(key, emoji) {
+      return `
+        <img src="${CUSTOM_ICONS[key]}" class="custom-icon" 
+             style="width:24px; height:24px; vertical-align:middle; margin-right:4px;"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+        <span class="fallback-emoji" style="display:none">${emoji}</span>
+      `;
+    }
 
-    function renderGrid() {
-      const list = recipes.filter(r => {
+    function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+    function highlight(text, query) {
+      if (!query) return text;
+      const re = new RegExp(`(${escapeRegex(query)})`, 'gi');
+      return text.replace(re, '<mark>$1</mark>');
+    }
+
+    function recipeMatchesSearch(r, q) {
+      if (!q) return true;
+      const lower = q.toLowerCase();
+      if (r.titleZh.toLowerCase().includes(lower)) return true;
+      if (r.titleEn.toLowerCase().includes(lower)) return true;
+      if (r.hook.toLowerCase().includes(lower)) return true;
+      if (r.tags.some(t => t.toLowerCase().includes(lower))) return true;
+      if (r.ingredients.some(i => i.name.toLowerCase().includes(lower))) return true;
+      return false;
+    }
+
+    function getFiltered() {
+      return recipes.filter(r => {
         const matchSeries = currentSeries === 'all' || r.series === currentSeries;
         const matchTag = currentTag === 'all' || r.tags.includes(currentTag);
-        const matchSearch = !currentSearch || r.titleZh.toLowerCase().includes(currentSearch.toLowerCase());
+        const matchSearch = recipeMatchesSearch(r, currentSearch);
         return matchSeries && matchTag && matchSearch;
       });
+    }
+
+    // 1. 補上 HTML 呼叫的啟動函式
+    function handleSearch(val) {
+      // 將搜尋框的值存入 currentSearch 變數，供 getFiltered 比對
+      currentSearch = val.trim();
+
+      // 同步切換清除按鈕的顯示狀態
+      const clearBtn = document.getElementById('searchClear');
+      if (clearBtn) {
+        clearBtn.classList.toggle('visible', currentSearch.length > 0);
+      }
+
+      // 重新過濾並重新渲染 Grid 畫面
+      renderGrid();
+    }
+
+    // 2. 補上清除搜尋的邏輯
+    function clearSearch() {
+      currentSearch = '';
+      document.getElementById('searchInput').value = '';
+      const clearBtn = document.getElementById('searchClear');
+      if (clearBtn) clearBtn.classList.remove('visible');
+
+      renderGrid();
+    }
+
+    // 3. 補上系列篩選按鈕的邏輯
+    function filterBySeries(series, btn) {
+      currentSeries = series;
+      document.querySelectorAll('.series-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGrid();
+    }
+
+    // 4. 補上標籤篩選按鈕的邏輯
+    function filterByTag(tag, btn) {
+      currentTag = tag;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGrid();
+    }
+
+    function renderCard(r) {
+      const s = getSeries(r.series);
+      const q = currentSearch;
+
+      let mediaContent = '';
+      if (r.youtubeId && r.youtubeId.trim().length > 5) {
+        mediaContent = `<img src="https://img.youtube.com/vi/${r.youtubeId}/maxresdefault.jpg" onerror="this.style.display='none'">`;
+      } else if (r.customCover) {
+        mediaContent = `<img src="${r.customCover}" onerror="this.style.display='none'">`;
+      } else {
+        mediaContent = `<video src="${BRAND_VIDEO}" autoplay muted loop playsinline></video>`;
+      }
+
+      return `
+    <div class="recipe-card" onclick="openDetail('${r.id}')">
+      <div class="card-thumb">
+        ${mediaContent}
+        
+        <div class="card-play">
+          <div class="play-circle">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </div>
+        <div class="card-series-badge" style="background:${s.bg};color:${s.text}">${r.series}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hook">${highlight(r.hook, q)}</div>
+        <div class="card-title-zh">${highlight(r.titleZh, q)}</div>
+        <div class="card-title-en">${r.titleEn}</div>
+        <div class="card-tags">${r.tags.map(t => `<span class="tag">${highlight(t, q)}</span>`).join('')}</div>
+      </div>
+    </div>`;
+    }
+
+    function renderGrid() {
+      const list = getFiltered();
       const grid = document.getElementById('recipesGrid');
-      grid.innerHTML = list.map(r => `
-        <div class="recipe-card" onclick="openDetail('${r.id}')">
-          <div class="card-thumb">
-            ${r.youtubeId ? `<img src="https://img.youtube.com/vi/${r.youtubeId}/maxresdefault.jpg">` : `<video src="${BRAND_VIDEO}" autoplay muted loop></video>`}
-            <div class="card-series-badge" style="background:${getSeries(r.series).bg}">${r.series}</div>
-          </div>
-          <div class="card-body">
-            <div class="card-title-zh">${r.titleZh}</div>
-          </div>
-        </div>`).join('');
+      const label = document.getElementById('sectionLabel');
+      const resultTag = document.getElementById('searchResultTag');
+      const resultText = document.getElementById('searchResultText');
+      if (list.length) { grid.innerHTML = list.map(renderCard).join(''); }
+      else { grid.innerHTML = `<div class="empty-state">...</div>`; }
+      label.textContent = currentSeries === 'all' ? `所有食譜（${list.length} 道）` : `${currentSeries}（${list.length} 道）`;
+      if (currentSearch) { resultTag.classList.add('visible'); resultText.textContent = `「${currentSearch}」找到 ${list.length} 道`; }
+      else { resultTag.classList.remove('visible'); }
     }
 
     function openDetail(id) {
@@ -661,18 +1237,19 @@
       const p = r.nutrition.perServing;
       const t = r.nutrition.total;
 
-      // 1. 處理媒體內容 (YouTube 或 品牌影片)
+      // 詳細頁媒體優先權邏輯 [來自您的要求]
       let detailMedia = '';
       if (r.youtubeId && r.youtubeId.trim() !== "") {
-        detailMedia = `<iframe src="https://www.youtube.com/embed/${r.youtubeId}?autoplay=1" allowfullscreen></iframe>`;
+        detailMedia = `<iframe src="https://www.youtube.com/embed/${r.youtubeId}?autoplay=1" 
+                     allowfullscreen style="display:block; width:100%; height:100%;"></iframe>`;
+      } else if (r.customCover) {
+        detailMedia = `<img src="${r.customCover}" style="width:100%; height:100%; object-fit:cover;">`;
       } else {
-        detailMedia = `<video src="${BRAND_VIDEO}" autoplay muted loop playsinline></video>`;
+        detailMedia = `<video src="${BRAND_VIDEO}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;"></video>`;
       }
 
       document.getElementById('detailVideo').innerHTML = detailMedia;
       document.getElementById('detailSeriesBar').style.background = s.grad;
-
-      // 2. 注入詳細內容 (恢復所有消失的欄位)
       document.getElementById('detailContent').innerHTML = `
     <div class="detail-series-label" style="background:${s.bg};color:${s.text}">${r.series}</div>
     <div class="detail-hook">${r.hook}</div>
@@ -688,9 +1265,9 @@
         <div class="nutrition-item"><span class="num hl">${p.kcal}</span><span class="lbl">每份 kcal</span></div>
       </div>
       <div class="macros-row">
-        <div class="macro-pill"><span class="m-label">蛋白質／份</span><span class="m-val" style="color:#5c9c84">${p.protein}g</span></div>
-        <div class="macro-pill"><span class="m-label">碳水／份</span><span class="m-val" style="color:#ffbe76">${p.carbs}g</span></div>
-        <div class="macro-pill"><span class="m-label">脂肪／份</span><span class="m-val" style="color:#ff7979">${p.fat}g</span></div>
+        <div class="macro-pill"><span class="m-label">蛋白質／份</span><span class="m-val" style="color:#5c9c84">${p.protein}<span class="m-unit"> g</span></span></div>
+        <div class="macro-pill"><span class="m-label">碳水／份</span><span class="m-val" style="color:#ffbe76">${p.carbs}<span class="m-unit"> g</span></span></div>
+        <div class="macro-pill"><span class="m-label">脂肪／份</span><span class="m-val" style="color:#ff7979">${p.fat}<span class="m-unit"> g</span></span></div>
       </div>
     </div>
 
@@ -698,8 +1275,23 @@
       <h3>${getIcon('ingr', '🥬')} 食材清單</h3>
       <div class="servings-badge">👤 ${r.servings} 人份</div>
       <div class="ingredients-grid">${r.ingredients.map(i => `
-        <div class="ingredient-row"><span class="i-name">${i.name}</span><span class="i-amount">${i.amount}</span></div>`).join('')}</div>
+        <div class="ingredient-row">
+          <span class="i-name">${i.name}</span>
+          <span class="i-amount">${i.amount}</span>
+        </div>`).join('')}</div>
     </div>
+
+    ${r.miseEnPlace ? `
+    <div class="detail-section">
+      <h3>${getIcon('prep', '🔪')} 備料 Mise en Place</h3>
+      <div class="steps-list">
+        ${r.miseEnPlace.map((item, i) => `
+          <div class="step-item" style="background:#f0f4f7; border:1px dashed #7B9BAE;">
+            <div class="step-num" style="background:#7B9BAE;">${i + 1}</div>
+            <div class="step-text">${item}</div>
+          </div>`).join('')}
+      </div>
+    </div>` : ''}
 
     <div class="detail-section">
       <h3>${getIcon('step', '👩‍🍳')} 料理步驟</h3>
@@ -709,19 +1301,56 @@
           <div class="step-text">${step}</div>
         </div>`).join('')}</div>
     </div>
-  `;
+
+${r.proTips && Array.isArray(r.proTips) ? r.proTips.map(tip => `
+  <div class="pro-tip-card" style="background:#f4faf7; border-left:5px solid #5c9c84; border-radius:12px; padding:20px; margin-bottom:15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    <h4 style="display:flex; align-items:center; gap:8px; color:#5c9c84; font-size:0.9rem; margin-bottom:8px;">
+      ${getIcon('tip', '💡')} PRO TIP
+    </h4>
+    <p style="font-size:0.95rem; line-height:1.6; color:#1f2937;">${tip}</p>
+  </div>
+`).join('') : ''}
+    `;
 
       document.getElementById('detailOverlay').classList.add('active');
       document.body.style.overflow = 'hidden';
     }
-    function closeDetailBtn() { document.getElementById('detailOverlay').classList.remove('active'); document.getElementById('detailVideo').innerHTML = ''; }
 
-    // 初始化漢堡選單 JS
+    function closeDetailBtn() {
+      document.getElementById('detailOverlay').classList.remove('active');
+      document.getElementById('detailVideo').innerHTML = '';
+      document.body.style.overflow = '';
+    }
+
+    function init() {
+      // 修正後的 Fetch 路徑，適應 Live Server
+      fetch('./data/recipes.json')
+        .then(res => res.json())
+        .then(data => { recipes = data; renderGrid(); })
+        .catch(err => {
+          console.error("Fetch error:", err);
+          document.getElementById('recipesGrid').innerHTML = '<div class="empty-state">⚠️ 無法載入食譜資料，請檢查 data/recipes.json 檔案路徑。</div>';
+        });
+    }
+
+    init();
+
     const menuBtn = document.getElementById('mobile-menu');
     const navLinks = document.getElementById('nav-links');
-    menuBtn.addEventListener('click', () => { menuBtn.classList.toggle('active'); navLinks.classList.toggle('active'); });
 
-    fetch('./data/recipes.json').then(res => res.json()).then(data => { recipes = data; renderGrid(); });
+    if (menuBtn) {
+      menuBtn.addEventListener('click', () => {
+        menuBtn.classList.toggle('active');
+        navLinks.classList.toggle('active');
+      });
+    }
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuBtn.classList.remove('active');
+      });
+    });
   </script>
 </body>
 
