@@ -43,6 +43,7 @@
       color: var(--charcoal);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     /* ── NAV ── */
@@ -117,59 +118,53 @@
     /* --- 手機版 (768px 以下) 修正核心 --- */
     @media (max-width: 768px) {
       .menu-toggle {
-        display: flex;
-        /* 顯示漢堡 */
+        display: flex !important;
         z-index: 1001;
       }
 
       .nav-links {
         position: fixed;
         right: -100%;
-        /* 關鍵：初始隱藏在右側 */
         top: 0;
         width: 260px;
-        /* 寬度適中，解決空白太大問題 */
+        /* 固定寬度，不跑版 */
         height: 100vh;
         background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
         flex-direction: column;
         justify-content: flex-start;
-        /* 靠上排列 */
         padding-top: 80px;
-        /* 留出頂部空間 */
-        gap: 0;
-        /* 移除 gap 改用 padding 讓點擊區域變大 */
         transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
       }
 
       .nav-links.active {
         right: 0;
-        /* 滑入畫面 */
       }
 
       .nav-links a {
         width: 100%;
         padding: 20px 30px;
-        /* 增加點擊區域，但縮小上下間距感 */
         border-bottom: 1px solid #f9f9f9;
-        font-size: 1.05rem;
         text-align: left;
-        /* 向左對齊較具專業感 */
+        /* 微笑料理也要靠左，才不會空白很大 */
+        display: block;
       }
+    }
 
-      /* 漢堡變成 X 的動畫 */
-      .menu-toggle.active .bar:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-      }
+    /* 漢堡變成 X 的動畫 */
+    .menu-toggle.active .bar:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
 
-      .menu-toggle.active .bar:nth-child(2) {
-        opacity: 0;
-      }
+    .menu-toggle.active .bar:nth-child(2) {
+      opacity: 0;
+    }
 
-      .menu-toggle.active .bar:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-      }
+    .menu-toggle.active .bar:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
     }
 
     /* ── HERO ── */
