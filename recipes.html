@@ -84,16 +84,29 @@
 
     .nav-links {
       display: flex;
-      gap: 0;
+      gap: 1.5rem;
+      /* 使用 gap 取代固定 margin，自動產生適當間距 */
       align-items: center;
+      /* 確保所有文字垂直置中 */
     }
 
     .nav-links a {
       text-decoration: none;
       color: var(--charcoal);
-      font-size: 0.95rem;
+      font-size: 15px;
       font-weight: 500;
-      transition: color 0.3s;
+      transition: color 0.2s;
+      white-space: nowrap;
+      /* 強制不換行，防止文字擠壓 */
+      display: flex;
+      /* 讓 a 標籤本身也具備 flex 屬性 */
+      align-items: center;
+      /* 確保文字內部的垂直置中 */
+    }
+
+    /* 移除原本可能存在的 margin-left 避免間距重疊 */
+    .nav-links a {
+      margin-left: 0 !important;
     }
 
     .nav-links a.active {
@@ -1018,7 +1031,7 @@
         <a href="index.html">首頁</a>
         <a href="https://app.jusmilespace.com">產品介紹</a>
         <a href="recipes.html" class="active">微笑料理</a>
-        <a href="https://app.jusmilespace.com/support.html">☕️ 支持我們</a>
+        <a href="https://app.jusmilespace.com/support.html">支持我們</a>
         <a href="privacy-policy.html">隱私權政策</a>
         <a href="index.html#contact">聯絡我們</a>
       </div>
