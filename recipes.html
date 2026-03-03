@@ -656,11 +656,63 @@
 
     function openDetail(id) {
       const r = recipes.find(r => String(r.id) === String(id));
+      if (!r) return;
       const s = getSeries(r.series);
-      document.getElementById('detailVideo').innerHTML = r.youtubeId ? `<iframe src="https://www.youtube.com/embed/${r.youtubeId}?autoplay=1" allowfullscreen></iframe>` : `<video src="${BRAND_VIDEO}" autoplay muted loop></video>`;
+      const p = r.nutrition.perServing;
+      const t = r.nutrition.total;
+
+      // 1. 處理媒體內容 (YouTube 或 品牌影片)
+      let detailMedia = '';
+      if (r.youtubeId && r.youtubeId.trim() !== "") {
+        detailMedia = `<iframe src="https://www.youtube.com/embed/${r.youtubeId}?autoplay=1" allowfullscreen></iframe>`;
+      } else {
+        detailMedia = `<video src="${BRAND_VIDEO}" autoplay muted loop playsinline></video>`;
+      }
+
+      document.getElementById('detailVideo').innerHTML = detailMedia;
       document.getElementById('detailSeriesBar').style.background = s.grad;
-      document.getElementById('detailContent').innerHTML = `<h2>${r.titleZh}</h2><p>${r.hook}</p>`;
+
+      // 2. 注入詳細內容 (恢復所有消失的欄位)
+      document.getElementById('detailContent').innerHTML = `
+    <div class="detail-series-label" style="background:${s.bg};color:${s.text}">${r.series}</div>
+    <div class="detail-hook">${r.hook}</div>
+    <div class="detail-title-zh">${r.titleZh}</div>
+    <div class="detail-title-en">${r.titleEn}</div>
+    <div class="detail-tags">${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    
+    <div class="nutrition-card">
+      <h3>📊 營養資訊</h3>
+      <div class="nutrition-summary">
+        <div class="nutrition-item"><span class="num hl">${t.kcal}</span><span class="lbl">整份 kcal</span></div>
+        <div class="nutrition-item"><span class="num">${r.servings}</span><span class="lbl">人份</span></div>
+        <div class="nutrition-item"><span class="num hl">${p.kcal}</span><span class="lbl">每份 kcal</span></div>
+      </div>
+      <div class="macros-row">
+        <div class="macro-pill"><span class="m-label">蛋白質／份</span><span class="m-val" style="color:#5c9c84">${p.protein}g</span></div>
+        <div class="macro-pill"><span class="m-label">碳水／份</span><span class="m-val" style="color:#ffbe76">${p.carbs}g</span></div>
+        <div class="macro-pill"><span class="m-label">脂肪／份</span><span class="m-val" style="color:#ff7979">${p.fat}g</span></div>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h3>${getIcon('ingr', '🥬')} 食材清單</h3>
+      <div class="servings-badge">👤 ${r.servings} 人份</div>
+      <div class="ingredients-grid">${r.ingredients.map(i => `
+        <div class="ingredient-row"><span class="i-name">${i.name}</span><span class="i-amount">${i.amount}</span></div>`).join('')}</div>
+    </div>
+
+    <div class="detail-section">
+      <h3>${getIcon('step', '👩‍🍳')} 料理步驟</h3>
+      <div class="steps-list">${r.steps.map((step, i) => `
+        <div class="step-item">
+          <div class="step-num">${i + 1}</div>
+          <div class="step-text">${step}</div>
+        </div>`).join('')}</div>
+    </div>
+  `;
+
       document.getElementById('detailOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
     }
     function closeDetailBtn() { document.getElementById('detailOverlay').classList.remove('active'); document.getElementById('detailVideo').innerHTML = ''; }
 
