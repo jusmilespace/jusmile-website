@@ -69,14 +69,17 @@
     }
 
     .logo {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--mint-dark);
+      font-family: var(--font) !important;
+      font-size: 24px !important;
+      font-weight: 800 !important;
+      color: var(--mint-dark) !important;
       text-decoration: none;
-      letter-spacing: -0.8px;
+      letter-spacing: -0.5px;
+      /* 改為與首頁一致的 -0.5px */
       display: flex;
       align-items: center;
       line-height: 1;
+      -webkit-font-smoothing: antialiased;
     }
 
     .nav-links {
@@ -956,9 +959,9 @@
     }
 
     @media (max-width: 768px) {
-      nav {
+      /* nav {
         padding: 0 20px;
-      }
+    } */
 
       .hero {
         padding: 52px 20px 32px;
