@@ -23,13 +23,31 @@
             box-sizing: border-box;
         }
 
+        /* --- 強制抗鋸齒渲染 --- */
+        html,
+        body {
+            -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
+        }
+
         body {
             font-family: var(--font);
             background-color: var(--bg);
             color: #333;
             line-height: 1.8;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- 同步 Logo 樣式 --- */
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--mint-dark);
+            text-decoration: none;
+            letter-spacing: -0.8px;
+            /* 確保字距也是 -0.8px */
+            display: flex;
+            align-items: center;
+            line-height: 1;
         }
 
         /* --- 導航列同步 (與官網一致) --- */
@@ -49,19 +67,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            /* 官網使用的是 800，但因為有抗鋸齒所以看起來不會太粗 */
-            color: var(--mint-dark);
-            text-decoration: none;
-            letter-spacing: -0.8px;
-            /* 稍微縮小字距，視覺上會更精緻 */
-            display: flex;
-            align-items: center;
-            line-height: 1;
         }
 
         .nav-links {
