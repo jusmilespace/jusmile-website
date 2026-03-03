@@ -98,15 +98,20 @@
 
         .nav-links {
             display: flex;
-            gap: 0;
+            gap: 1.5rem;
             align-items: center;
         }
 
         .nav-links a {
             text-decoration: none;
             color: var(--charcoal);
-            font-size: 0.95rem;
+            font-size: 15px;
             font-weight: 500;
+            white-space: nowrap;
+            /* 防止文字折行 */
+            transition: color 0.2s;
+            /* 移除所有可能干擾的 margin */
+            margin: 0 !important;
         }
 
         .nav-links a.active {
@@ -134,10 +139,11 @@
             }
 
             .nav-links {
+                gap: 0;
                 position: fixed;
                 right: -100%;
                 top: 0;
-                width: 260px;
+                width: 200px;
                 height: 100vh;
                 background: rgba(255, 255, 255, 0.98);
                 backdrop-filter: blur(15px);
