@@ -48,103 +48,113 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ── NAV ── */
+    /* ── 導航列精確對齊 ── */
     nav {
+      background: #ffffff;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      z-index: 100;
-      background: rgba(253, 252, 249, 0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 40px;
-      height: 64px;
+      z-index: 1000;
+      width: 100%;
+    }
+
+    .nav-container {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-    }
-
-    .nav-logo {
-      text-decoration: none;
-      display: flex;
       align-items: center;
-      gap: 10px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
 
-    /* 圓形佔位 logo — 之後換成真實圖檔 */
-    .nav-logo-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--charcoal);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* 微笑弧線 */
-    .nav-logo-circle::after {
-      content: '';
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 18px;
-      height: 8px;
-      border-bottom: 2px solid var(--mint);
-      border-radius: 0 0 10px 10px;
-    }
-
-    /* J 字 */
-    .nav-logo-circle span {
-      font-size: 15px;
+    .logo {
+      font-size: 24px;
       font-weight: 800;
-      color: white;
-      letter-spacing: -0.5px;
-      margin-bottom: 4px;
-      font-style: italic;
-    }
-
-    .nav-logo-text {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--charcoal);
-      letter-spacing: -0.2px;
-      line-height: 1.2;
-    }
-
-    .nav-logo-text small {
-      display: block;
-      font-size: 0.62rem;
-      font-weight: 500;
-      color: var(--warm-gray);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-top: 1px;
+      color: var(--mint-dark);
+      text-decoration: none;
+      letter-spacing: -0.8px;
+      display: flex;
+      align-items: center;
+      line-height: 1;
     }
 
     .nav-links {
       display: flex;
-      gap: 28px;
+      gap: 1.5rem;
+      align-items: center;
     }
 
     .nav-links a {
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: var(--warm-gray);
       text-decoration: none;
-      transition: color 0.2s;
+      color: var(--charcoal);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s;
     }
 
-    .nav-links a:hover,
     .nav-links a.active {
       color: var(--mint-dark);
     }
 
-    .nav-links a.active {
-      font-weight: 600;
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .menu-toggle .bar {
+      width: 25px;
+      height: 3px;
+      background-color: var(--charcoal);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── 手機版選單 (修正寬度與彈出邏輯) ── */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex !important;
+      }
+
+      .nav-links {
+        position: fixed;
+        right: -100%;
+        top: 0;
+        width: 260px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        flex-direction: column;
+        padding-top: 80px;
+        transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+      }
+
+      .nav-links.active {
+        right: 0;
+      }
+
+      .nav-links a {
+        width: 100%;
+        padding: 20px 30px;
+        border-bottom: 1px solid #f9f9f9;
+        text-align: left;
+      }
+
+      .menu-toggle.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+
+      .menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+      }
+
+      .menu-toggle.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
     }
 
     /* ── HERO ── */
