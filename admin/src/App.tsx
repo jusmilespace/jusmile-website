@@ -359,7 +359,7 @@ export default function App() {
 
             // 1. Prepare Dish Row (Update if exists, else append)
             // Remove spaces in Notes for better compatibility: 1份=450g
-            const dishRow = `${formData.titleZh},份,1,混合料理,1份=${nutrition.perServing.weight}g,${nutrition.perServing.weight},${nutrition.perServing.kcal},${nutrition.perServing.protein},${nutrition.perServing.carbs},${nutrition.perServing.fat},Ju Smile`;
+            const dishRow = `${formData.titleZh},份,1,混合料理,,${nutrition.perServing.weight},${nutrition.perServing.kcal},${nutrition.perServing.protein},${nutrition.perServing.carbs},${nutrition.perServing.fat},Ju Smile`;
             const dishIndex = existingNames.indexOf(formData.titleZh);
 
             if (dishIndex !== -1) {
@@ -368,8 +368,6 @@ export default function App() {
               dataLines.push(dishRow);
             }
 
-            // Sort data lines by name (Traditional Chinese collation)
-            dataLines.sort((a, b) => a.split(',')[0].localeCompare(b.split(',')[0], 'zh-Hant'));
 
             const updatedCsv = [header, ...dataLines].join('\r\n') + '\r\n';
             const encodedCsv = btoa(unescape(encodeURIComponent(updatedCsv)));
@@ -918,113 +916,125 @@ export default function App() {
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <div className="flex justify-between items-center ml-1">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Personal Access Token</label>
-                      <a
-                        href="https://github.com/settings/tokens/new?notes=Ju%20Smile%20App&scopes=repo"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[10px] text-mint hover:underline flex items-center gap-1"
-                      >
-                        <ExternalLink className="w-2 h-2" /> 如何取得？
-                      </a>
-                    </div>
-                    <input
-                      type="password"
-                      value={githubSettings.token}
-                      onChange={(e) => setGithubSettings(prev => ({ ...prev, token: e.target.value }))}
-                      placeholder="ghp_..."
-                      className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
-                    />
-                  </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Gemini API Key</label>
+                        <input
+                          type="password"
+                          value={githubSettings.geminiKey}
+                          onChange={(e) => setGithubSettings(prev => ({ ...prev, geminiKey: e.target.value }))}
+                          placeholder="AIza..."
+                          className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
+                        />
+                      </div>
 
-                  <div className="pt-2 border-t border-black/5">
-                    <p className="text-[10px] font-bold text-mint-dark uppercase tracking-widest ml-1 mb-2">食譜網站 Repo (JSON)</p>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Owner</label>
-                        <input
-                          type="text"
-                          value={githubSettings.owner}
-                          onChange={(e) => setGithubSettings(prev => ({ ...prev, owner: e.target.value }))}
-                          placeholder="GitHub 帳號"
-                          className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
-                        />
+                      <div className="pt-2 border-t border-black/5">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Personal Access Token</label>
+                        <a
+                          href="https://github.com/settings/tokens/new?notes=Ju%20Smile%20App&scopes=repo"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[10px] text-mint hover:underline flex items-center gap-1"
+                        >
+                          <ExternalLink className="w-2 h-2" /> 如何取得？
+                        </a>
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Repo Name</label>
-                        <input
-                          type="text"
-                          value={githubSettings.repo}
-                          onChange={(e) => setGithubSettings(prev => ({ ...prev, repo: e.target.value }))}
-                          placeholder="專案名稱"
-                          className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-1 mt-2">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">JSON Path</label>
                       <input
-                        type="text"
-                        value={githubSettings.path}
-                        onChange={(e) => setGithubSettings(prev => ({ ...prev, path: e.target.value }))}
-                        placeholder="data/recipes.json"
+                        type="password"
+                        value={githubSettings.token}
+                        onChange={(e) => setGithubSettings(prev => ({ ...prev, token: e.target.value }))}
+                        placeholder="ghp_..."
                         className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
                       />
                     </div>
-                  </div>
 
-                  <div className="pt-2 border-t border-black/5">
-                    <p className="text-[10px] font-bold text-mint-dark uppercase tracking-widest ml-1 mb-2">營養數據 Repo (CSV)</p>
-                    <p className="text-[9px] text-gray-400 mb-2 ml-1">可與網站 Repo 不同，系統會自動同步食材熱量</p>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Owner</label>
-                        <input
-                          type="text"
-                          value={githubSettings.csvOwner}
-                          onChange={(e) => setGithubSettings(prev => ({ ...prev, csvOwner: e.target.value }))}
-                          placeholder="GitHub 帳號"
-                          className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
-                        />
+                    <div className="pt-2 border-t border-black/5">
+                      <p className="text-[10px] font-bold text-mint-dark uppercase tracking-widest ml-1 mb-2">食譜網站 Repo (JSON)</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Owner</label>
+                          <input
+                            type="text"
+                            value={githubSettings.owner}
+                            onChange={(e) => setGithubSettings(prev => ({ ...prev, owner: e.target.value }))}
+                            placeholder="GitHub 帳號"
+                            className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Repo Name</label>
+                          <input
+                            type="text"
+                            value={githubSettings.repo}
+                            onChange={(e) => setGithubSettings(prev => ({ ...prev, repo: e.target.value }))}
+                            placeholder="專案名稱"
+                            className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
+                          />
+                        </div>
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Repo Name</label>
+                      <div className="space-y-1 mt-2">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">JSON Path</label>
                         <input
                           type="text"
-                          value={githubSettings.csvRepo}
-                          onChange={(e) => setGithubSettings(prev => ({ ...prev, csvRepo: e.target.value }))}
-                          placeholder="ju-smile-app"
+                          value={githubSettings.path}
+                          onChange={(e) => setGithubSettings(prev => ({ ...prev, path: e.target.value }))}
+                          placeholder="data/recipes.json"
                           className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
                         />
                       </div>
                     </div>
-                    <div className="space-y-1 mt-2">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">CSV Path</label>
-                      <input
-                        type="text"
-                        value={githubSettings.csvPath}
-                        onChange={(e) => setGithubSettings(prev => ({ ...prev, csvPath: e.target.value }))}
-                        placeholder="public/data/Unit_Map.csv"
-                        className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
-                      />
+
+                    <div className="pt-2 border-t border-black/5">
+                      <p className="text-[10px] font-bold text-mint-dark uppercase tracking-widest ml-1 mb-2">營養數據 Repo (CSV)</p>
+                      <p className="text-[9px] text-gray-400 mb-2 ml-1">可與網站 Repo 不同，系統會自動同步食材熱量</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Owner</label>
+                          <input
+                            type="text"
+                            value={githubSettings.csvOwner}
+                            onChange={(e) => setGithubSettings(prev => ({ ...prev, csvOwner: e.target.value }))}
+                            placeholder="GitHub 帳號"
+                            className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Repo Name</label>
+                          <input
+                            type="text"
+                            value={githubSettings.csvRepo}
+                            onChange={(e) => setGithubSettings(prev => ({ ...prev, csvRepo: e.target.value }))}
+                            placeholder="ju-smile-app"
+                            className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1 mt-2">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">CSV Path</label>
+                        <input
+                          type="text"
+                          value={githubSettings.csvPath}
+                          onChange={(e) => setGithubSettings(prev => ({ ...prev, csvPath: e.target.value }))}
+                          placeholder="public/data/Unit_Map.csv"
+                          className="w-full p-3 bg-gray-50 border border-black/5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-mint/20"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex gap-3 pt-4">
-                  <button
-                    onClick={() => setShowGithubSettings(false)}
-                    className="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-all"
-                  >
-                    取消
-                  </button>
-                  <button
-                    onClick={() => saveGithubSettings(githubSettings)}
-                    className="flex-1 py-3 bg-mint text-white rounded-xl font-bold hover:bg-mint-dark transition-all"
-                  >
-                    儲存設定
-                  </button>
-                </div>
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      onClick={() => setShowGithubSettings(false)}
+                      className="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-all"
+                    >
+                      取消
+                    </button>
+                    <button
+                      onClick={() => saveGithubSettings(githubSettings)}
+                      className="flex-1 py-3 bg-mint text-white rounded-xl font-bold hover:bg-mint-dark transition-all"
+                    >
+                      儲存設定
+                    </button>
+                  </div>
               </motion.div>
             </motion.div>
           )}

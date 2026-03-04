@@ -11,6 +11,9 @@ export default defineConfig(({ mode }) => {
     // 移除 define 區塊
     build: {
       outDir: 'dist',
+      rollupOptions: {
+        input: './_entry.html'
+      }
     }
   };
 });
