@@ -1281,11 +1281,19 @@
     }
 
     function openDetail(slugOrId) {
-      // 優先匹配 slug，這能確保網址分享後的導向正確
-      const r = recipes.find(r => (r.slug === slugOrId) || (String(r.id) === String(slugOrId)));
+      // 先將傳入的參數解碼，避免網址列的中文編碼導致比對失敗
+      const decodedSearch = decodeURIComponent(slugOrId);
+
+      // 優先比對 slug，再比對 id
+      const r = recipes.find(r =>
+        r.slug === decodedSearch ||
+        String(r.id) === String(decodedSearch) ||
+        r.titleZh === decodedSearch // 增加中文標題比對作為備援
+      );
+
       if (!r) return;
 
-      // 重要：開啟食譜後，更新網址 Hash 為美觀的英文 Slug
+      // 更新網址 Hash，確保分享出去的是美觀的 Slug
       const newHash = r.slug || encodeURIComponent(r.id);
       history.pushState(null, null, `#${newHash}`);
 
@@ -1401,25 +1409,41 @@
     }
 
     // 處理原生分享與備援邏輯
+    // 請在程式碼中只保留這一個版本的 handleWebShare
     async function handleWebShare() {
-      const hash = window.location.hash.replace('#', '');
-      const r = recipes.find(r => r.slug === hash || String(r.id) === String(hash));
-      if (!r) return;
+      // 1. 取得網址 Hash 並進行解碼 (處理中文編碼問題)
+      const rawHash = window.location.hash.replace('#', '');
+      const decodedHash = decodeURIComponent(rawHash.split('?')[0]); // 排除可能帶有的 UTM 參數
 
+      // 2. 尋找對應食譜
+      const r = recipes.find(r =>
+        r.slug === decodedHash ||
+        String(r.id) === String(decodedHash) ||
+        r.titleZh === decodedHash
+      );
+
+      if (!r) {
+        console.error("找不到食譜資料，無法分享");
+        return;
+      }
+
+      // 3. 準備分享資料 (包含美化後的網址與追蹤參數)
       const shareData = {
         title: `微笑料理：${r.titleZh}`,
         text: `${r.hook} | 讓微笑成為最好的調味料`,
-        url: `${window.location.origin}${window.location.pathname}#${r.slug || r.id}?utm_source=recipe_share`
+        url: `${window.location.origin}${window.location.pathname}#${r.slug || r.id}?utm_source=recipe_share&utm_medium=referral`
       };
 
       try {
         if (navigator.share) {
-          await navigator.share(shareData);
+          await navigator.share(shareData); // 調用手機原生分享
         } else {
-          await navigator.clipboard.writeText(shareData.url);
+          await navigator.clipboard.writeText(shareData.url); // 桌面端複製連結
           alert('連結已複製，快分享給朋友吧！');
         }
-      } catch (err) { console.log('分享取消', err); }
+      } catch (err) {
+        console.log('分享取消或發生錯誤', err);
+      }
     }
 
     function closeDetailBtn() {
@@ -1468,31 +1492,7 @@
       });
     });
 
-    async function handleWebShare() {
-      // 取得目前網址 Hash 所對應的食譜
-      const hash = window.location.hash.replace('#', '');
-      const r = recipes.find(r => r.slug === hash || String(r.id) === String(hash));
-      if (!r) return;
 
-      const shareData = {
-        title: `微笑料理：${r.titleZh}`,
-        text: `${r.hook} | 讓微笑成為最好的調味料`,
-        // 網址會帶上您的 Slug 與 UTM 追蹤參數
-        url: `${window.location.origin}${window.location.pathname}#${r.slug || r.id}?utm_source=recipe_share&utm_medium=referral`
-      };
-
-      try {
-        if (navigator.share) {
-          await navigator.share(shareData); // 調用 iOS/Android 原生分享介面
-        } else {
-          // 桌面端或不支援的瀏覽器，則自動複製連結
-          await navigator.clipboard.writeText(shareData.url);
-          alert('連結已複製，快分享給朋友吧！');
-        }
-      } catch (err) {
-        console.log('分享取消', err);
-      }
-    }
   </script>
 </body>
 
