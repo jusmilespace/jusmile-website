@@ -192,7 +192,7 @@
   {
     "id": "上海烤麩",
     "series": "阿嬤的私房菜",
-    "hook": "一口咬下鹹甜交織的記憶：阿嬤的上海烤麩，是年夜飯桌上永不缺席的溫暖。」",
+    "hook": "一口咬下鹹甜交織的記憶：阿嬤的上海烤麩，是年夜飯桌上永不缺席的溫暖。",
     "proTips": [
       "烤麩兩面煎得越金黃, 就會越好吃",
       "炒竹筍的時候要先撒一些鹽, 然後加蓋悶一下：口感更脆. 入味更快. 減少苦澀味.",
@@ -208,24 +208,23 @@
     "titleZh": "上海烤麩",
     "titleEn": "Shanghai Style Braised Wheat Gluten",
     "tags": [
-      "低碳",
       "低卡"
     ],
     "servings": 8,
     "nutrition": {
       "total": {
-        "kcal": 1215,
-        "protein": 0,
-        "carbs": 0,
-        "fat": 135,
-        "weight": 135
+        "kcal": 2138,
+        "protein": 63,
+        "carbs": 86,
+        "fat": 168.3,
+        "weight": 996
       },
       "perServing": {
-        "kcal": 152,
-        "protein": 0,
-        "carbs": 0,
-        "fat": 16.9,
-        "weight": 17
+        "kcal": 267,
+        "protein": 7.9,
+        "carbs": 10.7,
+        "fat": 21,
+        "weight": 125
       }
     },
     "ingredients": [
