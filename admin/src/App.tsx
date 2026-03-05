@@ -20,12 +20,28 @@ import {
 import { parseRecipe } from './services/geminiService';
 import { calculateNutrition, detectAllergens, getHealthTags } from './services/nutritionService';
 
+const generateAutoIds = (titleEn: string, titleZh: string) => {
+  const base = (titleEn || titleZh || 'recipe')
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-');
+
+  return {
+    id: `recipe_${Date.now()}`, // 內部 ID
+    slug: `${base}-${Math.random().toString(36).substring(2, 6)}` // 網址 Slug
+  };
+};
+
+
+
 interface Ingredient {
   name: string;
   amount: string;
 }
 
 interface RecipeData {
+  slug: string;
   titleZh: string;
   titleEn: string;
   series: string;
@@ -46,6 +62,7 @@ export default function App() {
 
   // Form State
   const [formData, setFormData] = useState<RecipeData>({
+    slug: '',
     titleZh: '',
     titleEn: '',
     series: '微笑料理',
@@ -239,8 +256,16 @@ export default function App() {
 
   const generateFinalJson = () => {
     if (!nutrition) return null;
+
+    // 呼叫自動產生器取得 ID 與 Slug
+    const { id, slug } = generateAutoIds(formData.titleEn, formData.titleZh);
+
+    // 如果使用者有手動輸入 slug，則優先使用手動的
+    const finalSlug = formData.slug || slug;
+
     return {
-      id: formData.titleZh.toLowerCase().replace(/\s+/g, '-') || 'new-recipe',
+      id: id,          // 內部唯一 ID：recipe_1741165432
+      slug: finalSlug, // 網址美化 ID：tomato-egg-a3f2
       series: formData.series,
       hook: formData.hook,
       proTips: formData.proTips.filter(t => t.trim() !== ''),
@@ -297,7 +322,8 @@ export default function App() {
 
         // 2. Update or Append recipe
         // Find if recipe with same ID exists
-        const existingIndex = currentContent.findIndex(r => r.id === finalData.id);
+        // 現在我們統一用 slug/id 比對，確保不會重複
+        const existingIndex = currentContent.findIndex(r => r.slug === finalData.slug || r.id === finalData.id);
         let updatedContent;
         if (existingIndex !== -1) {
           // Update existing
@@ -355,17 +381,21 @@ export default function App() {
 
             const header = csvLines[0];
             const dataLines = csvLines.slice(1);
-            const existingNames = dataLines.map(l => l.split(',')[0]);
+            const existingIds = dataLines.map(l => l.split(',')[0]); // 重新命名為 Ids 較準確
 
-            // 1. Prepare Dish Row (Update if exists, else append)
-            // Remove spaces in Notes for better compatibility: 1份=450g
-            const dishRow = `${formData.titleZh},份,1,混合料理,,${nutrition.perServing.weight},${nutrition.perServing.kcal},${nutrition.perServing.protein},${nutrition.perServing.carbs},${nutrition.perServing.fat},Ju Smile`;
-            const dishIndex = existingNames.indexOf(formData.titleZh);
+            // 1. 使用食譜中文名稱作為 CSV 的搜尋 Key
+            const dishName = formData.titleZh;
+
+            // 2. 準備要寫入 CSV 的橫列 (第一欄維持中文，方便 App 搜尋)
+            const dishRow = `${dishName},份,1,混合料理,,${nutrition.perServing.weight},${nutrition.perServing.kcal},${nutrition.perServing.protein},${nutrition.perServing.carbs},${nutrition.perServing.fat},Ju Smile`;
+
+            // 3. 尋找 CSV 中是否已有同名食譜
+            const dishIndex = dataLines.findIndex(l => l.split(',')[0] === dishName);
 
             if (dishIndex !== -1) {
-              dataLines[dishIndex] = dishRow;
+              dataLines[dishIndex] = dishRow; // 找到同名，更新內容
             } else {
-              dataLines.push(dishRow);
+              dataLines.push(dishRow); // 新增到最後
             }
 
 
@@ -590,6 +620,17 @@ export default function App() {
                   >
                     <Plus className="w-4 h-4" /> 新增小撇步
                   </button>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-mint-dark ml-1">網址別名 (Slug) <span className="text-[10px] font-normal opacity-60">(網址顯示用，限英文數字)</span></label>
+                  <input
+                    type="text"
+                    value={formData.slug}
+                    onChange={(e) => handleInputChange('slug', e.target.value.toLowerCase().replace(/\s+/g, '-'))}
+                    placeholder="例如：tomato-egg-pasta"
+                    className="w-full p-4 bg-[#f4faf7] border border-mint/20 rounded-2xl focus:ring-2 focus:ring-mint/20 outline-none font-mono text-sm"
+                  />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

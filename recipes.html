@@ -1280,18 +1280,24 @@
       else { resultTag.classList.remove('visible'); }
     }
 
-    function openDetail(id) {
-      const r = recipes.find(r => String(r.id) === String(id));
+    function openDetail(slugOrId) {
+      // 優先匹配 slug，這能確保網址分享後的導向正確
+      const r = recipes.find(r => (r.slug === slugOrId) || (String(r.id) === String(slugOrId)));
       if (!r) return;
+
+      // 重要：開啟食譜後，更新網址 Hash 為美觀的英文 Slug
+      const newHash = r.slug || encodeURIComponent(r.id);
+      history.pushState(null, null, `#${newHash}`);
+
       const s = getSeries(r.series);
       const p = r.nutrition.perServing;
       const t = r.nutrition.total;
 
-      // 詳細頁媒體優先權邏輯 [來自您的要求]
+      // 詳細頁媒體優先權邏輯
       let detailMedia = '';
       if (r.youtubeId && r.youtubeId.trim() !== "") {
         detailMedia = `<iframe src="https://www.youtube.com/embed/${r.youtubeId}?autoplay=1" 
-                     allowfullscreen style="display:block; width:100%; height:100%;"></iframe>`;
+                 allowfullscreen style="display:block; width:100%; height:100%;"></iframe>`;
       } else if (r.customCover) {
         detailMedia = `<img src="${r.customCover}" style="width:100%; height:100%; object-fit:cover;">`;
       } else {
@@ -1300,6 +1306,8 @@
 
       document.getElementById('detailVideo').innerHTML = detailMedia;
       document.getElementById('detailSeriesBar').style.background = s.grad;
+
+      // 渲染內容，並在最下方加入分享按鈕
       document.getElementById('detailContent').innerHTML = `
     <div class="detail-series-label" style="background:${s.bg};color:${s.text}">${r.series}</div>
     <div class="detail-hook">${r.hook}</div>
@@ -1352,34 +1360,92 @@
         </div>`).join('')}</div>
     </div>
 
-${r.proTips && Array.isArray(r.proTips) ? r.proTips.map(tip => `
-  <div class="pro-tip-card" style="background:#f4faf7; border-left:5px solid #5c9c84; border-radius:12px; padding:20px; margin-bottom:15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-    <h4 style="display:flex; align-items:center; gap:8px; color:#5c9c84; font-size:0.9rem; margin-bottom:8px;">
-      ${getIcon('tip', '💡')} PRO TIP
-    </h4>
-    <p style="font-size:0.95rem; line-height:1.6; color:#1f2937;">${tip}</p>
-  </div>
-`).join('') : ''}
-    `;
+    ${r.proTips && Array.isArray(r.proTips) ? r.proTips.map(tip => `
+      <div class="pro-tip-card" style="background:#f4faf7; border-left:5px solid #5c9c84; border-radius:12px; padding:20px; margin-bottom:15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h4 style="display:flex; align-items:center; gap:8px; color:#5c9c84; font-size:0.9rem; margin-bottom:8px;">
+          ${getIcon('tip', '💡')} PRO TIP
+        </h4>
+        <p style="font-size:0.95rem; line-height:1.6; color:#1f2937;">${tip}</p>
+      </div>
+    `).join('') : ''}
+
+    <div class="share-section" style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);">
+      <button onclick="handleWebShare()" class="share-btn">
+        <span style="margin-right: 8px;">🔗</span> 分享這道微笑料理
+      </button>
+    </div>
+
+    <style>
+      .share-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--mint-dark);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 20px rgba(92, 156, 132, 0.15);
+      }
+      .share-btn:hover { background: #4a8a72; transform: translateY(-2px); }
+    </style>
+  `;
 
       document.getElementById('detailOverlay').classList.add('active');
       document.body.style.overflow = 'hidden';
+    }
+
+    // 處理原生分享與備援邏輯
+    async function handleWebShare() {
+      const hash = window.location.hash.replace('#', '');
+      const r = recipes.find(r => r.slug === hash || String(r.id) === String(hash));
+      if (!r) return;
+
+      const shareData = {
+        title: `微笑料理：${r.titleZh}`,
+        text: `${r.hook} | 讓微笑成為最好的調味料`,
+        url: `${window.location.origin}${window.location.pathname}#${r.slug || r.id}?utm_source=recipe_share`
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          await navigator.clipboard.writeText(shareData.url);
+          alert('連結已複製，快分享給朋友吧！');
+        }
+      } catch (err) { console.log('分享取消', err); }
     }
 
     function closeDetailBtn() {
       document.getElementById('detailOverlay').classList.remove('active');
       document.getElementById('detailVideo').innerHTML = '';
       document.body.style.overflow = '';
+      // 關閉時清空 Hash
+      history.pushState(null, null, window.location.pathname);
     }
 
     function init() {
-      // 修正後的 Fetch 路徑，適應 Live Server
       fetch('./data/recipes.json')
         .then(res => res.json())
-        .then(data => { recipes = data; renderGrid(); })
+        .then(data => {
+          recipes = data;
+          renderGrid();
+
+          // 🚀 關鍵修正：將網址偵測移入 .then 內部
+          const initialHash = window.location.hash.replace('#', '');
+          if (initialHash) {
+            setTimeout(() => openDetail(initialHash), 150);
+          }
+        })
         .catch(err => {
           console.error("Fetch error:", err);
-          document.getElementById('recipesGrid').innerHTML = '<div class="empty-state">⚠️ 無法載入食譜資料，請檢查 data/recipes.json 檔案路徑。</div>';
+          document.getElementById('recipesGrid').innerHTML = '<div class="empty-state">⚠️ 無法載入食譜資料...</div>';
         });
     }
 
@@ -1401,6 +1467,32 @@ ${r.proTips && Array.isArray(r.proTips) ? r.proTips.map(tip => `
         menuBtn.classList.remove('active');
       });
     });
+
+    async function handleWebShare() {
+      // 取得目前網址 Hash 所對應的食譜
+      const hash = window.location.hash.replace('#', '');
+      const r = recipes.find(r => r.slug === hash || String(r.id) === String(hash));
+      if (!r) return;
+
+      const shareData = {
+        title: `微笑料理：${r.titleZh}`,
+        text: `${r.hook} | 讓微笑成為最好的調味料`,
+        // 網址會帶上您的 Slug 與 UTM 追蹤參數
+        url: `${window.location.origin}${window.location.pathname}#${r.slug || r.id}?utm_source=recipe_share&utm_medium=referral`
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData); // 調用 iOS/Android 原生分享介面
+        } else {
+          // 桌面端或不支援的瀏覽器，則自動複製連結
+          await navigator.clipboard.writeText(shareData.url);
+          alert('連結已複製，快分享給朋友吧！');
+        }
+      } catch (err) {
+        console.log('分享取消', err);
+      }
+    }
   </script>
 </body>
 

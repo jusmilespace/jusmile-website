@@ -1,6 +1,7 @@
 [
   {
-    "id": "紅酒燉牛肉",
+    "id": "recipe_001",
+    "slug": "beef-bourguignon",
     "series": "Julia Child 經典重現",
     "hook": "重現傳奇主廚 Julia Child 的經典紅酒燉牛肉，讓濃郁的酒香與入口即化的牛肉為你帶來法式浪漫饗宴！",
     "proTips": [
@@ -132,7 +133,8 @@
     ]
   },
   {
-    "id": "漩渦蛋/裙擺蛋",
+    "id": "recipe_002",
+    "slug": "tornado-omelette",
     "series": "微笑料理",
     "hook": "1分鐘學會！挑戰零失敗！新手也能做出完美漩渦裙襬蛋 🍳",
     "proTips": [
