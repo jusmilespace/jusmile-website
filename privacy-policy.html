@@ -136,6 +136,10 @@
         @media (max-width: 768px) {
             .menu-toggle {
                 display: flex !important;
+                position: relative;
+                z-index: 2001;
+                /* 關鍵：確保 X 的層級高於滑出的選單 */
+                transition: all 0.3s ease;
             }
 
             .nav-links {
@@ -144,13 +148,17 @@
                 right: -100%;
                 top: 0;
                 width: 200px;
+                /* 恢復原本的 200px 寬度 */
                 height: 100vh;
                 background: rgba(255, 255, 255, 0.98);
                 backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
                 flex-direction: column;
                 padding-top: 80px;
-                transition: 0.4s;
+                /* 恢復原本的 80px 頂部間距 */
+                transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
                 box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+                z-index: 1000;
             }
 
             .nav-links.active {
