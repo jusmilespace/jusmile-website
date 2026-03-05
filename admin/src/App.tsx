@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { parseRecipe } from './services/geminiService';
 import { calculateNutrition, detectAllergens, getHealthTags } from './services/nutritionService';
-// force update
+
 const generateAutoIds = (titleEn: string, titleZh: string) => {
   const base = (titleEn || titleZh || 'recipe')
     .toLowerCase()
