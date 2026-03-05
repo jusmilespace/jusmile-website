@@ -21,7 +21,7 @@ export interface IngredientCalculation {
   isEstimated?: boolean;
 }
 
-export async function calculateNutrition(ingredients: { name: string; amount: string }[], servings: number = 1) {
+export async function calculateNutrition(ingredients: { name: string; amount: string }[], servings: number = 1, apiKey: string = '') {
   const results: IngredientCalculation[] = [];
   const unknownIngredients: { name: string; amount: string }[] = [];
 
@@ -29,11 +29,11 @@ export async function calculateNutrition(ingredients: { name: string; amount: st
   for (const ing of ingredients) {
     const { name, amount } = ing;
     const parsed = parseAmount(amount);
-    
+
     const foodName = findBestMatch(name);
     const dbItem = FOOD_DB.find(f => f.food === foodName);
     const unitItems = UNIT_MAP.filter(u => u.food === foodName);
-    
+
     let kcal = 0, protein = 0, carbs = 0, fat = 0, weight = 0;
     let found = false;
 
@@ -79,7 +79,7 @@ export async function calculateNutrition(ingredients: { name: string; amount: st
   // Second pass: Gemini estimation for unknown ingredients
   if (unknownIngredients.length > 0) {
     try {
-      const estimations = await estimateNutrition(unknownIngredients);
+      const estimations = await estimateNutrition(unknownIngredients, apiKey);
       for (const est of estimations) {
         results.push({
           ...est,
@@ -191,6 +191,6 @@ export function getHealthTags(nutrition: NutritionResult) {
   if (nutrition.carbs < 10) tags.push("低碳");
   // Low Calorie: < 400 kcal per serving
   if (nutrition.kcal < 400) tags.push("低卡");
-  
+
   return tags;
 }

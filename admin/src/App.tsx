@@ -121,7 +121,7 @@ export default function App() {
 
   const updateNutrition = async (ingredients: Ingredient[], currentServings: number) => {
     if (!ingredients.length) return;
-    const nutResults = await calculateNutrition(ingredients, currentServings);
+    const nutResults = await calculateNutrition(ingredients, currentServings, githubSettings.geminiKey);
     setNutrition(nutResults);
 
     const detectedAllergens = detectAllergens(ingredients.map(i => i.name));
