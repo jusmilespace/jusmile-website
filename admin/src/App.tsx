@@ -257,15 +257,16 @@ export default function App() {
   const generateFinalJson = () => {
     if (!nutrition) return null;
 
-    // 🚀 正確呼叫自動產生器，取得這一份資料專屬的 ID 與 Slug
-    const { id: autoId, slug: autoSlug } = generateAutoIds(formData.titleEn, formData.titleZh);
+    // 🚀 正確呼叫產生器
+    const autoIds = generateAutoIds(formData.titleEn, formData.titleZh);
 
-    // 優先使用使用者手動輸入的 slug，若無則用自動生成的
-    const finalSlug = formData.slug || autoSlug;
+    // 決定最終 Slug
+    const finalSlug = formData.slug || autoIds.slug;
+    const finalId = autoIds.id;
 
     return {
-      id: autoId,          // 這裡會正確存入 recipe_1741165432
-      slug: finalSlug,     // 這裡會存入英文網址標籤 tomato-egg-a3f2
+      id: finalId,     // 這裡強制改為 recipe_174xxx
+      slug: finalSlug, // 這裡強制新增 slug 欄位
       series: formData.series,
       hook: formData.hook,
       proTips: formData.proTips.filter(t => t.trim() !== ''),
@@ -321,9 +322,12 @@ export default function App() {
         }
 
         // 2. Update or Append recipe
-        // Find if recipe with same ID exists
-        // 現在我們統一用 slug/id 比對，確保不會重複
-        const existingIndex = currentContent.findIndex(r => r.slug === finalData.slug || r.id === finalData.id);
+        // 修正比對邏輯：優先比對 slug，再比對 id，最後比對中文標題（相容舊資料）
+        const existingIndex = currentContent.findIndex(r =>
+          (r.slug && r.slug === finalData.slug) ||
+          (r.id === finalData.id) ||
+          (r.titleZh === finalData.titleZh)
+        );
         let updatedContent;
         if (existingIndex !== -1) {
           // Update existing
@@ -383,19 +387,19 @@ export default function App() {
             const dataLines = csvLines.slice(1);
             const existingIds = dataLines.map(l => l.split(',')[0]); // 重新命名為 Ids 較準確
 
-            /// 1. 使用食譜中文名稱作為 CSV 的搜尋 Key，確保 App 搜尋功能不變
+            // 1. 使用中文名稱作為 CSV 搜尋 Key
             const dishName = formData.titleZh;
 
-            // 2. 準備要寫入 CSV 的橫列 (第一欄維持中文名稱)
+            // 2. 準備橫列 (第一欄維持中文)
             const dishRow = `${dishName},份,1,混合料理,,${nutrition.perServing.weight},${nutrition.perServing.kcal},${nutrition.perServing.protein},${nutrition.perServing.carbs},${nutrition.perServing.fat},Ju Smile`;
 
-            // 3. 尋找 CSV 中是否已有同名食譜
+            // 3. 尋找舊資料並更新
             const dishIndex = dataLines.findIndex(l => l.split(',')[0] === dishName);
 
             if (dishIndex !== -1) {
-              dataLines[dishIndex] = dishRow; // 找到同名，更新內容
+              dataLines[dishIndex] = dishRow;
             } else {
-              dataLines.push(dishRow); // 新增到最後
+              dataLines.push(dishRow);
             }
 
 
