@@ -257,15 +257,15 @@ export default function App() {
   const generateFinalJson = () => {
     if (!nutrition) return null;
 
-    // 呼叫自動產生器取得 ID 與 Slug
-    const { id, slug } = generateAutoIds(formData.titleEn, formData.titleZh);
+    // 🚀 正確呼叫自動產生器，取得這一份資料專屬的 ID 與 Slug
+    const { id: autoId, slug: autoSlug } = generateAutoIds(formData.titleEn, formData.titleZh);
 
-    // 如果使用者有手動輸入 slug，則優先使用手動的
-    const finalSlug = formData.slug || slug;
+    // 優先使用使用者手動輸入的 slug，若無則用自動生成的
+    const finalSlug = formData.slug || autoSlug;
 
     return {
-      id: id,          /// 這裡會是 recipe_時間戳記
-      slug: finalSlug, // 網址美化 ID：tomato-egg-a3f2
+      id: autoId,          // 這裡會正確存入 recipe_1741165432
+      slug: finalSlug,     // 這裡會存入英文網址標籤 tomato-egg-a3f2
       series: formData.series,
       hook: formData.hook,
       proTips: formData.proTips.filter(t => t.trim() !== ''),
@@ -383,10 +383,10 @@ export default function App() {
             const dataLines = csvLines.slice(1);
             const existingIds = dataLines.map(l => l.split(',')[0]); // 重新命名為 Ids 較準確
 
-            // 1. 使用食譜中文名稱作為 CSV 的搜尋 Key
+            /// 1. 使用食譜中文名稱作為 CSV 的搜尋 Key，確保 App 搜尋功能不變
             const dishName = formData.titleZh;
 
-            // 2. 準備要寫入 CSV 的橫列 (第一欄維持中文，方便 App 搜尋)
+            // 2. 準備要寫入 CSV 的橫列 (第一欄維持中文名稱)
             const dishRow = `${dishName},份,1,混合料理,,${nutrition.perServing.weight},${nutrition.perServing.kcal},${nutrition.perServing.protein},${nutrition.perServing.carbs},${nutrition.perServing.fat},Ju Smile`;
 
             // 3. 尋找 CSV 中是否已有同名食譜
