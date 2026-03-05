@@ -128,49 +128,66 @@
       transition: 0.3s;
     }
 
+
     /* ── 手機版選單 (修正寬度與彈出邏輯) ── */
     @media (max-width: 768px) {
       .menu-toggle {
         display: flex !important;
+        z-index: 1001;
+        /* 確保漢堡按鈕永遠在最上層，才點得到 */
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      /* 當選單開啟時，將三條線轉變為 X */
+      .menu-toggle.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+        background-color: var(--mint-dark);
+        /* 變色增加視覺反饋 */
+      }
+
+      .menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+        /* 中間線消失 */
+      }
+
+      .menu-toggle.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+        background-color: var(--mint-dark);
       }
 
       .nav-links {
         gap: 0;
         position: fixed;
         right: -100%;
+        /* 初始隱藏在右側 */
         top: 0;
         width: 200px;
+        /* 稍微加寬，視覺比例更平衡 */
         height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         flex-direction: column;
-        padding-top: 80px;
-        transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+        padding-top: 100px;
+        /* 增加頂部間距，避開 X 按鈕 */
+        transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: -15px 0 35px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        /* 低於 menu-toggle */
       }
 
       .nav-links.active {
         right: 0;
+        /* 展開選單 */
       }
 
-      .nav-links a {
+      .nav-links li {
         width: 100%;
-        padding: 12px 30px;
-        border-bottom: 1px solid #f9f9f9;
-        text-align: left;
-      }
-
-      .menu-toggle.active .bar:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-      }
-
-      .menu-toggle.active .bar:nth-child(2) {
-        opacity: 0;
-      }
-
-      .menu-toggle.active .bar:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
+        text-align: center;
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+        /* 增加細微分隔線 */
       }
     }
 
