@@ -264,7 +264,7 @@ export default function App() {
     const finalSlug = formData.slug || slug;
 
     return {
-      id: id,          // 內部唯一 ID：recipe_1741165432
+      id: id,          /// 這裡會是 recipe_時間戳記
       slug: finalSlug, // 網址美化 ID：tomato-egg-a3f2
       series: formData.series,
       hook: formData.hook,
