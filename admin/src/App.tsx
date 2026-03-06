@@ -81,6 +81,10 @@ export default function App() {
   const [allergens, setAllergens] = useState<string[]>([]);
   const [showJsonPreview, setShowJsonPreview] = useState(false);
   const [showGithubSettings, setShowGithubSettings] = useState(false);
+  const [existingRecipes, setExistingRecipes] = useState<any[]>([]);
+  const [editSearchQuery, setEditSearchQuery] = useState('');
+  const [showEditDropdown, setShowEditDropdown] = useState(false);
+  const [editingRecipeId, setEditingRecipeId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [githubSettings, setGithubSettings] = useState({
@@ -161,6 +165,50 @@ export default function App() {
       await handleProcess(content);
     };
     reader.readAsText(file);
+  };
+
+  const fetchExistingRecipes = async () => {
+    if (!githubSettings.token || !githubSettings.owner || !githubSettings.repo) return;
+    try {
+      const { token, owner, repo, path } = githubSettings;
+      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?t=${Date.now()}`, {
+        headers: { Authorization: `token ${token}` }
+      });
+      if (res.ok) {
+        const fileData = await res.json();
+        const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/\s/g, ''))));
+        setExistingRecipes(JSON.parse(decoded));
+      }
+    } catch (e) {
+      console.error('Failed to fetch recipes:', e);
+    }
+  };
+
+  const loadRecipeForEdit = (recipe: any) => {
+    setEditingRecipeId(recipe.id);
+    setEditSearchQuery(recipe.titleZh);
+    setShowEditDropdown(false);
+    setFormData({
+      slug: recipe.slug || '',
+      titleZh: recipe.titleZh || '',
+      titleEn: recipe.titleEn || '',
+      series: recipe.series || '微笑料理',
+      hook: recipe.hook || '',
+      proTips: recipe.proTips?.length ? recipe.proTips : [''],
+      miseEnPlace: recipe.miseEnPlace?.length ? recipe.miseEnPlace : [''],
+      youtubeUrl: recipe.youtubeId ? `https://www.youtube.com/watch?v=${recipe.youtubeId}` : '',
+      imageUrl: recipe.imageUrl || '',
+      servings: recipe.servings || 1,
+      ingredients: recipe.ingredients || [],
+      steps: recipe.steps?.length ? recipe.steps : [''],
+      tags: recipe.tags || []
+    });
+    setNutrition({
+      total: recipe.nutrition.total,
+      perServing: recipe.nutrition.perServing,
+      ingredients: []
+    });
+    setAllergens(detectAllergens((recipe.ingredients || []).map((i: any) => i.name)));
   };
 
   const handleInputChange = (field: keyof RecipeData, value: any) => {
@@ -262,7 +310,7 @@ export default function App() {
 
     // 決定最終 Slug
     const finalSlug = formData.slug || autoIds.slug;
-    const finalId = autoIds.id;
+    const finalId = editingRecipeId || autoIds.id;
 
     return {
       id: finalId,     // 這裡強制改為 recipe_174xxx
@@ -516,6 +564,54 @@ export default function App() {
                 <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept=".txt,.json" />
               </div>
             </div>
+
+            {/* 編輯既有食譜 */}
+            <div className="bg-white p-8 rounded-[32px] border border-black/5 shadow-sm space-y-4">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-mint" />
+                <span className="text-sm font-bold">編輯既有食譜</span>
+              </div>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={editSearchQuery}
+                  onChange={(e) => {
+                    setEditSearchQuery(e.target.value);
+                    setShowEditDropdown(true);
+                    if (existingRecipes.length === 0) fetchExistingRecipes();
+                  }}
+                  onFocus={() => {
+                    setShowEditDropdown(true);
+                    if (existingRecipes.length === 0) fetchExistingRecipes();
+                  }}
+                  onBlur={() => setTimeout(() => setShowEditDropdown(false), 150)}
+                  placeholder="搜尋食譜名稱..."
+                  className="w-full px-4 py-3 bg-[#f4faf7] border-none rounded-2xl focus:ring-2 focus:ring-mint/20 outline-none text-sm"
+                />
+                {showEditDropdown && existingRecipes.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-black/5 rounded-2xl shadow-lg max-h-60 overflow-y-auto z-10">
+                    {existingRecipes
+                      .filter(r =>
+                        !editSearchQuery ||
+                        r.titleZh?.includes(editSearchQuery) ||
+                        r.titleEn?.toLowerCase().includes(editSearchQuery.toLowerCase())
+                      )
+                      .map((r) => (
+                        <button
+                          key={r.id}
+                          onMouseDown={() => loadRecipeForEdit(r)}
+                          className="w-full text-left px-4 py-3 hover:bg-[#f4faf7] text-sm border-b border-black/5 last:border-0"
+                        >
+                          <div className="font-bold">{r.titleZh}</div>
+                          <div className="text-xs text-gray-400">{r.titleEn}</div>
+                        </button>
+                      ))
+                    }
+                  </div>
+                )}
+              </div>
+            </div>
+
           </motion.div>
         )}
 
@@ -541,7 +637,7 @@ export default function App() {
                 <p className="text-xs text-gray-400 mt-1">填寫完成後儲存至 GitHub</p>
               </div>
               <button
-                onClick={() => { setNutrition(null); setInputText(''); }}
+                onClick={() => { setNutrition(null); setInputText(''); setEditingRecipeId(null); setEditSearchQuery(''); }}
                 className="text-xs font-bold text-gray-400 hover:text-red-500 transition-colors"
               >
                 重新開始

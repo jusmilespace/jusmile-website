@@ -1240,8 +1240,8 @@
       let mediaContent = '';
       if (r.youtubeId && r.youtubeId.trim().length > 5) {
         mediaContent = `<img src="https://img.youtube.com/vi/${r.youtubeId}/maxresdefault.jpg" onerror="this.style.display='none'">`;
-      } else if (r.customCover) {
-        mediaContent = `<img src="${r.customCover}" onerror="this.style.display='none'">`;
+      } else if (r.customCover || r.imageUrl) {
+        mediaContent = `<img src="${r.customCover || r.imageUrl}" onerror="this.style.display='none'">`;
       } else {
         mediaContent = `<video src="${BRAND_VIDEO}" autoplay muted loop playsinline></video>`;
       }
@@ -1306,8 +1306,8 @@
       if (r.youtubeId && r.youtubeId.trim() !== "") {
         detailMedia = `<iframe src="https://www.youtube.com/embed/${r.youtubeId}?autoplay=1" 
                  allowfullscreen style="display:block; width:100%; height:100%;"></iframe>`;
-      } else if (r.customCover) {
-        detailMedia = `<img src="${r.customCover}" style="width:100%; height:100%; object-fit:cover;">`;
+      } else if (r.customCover || r.imageUrl) {
+        detailMedia = `<img src="${r.customCover || r.imageUrl}" style="width:100%; height:100%; object-fit:cover;">`;
       } else {
         detailMedia = `<video src="${BRAND_VIDEO}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;"></video>`;
       }
