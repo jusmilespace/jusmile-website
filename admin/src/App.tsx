@@ -171,13 +171,10 @@ export default function App() {
     if (!githubSettings.token || !githubSettings.owner || !githubSettings.repo) return;
     try {
       const { token, owner, repo, path } = githubSettings;
-      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?t=${Date.now()}`, {
-        headers: { Authorization: `token ${token}` }
-      });
+      const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${path}?t=${Date.now()}`);
       if (res.ok) {
-        const fileData = await res.json();
-        const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/\s/g, ''))));
-        setExistingRecipes(JSON.parse(decoded));
+        const data = await res.json();
+        setExistingRecipes(data);
       }
     } catch (e) {
       console.error('Failed to fetch recipes:', e);
