@@ -772,14 +772,24 @@ export default function App() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 ml-1">或上傳食譜照片</label>
-                    <div
-                      onClick={() => imageInputRef.current?.click()}
-                      className="w-full p-4 bg-white border border-black/5 rounded-2xl cursor-pointer hover:bg-gray-50 transition-all flex items-center justify-between"
-                    >
-                      <span className="text-sm text-gray-400 truncate">
-                        {formData.imageUrl ? '✅ 已選擇照片' : '點擊上傳照片...'}
-                      </span>
-                      <Upload className="w-4 h-4 text-gray-400" />
+                    <div className="flex gap-2">
+                      <div
+                        onClick={() => imageInputRef.current?.click()}
+                        className="flex-1 p-4 bg-white border border-black/5 rounded-2xl cursor-pointer hover:bg-gray-50 transition-all flex items-center justify-between"
+                      >
+                        <span className="text-sm text-gray-400 truncate">
+                          {formData.imageUrl ? '✅ 已選擇照片' : '點擊上傳照片...'}
+                        </span>
+                        <Upload className="w-4 h-4 text-gray-400" />
+                      </div>
+                      {formData.imageUrl && (
+                        <button
+                          onClick={() => setFormData(prev => ({ ...prev, imageUrl: '' }))}
+                          className="px-4 bg-white border border-black/5 rounded-2xl text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                     <input
                       type="file"
